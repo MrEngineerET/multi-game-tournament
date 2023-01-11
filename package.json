@@ -19,7 +19,9 @@
     "prettier": "prettier --ignore-path ./.gitignore .",
     "format_check": "npm run prettier -- --check",
     "format": "npm run prettier -- --write",
-    "lint": "eslint --ignore-path ./.gitignore ."
+    "lint": "eslint --ignore-path ./.gitignore .",
+    "validate": "npm run format_check && npm run lint && npm run build",
+    "prepare": "husky install"
   },
   "eslintConfig": {
     "extends": [
@@ -43,6 +45,7 @@
     "eslint": "^8.31.0",
     "eslint-config-prettier": "^8.6.0",
     "eslint-plugin-react": "^7.32.0",
+    "husky": "^8.0.3",
     "prettier": "2.8.2"
   }
 }
