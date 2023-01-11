@@ -18,7 +18,8 @@
     "eject": "react-scripts eject",
     "prettier": "prettier --ignore-path ./.gitignore .",
     "format_check": "npm run prettier -- --check",
-    "format": "npm run prettier -- --write"
+    "format": "npm run prettier -- --write",
+    "lint": "eslint --ignore-path ./.gitignore ."
   },
   "eslintConfig": {
     "extends": [
@@ -39,6 +40,8 @@
     ]
   },
   "devDependencies": {
+    "eslint": "^8.31.0",
+    "eslint-plugin-react": "^7.32.0",
     "prettier": "2.8.2"
   }
 }
