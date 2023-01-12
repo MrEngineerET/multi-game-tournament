@@ -8,13 +8,14 @@ import {
 import { routes as loggedInRoutes } from "./routes/loggedInRoutes"
 import { routes as loggedOutRoutes } from "./routes/loggedOutRoutes"
 import { routes as commonRoutes } from "./routes/commonRoutes"
+import { useAuth } from "./context/AuthContext"
 import "./App.css"
 
 function App() {
-  const loggedIn = false
-  let routes
+  const { user } = useAuth()
 
-  if (loggedIn) routes = loggedInRoutes
+  let routes
+  if (user) routes = loggedInRoutes
   else routes = loggedOutRoutes
 
   routes = (
