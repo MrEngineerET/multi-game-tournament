@@ -1,6 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { Link } from "react-router-dom"
+import { Button } from "@mui/material"
 
 export const LandingPage = () => {
   return (
@@ -12,6 +13,7 @@ export const LandingPage = () => {
         </li>
       </ul>
       <div>This is the landing page</div>
+      <Button variant="contained">MUI Test Button</Button>
     </div>
   )
 }
