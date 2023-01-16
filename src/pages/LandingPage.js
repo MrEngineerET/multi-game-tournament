@@ -8,12 +8,11 @@ export const LandingPage = () => {
     <div>
       <ul>
         <li>
-          <Link to="/login">Login</Link>
-          <Link to="/login">Sign up</Link>
+          <Link to="/login">Login</Link> <Link to="/signup">Sign up</Link>
         </li>
       </ul>
       <div>This is the landing page</div>
-      <Button variant="contained">MUI Test Button</Button>
+      <Button variant="contained">MUI Button</Button>
     </div>
   )
 }

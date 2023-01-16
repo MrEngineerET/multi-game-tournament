@@ -1,18 +1,47 @@
-import React from "react"
+import React, { useState, createContext, useMemo } from "react"
 import ReactDOM from "react-dom/client"
-import "./index.css"
 import App from "./App"
+import "./index.css"
 import reportWebVitals from "./reportWebVitals"
 import { AuthProvider } from "./context/AuthContext"
+import { ThemeProvider } from "@mui/material/styles"
+import { useMediaQuery } from "@mui/material"
+import { getTheme } from "./styles/theme"
+
+export const themeModeContext = createContext({ mode: "light" })
+
+function Root() {
+  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
+  const [themeMode, setThemeMode] = useState(() => {
+    return prefersDarkMode ? "dark" : "light"
+  })
+  const theme = useMemo(() => getTheme(themeMode), [themeMode])
+
+  const value = useMemo(
+    () => ({
+      changeThemeMode: () => {
+        setThemeMode((prevMode) => (prevMode === "light" ? "dark" : "light"))
+      },
+      themeMode: themeMode,
+    }),
+    [themeMode],
+  )
+
+  return (
+    <React.StrictMode>
+      <themeModeContext.Provider value={value}>
+        <ThemeProvider theme={theme}>
+          <AuthProvider>
+            <App />
+          </AuthProvider>
+        </ThemeProvider>
+      </themeModeContext.Provider>
+    </React.StrictMode>
+  )
+}
 
 const root = ReactDOM.createRoot(document.getElementById("root"))
-root.render(
-  <React.StrictMode>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
-  </React.StrictMode>,
-)
+root.render(<Root />)
 
 // If you want to start measuring performance in your app, pass a function
 // to log results (for example: reportWebVitals(console.log))

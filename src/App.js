@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useContext } from "react"
 import {
   RouterProvider,
   createBrowserRouter,
@@ -9,10 +9,15 @@ import { routes as loggedInRoutes } from "./routes/loggedInRoutes"
 import { routes as loggedOutRoutes } from "./routes/loggedOutRoutes"
 import { routes as commonRoutes } from "./routes/commonRoutes"
 import { useAuth } from "./context/AuthContext"
+import { CssBaseline } from "@mui/material"
+import { Button } from "@mui/material"
+import { themeModeContext } from "./index"
+
 import "./App.css"
 
 function App() {
   const { user } = useAuth()
+  const themeMode = useContext(themeModeContext)
 
   let routes
   if (user) routes = loggedInRoutes
@@ -26,7 +31,13 @@ function App() {
   )
 
   const router = createBrowserRouter(createRoutesFromElements(routes))
-  return <RouterProvider router={router} />
+  return (
+    <>
+      <CssBaseline />
+      <Button onClick={themeMode.changeThemeMode}>Change to Dark Mode</Button>
+      <RouterProvider router={router} />
+    </>
+  )
 }
 
 export default App
