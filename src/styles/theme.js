@@ -3,6 +3,7 @@ import {
   createTheme as muiCreateTheme,
   responsiveFontSizes,
 } from "@mui/material"
+import { deepmerge } from "@mui/utils"
 
 const lightModeTheme = {
   palette: {
@@ -121,6 +122,13 @@ const darkModeTheme = {
 
 const commonTheme = {
   spacing: 4,
+  components: {
+    MuiButton: {
+      defaultProps: {
+        variant: "contained",
+      },
+    },
+  },
 }
 
 function getDecimalColor(color) {
@@ -140,10 +148,12 @@ function fadeToTransparent(color, percent) {
 }
 
 function createTheme(themeMode = "light") {
-  const theme = muiCreateTheme({
-    ...commonTheme,
-    ...(themeMode === "dark" ? darkModeTheme : lightModeTheme),
-  })
+  const theme = muiCreateTheme(
+    deepmerge(
+      commonTheme,
+      themeMode === "dark" ? darkModeTheme : lightModeTheme,
+    ),
+  )
   return responsiveFontSizes(theme, { factor: 2 })
 }
 
