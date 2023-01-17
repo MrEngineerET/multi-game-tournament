@@ -1,9 +1,29 @@
-/* eslint-disable no-unused-vars */
+import React from "react"
+import { Link as RouterLink } from "react-router-dom"
+import PropTypes from "prop-types"
 import {
   createTheme as muiCreateTheme,
   responsiveFontSizes,
 } from "@mui/material"
 import { deepmerge } from "@mui/utils"
+
+const LinkBehavior = React.forwardRef((props, ref) => {
+  const { href, ...other } = props
+  // Map href (MUI) -> to (react-router)
+  return <RouterLink ref={ref} to={href} {...other} />
+})
+LinkBehavior.displayName = "LinkBehaviour"
+
+LinkBehavior.propTypes = {
+  href: PropTypes.oneOfType([
+    PropTypes.shape({
+      hash: PropTypes.string,
+      pathname: PropTypes.string,
+      search: PropTypes.string,
+    }),
+    PropTypes.string,
+  ]).isRequired,
+}
 
 const lightModeTheme = {
   palette: {
@@ -128,7 +148,34 @@ const commonTheme = {
         variant: "contained",
       },
     },
+    MuiLink: {
+      defaultProps: {
+        component: LinkBehavior,
+      },
+    },
+    MuiButtonBase: {
+      defaultProps: {
+        LinkComponent: LinkBehavior,
+      },
+    },
   },
+}
+
+const lightTheme = createTheme("light")
+const darkTheme = createTheme("dark")
+
+export function getTheme(themeMode) {
+  return themeMode === "dark" ? darkTheme : lightTheme
+}
+
+function createTheme(themeMode = "light") {
+  const theme = muiCreateTheme(
+    deepmerge(
+      commonTheme,
+      themeMode === "dark" ? darkModeTheme : lightModeTheme,
+    ),
+  )
+  return responsiveFontSizes(theme, { factor: 2 })
 }
 
 function getDecimalColor(color) {
@@ -145,21 +192,4 @@ function fadeToTransparent(color, percent) {
   if (!percent) percent = 0
   const dec = getDecimalColor(color)
   return `rgba(${dec.R}, ${dec.G}, ${dec.B}, ${percent})`
-}
-
-function createTheme(themeMode = "light") {
-  const theme = muiCreateTheme(
-    deepmerge(
-      commonTheme,
-      themeMode === "dark" ? darkModeTheme : lightModeTheme,
-    ),
-  )
-  return responsiveFontSizes(theme, { factor: 2 })
-}
-
-const lightTheme = createTheme("light")
-const darkTheme = createTheme("dark")
-
-export function getTheme(themeMode) {
-  return themeMode === "dark" ? darkTheme : lightTheme
 }
