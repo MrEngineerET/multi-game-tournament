@@ -1,19 +1,54 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Link } from "react-router-dom"
-import { Button } from "@mui/material"
+import {
+  Button,
+  Box,
+  AppBar,
+  Toolbar,
+  IconButton,
+  Typography,
+  Container,
+  Stack,
+} from "@mui/material"
+import { Menu as MenuIcon } from "@mui/icons-material"
 
 export const LandingPage = () => {
   return (
-    <div>
-      <ul>
-        <li>
-          <Link to="/login">Login</Link> <Link to="/signup">Sign up</Link>
-        </li>
-      </ul>
-      <div>This is the landing page</div>
-      <Button variant="contained">MUI Button</Button>
-    </div>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Tourney
+          </Typography>
+          <Button variant="text" href="/signup">
+            Sign Up
+          </Button>
+        </Toolbar>
+      </AppBar>
+      <Container maxWidth="md">
+        <Stack
+          sx={{
+            gap: 5,
+            mt: 10,
+            alignItems: "center",
+          }}
+        >
+          <Typography variant="h4">Simplify Tournament Management</Typography>
+          <Button href="tournament/bracket-generator">
+            Try Bracket Generator
+          </Button>
+        </Stack>
+      </Container>
+    </Box>
   )
 }
 

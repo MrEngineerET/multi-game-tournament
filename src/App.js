@@ -35,7 +35,9 @@ function App() {
     <>
       <CssBaseline />
       <RouterProvider router={router} />
-      <Button onClick={themeMode.changeThemeMode}>Change to Dark Mode</Button>
+      <Button variant="text" onClick={themeMode.changeThemeMode}>
+        Change to Dark Mode
+      </Button>
     </>
   )
 }
