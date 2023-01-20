@@ -3,6 +3,7 @@ import { Route } from "react-router-dom"
 import { LandingPage } from "../pages/LandingPage"
 import { LogIn } from "../pages/LogIn"
 import { SignUp } from "../pages/SignUp"
+import { BracketGenerator } from "../pages/BracketGenerator"
 /**
  *  /login
  *  /signup
@@ -17,6 +18,10 @@ export const routes = (
     <Route
       path="/forgot-password"
       element={<div>This is the forgot password page</div>}
+    />
+    <Route
+      path="/tournament/bracket-generator"
+      element={<BracketGenerator />}
     />
   </Route>
 )

@@ -1,5 +1,4 @@
 import React from "react"
-import PropTypes from "prop-types"
 import {
   Button,
   Box,
@@ -50,9 +49,4 @@ export const LandingPage = () => {
       </Container>
     </Box>
   )
-}
-
-LandingPage.propTypes = {
-  setShowLandingPage: PropTypes.func.isRequired,
-  pathname: PropTypes.string,
 }

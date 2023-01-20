@@ -46,6 +46,10 @@ const lightModeTheme = {
       lightest: "#C8D2DC",
       themostlight: "#F6F6F6",
     },
+    bracket: {
+      background: "#58595E",
+      score: "#777A7F",
+    },
   },
   components: {
     MuiAppBar: {
@@ -137,11 +141,24 @@ const darkModeTheme = {
       focusOpacity: 0.12,
       activatedOpacity: 0.24,
     },
+    bracket: {
+      background: "#393737",
+      score: "#554f4f",
+    },
   },
 }
 
 const commonTheme = {
   spacing: 4,
+  typography: {
+    text: {
+      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      fontSize: "1rem",
+      fontWeight: 400,
+      letterSpacing: "0.00938em",
+      lineHeight: 1.5,
+    },
+  },
   components: {
     MuiButton: {
       defaultProps: {
