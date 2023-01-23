@@ -6,10 +6,14 @@ import { Match } from "../components/Match"
 
 const styles = {
   column: {
-    height: "100%",
+    flex: 1,
   },
   row: {
-    height: "100%",
+    flex: 1,
+    display: "flex",
+  },
+  matchWrapper: {
+    flex: 1,
     display: "flex",
     flexDirection: "column",
     justifyContent: "center",
@@ -17,6 +21,49 @@ const styles = {
   header: {
     display: "flex",
     justifyContent: "center",
+  },
+  afterTopWrapper: {
+    display: "flex",
+    alignItems: "center",
+    position: "relative",
+  },
+  afterTop: {
+    borderTop: 2,
+    borderRight: 2,
+    borderColor: "bracket.line",
+    position: "absolute",
+    height: "50%",
+    top: "50%",
+    left: 1,
+    width: "25px",
+  },
+  afterBottomWrapper: {
+    display: "flex",
+    alignItems: "center",
+    position: "relative",
+  },
+  afterBottom: {
+    borderBottom: 2,
+    borderRight: 2,
+    borderColor: "bracket.line",
+    position: "absolute",
+    height: "50%",
+    bottom: "50%",
+    width: "25px",
+    left: 1,
+  },
+  beforeWrapper: {
+    display: "flex",
+    alignItems: "center",
+    position: "relative",
+  },
+  before: {
+    position: "absolute",
+    borderBottom: 2,
+    borderColor: "bracket.line",
+    width: 30,
+    top: "50%",
+    right: 1,
   },
 }
 
@@ -28,30 +75,70 @@ export const BracketGenerator = () => {
           <Box sx={styles.header}>
             <Typography variant="h5">Round One</Typography>
           </Box>
-          <Stack gap={6} sx={styles.column}>
+          <Stack gap={4} sx={styles.column}>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterTopWrapper}>
+                <Box sx={styles.afterTop}></Box>
+              </Box>
             </Box>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterBottomWrapper}>
+                <Box sx={styles.afterBottom}></Box>
+              </Box>
             </Box>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterTopWrapper}>
+                <Box sx={styles.afterTop}></Box>
+              </Box>
             </Box>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterBottomWrapper}>
+                <Box sx={styles.afterBottom}></Box>
+              </Box>
             </Box>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterTopWrapper}>
+                <Box sx={styles.afterTop}></Box>
+              </Box>
             </Box>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterBottomWrapper}>
+                <Box sx={styles.afterBottom}></Box>
+              </Box>
             </Box>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterTopWrapper}>
+                <Box sx={styles.afterTop}></Box>
+              </Box>
             </Box>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterBottomWrapper}>
+                <Box sx={styles.afterBottom}></Box>
+              </Box>
             </Box>
           </Stack>
         </Stack>
@@ -61,16 +148,48 @@ export const BracketGenerator = () => {
           </Box>
           <Stack gap={4} sx={styles.column}>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.beforeWrapper}>
+                <Box sx={styles.before}></Box>
+              </Box>
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterTopWrapper}>
+                <Box sx={styles.afterTop}></Box>
+              </Box>
             </Box>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.beforeWrapper}>
+                <Box sx={styles.before}></Box>
+              </Box>
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterBottomWrapper}>
+                <Box sx={styles.afterBottom}></Box>
+              </Box>
             </Box>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.beforeWrapper}>
+                <Box sx={styles.before}></Box>
+              </Box>
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterTopWrapper}>
+                <Box sx={styles.afterTop}></Box>
+              </Box>
             </Box>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.beforeWrapper}>
+                <Box sx={styles.before}></Box>
+              </Box>
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterBottomWrapper}>
+                <Box sx={styles.afterBottom}></Box>
+              </Box>
             </Box>
           </Stack>
         </Stack>
@@ -80,10 +199,26 @@ export const BracketGenerator = () => {
           </Box>
           <Stack gap={4} sx={styles.column}>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.beforeWrapper}>
+                <Box sx={styles.before}></Box>
+              </Box>
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterTopWrapper}>
+                <Box sx={styles.afterTop}></Box>
+              </Box>
             </Box>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.beforeWrapper}>
+                <Box sx={styles.before}></Box>
+              </Box>
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
+              <Box sx={styles.afterBottomWrapper}>
+                <Box sx={styles.afterBottom}></Box>
+              </Box>
             </Box>
           </Stack>
         </Stack>
@@ -93,7 +228,12 @@ export const BracketGenerator = () => {
           </Box>
           <Stack gap={4} sx={styles.column}>
             <Box sx={styles.row}>
-              <Match />
+              <Box sx={styles.beforeWrapper}>
+                <Box sx={styles.before}></Box>
+              </Box>
+              <Box sx={styles.matchWrapper}>
+                <Match />
+              </Box>
             </Box>
           </Stack>
         </Stack>

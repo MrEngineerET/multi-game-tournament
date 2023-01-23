@@ -49,6 +49,7 @@ const lightModeTheme = {
     bracket: {
       background: "#58595E",
       score: "#777A7F",
+      line: "#aaa",
     },
   },
   components: {
@@ -144,6 +145,7 @@ const darkModeTheme = {
     bracket: {
       background: "#393737",
       score: "#554f4f",
+      line: "#888",
     },
   },
 }

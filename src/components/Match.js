@@ -7,6 +7,12 @@ const matchStyles = {
     width: 200,
     borderRadius: "5px",
     bgcolor: "#bbb",
+    boxShadow: 3,
+    "&:hover": {
+      border: "1px solid",
+      borderColor: "primary.main",
+      boxShadow: 4,
+    },
   },
 }
 
@@ -42,7 +48,7 @@ export const Match = () => {
   return (
     <Box sx={matchStyles.root}>
       <Row name="Player One" score={5} isTop />
-      <Divider color="white" />
+      <Divider sx={{ borderColor: "background.default" }} />
       <Row name="Player Two" score={2} isWinner />
     </Box>
   )
