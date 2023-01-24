@@ -59,16 +59,16 @@ function Row({ name, score, isWinner, isTop }) {
     <Box
       sx={[rowStyles.row, isTop ? rowStyles.borderTop : rowStyles.borderBottom]}
     >
-      <Typography sx={rowStyles.name} variant="text">
+      <Typography sx={rowStyles.name} component="span">
         {name}
       </Typography>
       <Typography
+        component="span"
         sx={[
           rowStyles.score,
           isWinner && { bgcolor: (theme) => theme.palette.primary.main },
           isTop ? { borderTopRightRadius: 5 } : { borderBottomRightRadius: 5 },
         ]}
-        variant="text"
       >
         {score}
       </Typography>

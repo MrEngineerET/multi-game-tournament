@@ -38,14 +38,7 @@ const lightModeTheme = {
     secondary: {
       main: "#288CBE",
     },
-    text: {
-      primary: "#28323C",
-      secondary: "#646E78",
-      disabled: fadeToTransparent("#28323C", 0.7),
-      lighter: "#A0AAB4",
-      lightest: "#C8D2DC",
-      themostlight: "#F6F6F6",
-    },
+
     bracket: {
       background: "#58595E",
       score: "#777A7F",
@@ -79,23 +72,6 @@ const darkModeTheme = {
     background: {
       default: "#001E3C",
       paper: "#0A1929",
-    },
-    common: {
-      black: "#1D1D1D",
-      white: "#fff",
-    },
-    text: {
-      primary: "#fff",
-      secondary: "#B2BAC2",
-      disabled: "rgba(255, 255, 255, 0.5)",
-      icon: "rgba(255, 255, 255, 0.5)",
-    },
-    grey: {
-      contrastText: "#6F7E8C",
-      A100: "#f5f5f5",
-      A200: "#eeeeee",
-      A400: "#bdbdbd",
-      A700: "#616161",
     },
     error: {
       main: "#EB0014",
@@ -152,15 +128,7 @@ const darkModeTheme = {
 
 const commonTheme = {
   spacing: 4,
-  typography: {
-    text: {
-      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
-      fontSize: "1rem",
-      fontWeight: 400,
-      letterSpacing: "0.00938em",
-      lineHeight: 1.5,
-    },
-  },
+  typography: {},
   components: {
     MuiButton: {
       defaultProps: {
@@ -195,20 +163,4 @@ function createTheme(themeMode = "light") {
     ),
   )
   return responsiveFontSizes(theme, { factor: 2 })
-}
-
-function getDecimalColor(color) {
-  const R = color.substring(1, 3)
-  const G = color.substring(3, 5)
-  const B = color.substring(5, 7)
-  const decR = parseInt(R, 16)
-  const decG = parseInt(G, 16)
-  const decB = parseInt(B, 16)
-  return { R: decR, G: decG, B: decB }
-}
-
-function fadeToTransparent(color, percent) {
-  if (!percent) percent = 0
-  const dec = getDecimalColor(color)
-  return `rgba(${dec.R}, ${dec.G}, ${dec.B}, ${percent})`
 }
