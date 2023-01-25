@@ -4,6 +4,7 @@ import { LandingPage } from "../pages/LandingPage"
 import { LogIn } from "../pages/LogIn"
 import { SignUp } from "../pages/SignUp"
 import { BracketGenerator } from "../pages/BracketGenerator"
+import { Tournament } from "../components/Tournament/Tournament"
 /**
  *  /login
  *  /signup
@@ -23,6 +24,7 @@ export const routes = (
       path="/tournament/bracket-generator"
       element={<BracketGenerator />}
     />
+    <Route path="/tournament/example-tournament" element={<Tournament />} />
   </Route>
 )
 
