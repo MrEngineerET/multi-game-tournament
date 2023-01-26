@@ -93,19 +93,19 @@ export const singleEliminationTournament = {
       number: 1,
     },
   ],
-  matchs: [
+  matches: [
     {
       id: 0,
       number: 1,
       round_id: 0,
       participants: [
         {
-          id: null,
-          score: null,
+          id: 0,
+          score: 5,
         },
         {
-          id: null,
-          score: null,
+          id: 1,
+          score: 2,
         },
       ],
       winner_id: null,
@@ -117,11 +117,11 @@ export const singleEliminationTournament = {
       round_id: 0,
       participants: [
         {
-          id: null,
+          id: 2,
           score: null,
         },
         {
-          id: null,
+          id: 3,
           score: null,
         },
       ],
@@ -134,11 +134,11 @@ export const singleEliminationTournament = {
       round_id: 0,
       participants: [
         {
-          id: null,
+          id: 4,
           score: null,
         },
         {
-          id: null,
+          id: 5,
           score: null,
         },
       ],
@@ -151,11 +151,11 @@ export const singleEliminationTournament = {
       round_id: 0,
       participants: [
         {
-          id: null,
+          id: 6,
           score: null,
         },
         {
-          id: null,
+          id: 7,
           score: null,
         },
       ],
@@ -232,3 +232,52 @@ export const singleEliminationTournament = {
     },
   ],
 }
+
+function catagorizeData(tournamentData) {
+  const organizedData = { ...tournamentData }
+  // organize matches into group
+  organizedData.rounds.forEach((round) => (round.matches = []))
+  for (let round of organizedData.rounds) {
+    for (let match of organizedData.matches)
+      if (match.round_id === round.id) round.matches.push({ ...match })
+  }
+  delete organizedData.matches
+
+  organizedData.groups.forEach((group) => (group.rounds = []))
+  for (let group of organizedData.groups) {
+    for (let round of organizedData.rounds)
+      if (round.group_id === group.id) group.rounds.push(round)
+  }
+  delete organizedData.rounds
+
+  organizedData.stages.forEach((stage) => (stage.groups = []))
+  for (let stage of organizedData.stages) {
+    for (let group of organizedData.groups)
+      if (group.stage_id === stage.id) stage.groups.push(group)
+  }
+  delete organizedData.groups
+
+  return organizedData
+}
+
+function addParticipantNameInMatch(tournamentData) {
+  function getParticipantName(id) {
+    const participant = tournamentData.participants.find(
+      (participant) => participant.id === id,
+    )
+    if (!participant) return ""
+    return participant.name
+  }
+
+  const updatedData = tournamentData
+  for (let match of updatedData.matches) {
+    for (let participant of match.participants) {
+      participant.name = getParticipantName(participant.id)
+    }
+  }
+  return updatedData
+}
+
+export const organizedData = catagorizeData(
+  addParticipantNameInMatch(singleEliminationTournament),
+)

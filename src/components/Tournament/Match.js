@@ -14,7 +14,6 @@ const styleConstants = {
 }
 const styles = {
   match: {
-    m: 2,
     position: "relative",
     width: "max-content",
     boxShadow: 3,
@@ -92,6 +91,7 @@ const styles = {
 }
 
 export function Match({
+  connectTo,
   match = {
     id: 0,
     number: 1,
@@ -168,4 +168,5 @@ export function Match({
 
 Match.propTypes = {
   match: PropTypes.object,
+  connectTo: PropTypes.oneOf("up", "down", "behind"),
 }

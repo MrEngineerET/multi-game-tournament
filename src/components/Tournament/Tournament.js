@@ -1,15 +1,31 @@
 import React from "react"
-import { singleEliminationTournament as tournamentData } from "../../testData"
-import { Typography, Box } from "@mui/material"
-import { Stage } from "./Stage"
+import { organizedData as tournamentData } from "../../testData"
+import { Typography, Box, Divider } from "@mui/material"
+import { SingleEliminationStage } from "./SingleEliminationStage"
+import { DoubleEliminationStage } from "./DoubleEliminationStage"
+import { RoundRobinStage } from "./RoundRobinStage"
 
 export function Tournament() {
+  console.log("idid", "tournament data", tournamentData)
   return (
     <Box>
       <Typography variant="h4" component="h1">
         {tournamentData.name}
       </Typography>
-      <Stage />
+      {tournamentData.stages.map((stage, i) => {
+        return (
+          <Box key={stage.name && i}>
+            {stage.type === "single_elimination" && (
+              <SingleEliminationStage stage={stage} />
+            )}
+            {stage.type === "double_elimination" && (
+              <DoubleEliminationStage stage={stage} />
+            )}
+            {stage.type === "round_robin" && <RoundRobinStage stage={stage} />}
+            <Divider />
+          </Box>
+        )
+      })}
     </Box>
   )
 }
