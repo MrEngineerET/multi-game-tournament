@@ -24,7 +24,7 @@ export const routes = (
       path="/tournament/bracket-generator"
       element={<BracketGenerator />}
     />
-    <Route path="/tournament/example-tournament" element={<Tournament />} />
+    <Route path="/tournament/example" element={<Tournament />} />
   </Route>
 )
 

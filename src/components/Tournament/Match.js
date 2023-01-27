@@ -150,7 +150,12 @@ export function Match({
           opponent.push(
             <Divider
               key="divider"
-              sx={{ borderColor: "background.default" }}
+              sx={{
+                borderColor: (theme) =>
+                  theme.palette.mode === "light"
+                    ? "#78787c"
+                    : theme.palette.background.default,
+              }}
             />,
           )
         return opponent

@@ -8,7 +8,7 @@ const styleConstants = {
 }
 const styles = {
   root: {
-    minWidth: (theme) => theme.breakpoints.values.sm,
+    minWidth: "100%",
     overflow: "scroll",
     border: 1,
   },

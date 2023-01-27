@@ -6,9 +6,8 @@ import { DoubleEliminationStage } from "./DoubleEliminationStage"
 import { RoundRobinStage } from "./RoundRobinStage"
 
 export function Tournament() {
-  console.log("idid", "tournament data", tournamentData)
   return (
-    <Box>
+    <Box sx={{ m: 5 }}>
       <Typography variant="h4" component="h1">
         {tournamentData.name}
       </Typography>
