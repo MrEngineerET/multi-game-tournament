@@ -67,7 +67,7 @@ const styles = {
   },
 }
 
-export const BracketGenerator = () => {
+export const BracketExample = () => {
   return (
     <Box p={5}>
       <Stack direction="row" gap={15}>
