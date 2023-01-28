@@ -2,7 +2,7 @@
 import React from "react"
 import { Box, Stack, Typography } from "@mui/material"
 
-import { Match } from "../components/Match"
+import { Match } from "../Match"
 
 const styles = {
   column: {
@@ -67,7 +67,7 @@ const styles = {
   },
 }
 
-export const BracketExample = () => {
+export const TournamentExampleComplete = () => {
   return (
     <Box p={5}>
       <Stack direction="row" gap={15}>

@@ -1,11 +1,19 @@
 import React from "react"
-import { Route } from "react-router-dom"
+import { Outlet, Route } from "react-router-dom"
 import { LandingPage } from "../pages/LandingPage"
 import { LogIn } from "../pages/LogIn"
 import { SignUp } from "../pages/SignUp"
-import { BracketExample } from "../pages/BracketExample"
-import { Tournament } from "../components/Tournament/Tournament"
-import { CreateTournament } from "../pages/CreateTournament"
+import { TournamentExampleComplete } from "../components/Tournament/TournamentExampleComplete"
+import { TournamentExample } from "../components/Tournament/TournamentExample"
+import { TournamentDetail } from "../components/Tournament/TournamentDetail"
+import { Tournament } from "../pages/Tournament"
+import {
+  CreateTournament,
+  action as createTournamentAction,
+} from "../pages/CreateTournament"
+import { LoggedOutHeader } from "../components/LoggedOutHeader"
+import { Box } from "@mui/material"
+
 /**
  *  /login
  *  /signup
@@ -21,10 +29,24 @@ export const routes = (
       path="forgot-password"
       element={<div>This is the forgot password page</div>}
     />
-    <Route path="tournament">
-      <Route path="create" element={<CreateTournament />} />
-      <Route path="example-one" element={<Tournament />} />
-      <Route path="example-completed" element={<BracketExample />} />
+    <Route
+      path="tournament"
+      element={
+        <Box>
+          <LoggedOutHeader />
+          <Outlet />
+        </Box>
+      }
+    >
+      <Route index element={<Tournament />} />
+      <Route path=":id" element={<TournamentDetail />} />
+      <Route
+        path="new"
+        element={<CreateTournament />}
+        action={createTournamentAction}
+      />
+      <Route path="example-one" element={<TournamentExample />} />
+      <Route path="example-completed" element={<TournamentExampleComplete />} />
     </Route>
   </Route>
 )

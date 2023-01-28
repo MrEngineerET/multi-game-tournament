@@ -42,7 +42,7 @@ export const LandingPage = () => {
           }}
         >
           <Typography variant="h4">Simplify Tournament Management</Typography>
-          <Button href="tournament/create">Generate Bracket</Button>
+          <Button href="tournament">Tournament</Button>
           <Button href="tournament/example-one">Example</Button>
           <Button href="tournament/example-completed">
             Example (completed)

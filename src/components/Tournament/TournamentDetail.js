@@ -1,11 +1,16 @@
 import React from "react"
-import { organizedData as tournamentData } from "../../testData"
+import { addParticipantNameInMatch, catagorizeData } from "../../testData"
 import { Typography, Box, Divider } from "@mui/material"
 import { SingleEliminationStage } from "./SingleEliminationStage"
 import { DoubleEliminationStage } from "./DoubleEliminationStage"
 import { RoundRobinStage } from "./RoundRobinStage"
 
-export function Tournament() {
+export function TournamentDetail() {
+  const tournamentData = catagorizeData(
+    addParticipantNameInMatch(window.tournamentData),
+  )
+
+  if (!tournamentData) return "waiting"
   return (
     <Box sx={{ m: 5 }}>
       <Typography variant="h4" component="h1">
