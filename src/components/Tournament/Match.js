@@ -106,8 +106,6 @@ export function Match({
         name: "Biruk Berhanu",
       },
     ],
-    winner_id: null,
-    loser_id: null,
   },
 }) {
   const bothParticipantsPresent =

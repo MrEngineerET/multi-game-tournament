@@ -5,7 +5,10 @@ import { LogIn } from "../pages/LogIn"
 import { SignUp } from "../pages/SignUp"
 import { TournamentExampleComplete } from "../components/Tournament/TournamentExampleComplete"
 import { TournamentExample } from "../components/Tournament/TournamentExample"
-import { TournamentDetail } from "../components/Tournament/TournamentDetail"
+import {
+  TournamentDetail,
+  loader as tournamentDetailLoader,
+} from "../components/Tournament/TournamentDetail"
 import { Tournament } from "../pages/Tournament"
 import {
   CreateTournament,
@@ -21,16 +24,9 @@ import { Box } from "@mui/material"
  */
 
 export const routes = (
-  <Route path="/">
-    <Route index element={<LandingPage />} />
-    <Route path={"login"} element={<LogIn />} />
-    <Route path="signup" element={<SignUp />} />
+  <Route>
     <Route
-      path="forgot-password"
-      element={<div>This is the forgot password page</div>}
-    />
-    <Route
-      path="tournament"
+      path="/"
       element={
         <Box>
           <LoggedOutHeader />
@@ -38,16 +34,32 @@ export const routes = (
         </Box>
       }
     >
-      <Route index element={<Tournament />} />
-      <Route path=":id" element={<TournamentDetail />} />
-      <Route
-        path="new"
-        element={<CreateTournament />}
-        action={createTournamentAction}
-      />
-      <Route path="example-one" element={<TournamentExample />} />
-      <Route path="example-completed" element={<TournamentExampleComplete />} />
+      <Route index element={<LandingPage />} />
+      <Route path="tournament">
+        <Route index element={<Tournament />} />
+        <Route
+          path=":id"
+          element={<TournamentDetail />}
+          loader={tournamentDetailLoader}
+        />
+        <Route
+          path="new"
+          element={<CreateTournament />}
+          action={createTournamentAction}
+        />
+        <Route path="example-one" element={<TournamentExample />} />
+        <Route
+          path="example-completed"
+          element={<TournamentExampleComplete />}
+        />
+      </Route>
     </Route>
+    <Route path={"/login"} element={<LogIn />} />
+    <Route path="/signup" element={<SignUp />} />
+    <Route
+      path="forgot-password"
+      element={<div>This is the forgot password page</div>}
+    />
   </Route>
 )
 

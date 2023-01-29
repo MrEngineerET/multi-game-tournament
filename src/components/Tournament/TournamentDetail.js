@@ -1,4 +1,5 @@
 import React from "react"
+import { useLoaderData } from "react-router-dom"
 import { addParticipantNameInMatch, catagorizeData } from "../../testData"
 import { Typography, Box, Divider } from "@mui/material"
 import { SingleEliminationStage } from "./SingleEliminationStage"
@@ -6,9 +7,8 @@ import { DoubleEliminationStage } from "./DoubleEliminationStage"
 import { RoundRobinStage } from "./RoundRobinStage"
 
 export function TournamentDetail() {
-  const tournamentData = catagorizeData(
-    addParticipantNameInMatch(window.tournamentData),
-  )
+  let { tournamentData } = useLoaderData()
+  tournamentData = catagorizeData(addParticipantNameInMatch(tournamentData))
 
   if (!tournamentData) return "waiting"
   return (
@@ -32,4 +32,10 @@ export function TournamentDetail() {
       })}
     </Box>
   )
+}
+
+export function loader() {
+  return {
+    tournamentData: window.tournamentData,
+  }
 }
