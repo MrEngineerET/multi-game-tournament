@@ -506,8 +506,6 @@ export function catagorizeData(tournamentData) {
   // create participants property in matches and add 'opponent1' and 'opponent2'
   organizedData.matches.forEach((match) => {
     match.participants = [match.opponent1, match.opponent2]
-    delete match.opponent1
-    delete match.opponent2
   })
 
   // collect matches into group

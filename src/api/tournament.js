@@ -5,19 +5,18 @@ const storage = new InMemoryDatabase()
 const bracketsManager = new BracketsManager(storage)
 
 export async function createTournament() {
-  const bracket = await bracketsManager.create({
-    tournamentId: 0,
-    name: "Tournament Name",
-    type: "single_elimination",
-    number: 1,
+  // eslint-disable-next-line no-unused-vars
+  let query = {
+    name: "aa",
+    seeding: ["a", "b", "c", "d"],
     settings: {
-      size: 4,
+      seedOrdering: ["natural"],
+      consolationFinal: false,
     },
-  })
-  const tournament = {
-    ...storage.data,
-    ...bracket,
+    tournamentId: 0,
+    type: "single_elimination",
   }
-  console.log("idid", "newly created tournament", tournament)
-  return tournament
+  const bracket = await bracketsManager.create(query)
+
+  return { ...bracket, ...storage.data }
 }
