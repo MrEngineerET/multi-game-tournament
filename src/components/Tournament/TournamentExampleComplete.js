@@ -1,7 +1,7 @@
 import React from "react"
 import { Box, Stack, Typography } from "@mui/material"
 
-import { Match } from "../Match"
+import { MatchExample } from "../MatchExample"
 
 const styles = {
   column: {
@@ -77,7 +77,7 @@ export const TournamentExampleComplete = () => {
           <Stack gap={4} sx={styles.column}>
             <Box sx={styles.row}>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterTopWrapper}>
                 <Box sx={styles.afterTop}></Box>
@@ -85,7 +85,7 @@ export const TournamentExampleComplete = () => {
             </Box>
             <Box sx={styles.row}>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterBottomWrapper}>
                 <Box sx={styles.afterBottom}></Box>
@@ -93,7 +93,7 @@ export const TournamentExampleComplete = () => {
             </Box>
             <Box sx={styles.row}>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterTopWrapper}>
                 <Box sx={styles.afterTop}></Box>
@@ -101,7 +101,7 @@ export const TournamentExampleComplete = () => {
             </Box>
             <Box sx={styles.row}>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterBottomWrapper}>
                 <Box sx={styles.afterBottom}></Box>
@@ -109,7 +109,7 @@ export const TournamentExampleComplete = () => {
             </Box>
             <Box sx={styles.row}>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterTopWrapper}>
                 <Box sx={styles.afterTop}></Box>
@@ -117,7 +117,7 @@ export const TournamentExampleComplete = () => {
             </Box>
             <Box sx={styles.row}>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterBottomWrapper}>
                 <Box sx={styles.afterBottom}></Box>
@@ -125,7 +125,7 @@ export const TournamentExampleComplete = () => {
             </Box>
             <Box sx={styles.row}>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterTopWrapper}>
                 <Box sx={styles.afterTop}></Box>
@@ -133,7 +133,7 @@ export const TournamentExampleComplete = () => {
             </Box>
             <Box sx={styles.row}>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterBottomWrapper}>
                 <Box sx={styles.afterBottom}></Box>
@@ -151,7 +151,7 @@ export const TournamentExampleComplete = () => {
                 <Box sx={styles.before}></Box>
               </Box>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterTopWrapper}>
                 <Box sx={styles.afterTop}></Box>
@@ -162,7 +162,7 @@ export const TournamentExampleComplete = () => {
                 <Box sx={styles.before}></Box>
               </Box>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterBottomWrapper}>
                 <Box sx={styles.afterBottom}></Box>
@@ -173,7 +173,7 @@ export const TournamentExampleComplete = () => {
                 <Box sx={styles.before}></Box>
               </Box>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterTopWrapper}>
                 <Box sx={styles.afterTop}></Box>
@@ -184,7 +184,7 @@ export const TournamentExampleComplete = () => {
                 <Box sx={styles.before}></Box>
               </Box>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterBottomWrapper}>
                 <Box sx={styles.afterBottom}></Box>
@@ -202,7 +202,7 @@ export const TournamentExampleComplete = () => {
                 <Box sx={styles.before}></Box>
               </Box>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterTopWrapper}>
                 <Box sx={styles.afterTop}></Box>
@@ -213,7 +213,7 @@ export const TournamentExampleComplete = () => {
                 <Box sx={styles.before}></Box>
               </Box>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
               <Box sx={styles.afterBottomWrapper}>
                 <Box sx={styles.afterBottom}></Box>
@@ -231,7 +231,7 @@ export const TournamentExampleComplete = () => {
                 <Box sx={styles.before}></Box>
               </Box>
               <Box sx={styles.matchWrapper}>
-                <Match />
+                <MatchExample />
               </Box>
             </Box>
           </Stack>

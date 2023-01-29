@@ -44,7 +44,7 @@ const rowStyles = {
   },
 }
 
-export const Match = () => {
+export const MatchExample = () => {
   return (
     <Box sx={matchStyles.root}>
       <Row name="Player One" score={5} isTop />
