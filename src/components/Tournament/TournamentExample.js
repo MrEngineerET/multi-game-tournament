@@ -8,6 +8,7 @@ import { RoundRobinStage } from "./RoundRobinStage"
 export function TournamentExample() {
   return (
     <Box sx={{ m: 5 }}>
+      <Typography>Tournament Example with data created manually</Typography>
       <Typography variant="h4" component="h1">
         {tournamentData.name}
       </Typography>
