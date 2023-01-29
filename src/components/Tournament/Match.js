@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React from "react"
 import PropTypes from "prop-types"
 import { Box, Divider, IconButton, Typography } from "@mui/material"
@@ -91,7 +90,6 @@ const styles = {
 }
 
 export function Match({
-  connectTo,
   match = {
     id: 0,
     number: 1,
@@ -173,5 +171,4 @@ export function Match({
 
 Match.propTypes = {
   match: PropTypes.object,
-  connectTo: PropTypes.oneOf("up", "down", "behind"),
 }
