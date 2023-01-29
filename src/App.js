@@ -35,7 +35,14 @@ function App() {
     <>
       <CssBaseline />
       <RouterProvider router={router} />
-      <Button variant="text" onClick={themeMode.changeThemeMode} sx={{ mt: 5 }}>
+      <Button
+        sx={{
+          position: "fixed",
+          bottom: 0,
+        }}
+        variant="text"
+        onClick={themeMode.changeThemeMode}
+      >
         Change to Dark Mode
       </Button>
     </>
