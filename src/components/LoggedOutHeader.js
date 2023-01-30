@@ -4,7 +4,7 @@ import { Menu as MenuIcon } from "@mui/icons-material"
 
 export function LoggedOutHeader() {
   return (
-    <AppBar position="static">
+    <AppBar position="sticky">
       <Toolbar>
         <IconButton
           size="large"

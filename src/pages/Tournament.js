@@ -5,7 +5,7 @@ import { Container } from "@mui/system"
 const styles = {
   root: {},
   bannerWrapper: {
-    background: "linear-gradient(to right, #414345, #232526)",
+    bgcolor: "background.paper",
     p: 20,
     pl: 5,
     pr: 5,
@@ -26,19 +26,10 @@ const styles = {
 
 export function Tournament() {
   return (
-    <Box
-      sx={{
-        ...styles.root,
-      }}
-    >
+    <Box sx={styles.root}>
       <Box sx={styles.bannerWrapper}>
         <Container sx={styles.banner}>
-          <Typography
-            variant="h3"
-            component="h1"
-            color="whitesmoke"
-            sx={styles.yourTournament}
-          >
+          <Typography variant="h3" component="h1" sx={styles.yourTournament}>
             Your Tournaments
           </Typography>
           <Button href="new" fullWidth={false}>
