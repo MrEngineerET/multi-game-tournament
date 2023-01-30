@@ -5,6 +5,7 @@ import { Typography, Box, Divider } from "@mui/material"
 import { SingleEliminationStage } from "./SingleEliminationStage"
 import { DoubleEliminationStage } from "./DoubleEliminationStage"
 import { RoundRobinStage } from "./RoundRobinStage"
+import { getTournament } from "../../api/tournament"
 
 export function TournamentDetail() {
   let { tournamentData } = useLoaderData()
@@ -34,8 +35,8 @@ export function TournamentDetail() {
   )
 }
 
-export function loader() {
-  return {
-    tournamentData: window.tournamentData,
-  }
+export async function loader({ params }) {
+  const tournamentId = params.id
+  const tournament = await getTournament(tournamentId)
+  return { tournamentData: tournament }
 }

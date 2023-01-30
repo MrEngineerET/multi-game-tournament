@@ -9,7 +9,7 @@ import {
   TournamentDetail,
   loader as tournamentDetailLoader,
 } from "../components/Tournament/TournamentDetail"
-import { Tournament } from "../pages/Tournament"
+import { Tournament, loader as tournamentsLoader } from "../pages/Tournament"
 import {
   CreateTournament,
   action as createTournamentAction,
@@ -36,7 +36,7 @@ export const routes = (
     >
       <Route index element={<LandingPage />} />
       <Route path="tournament">
-        <Route index element={<Tournament />} />
+        <Route index element={<Tournament />} loader={tournamentsLoader} />
         <Route
           path=":id"
           element={<TournamentDetail />}
