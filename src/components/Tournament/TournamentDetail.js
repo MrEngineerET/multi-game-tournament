@@ -8,9 +8,8 @@ import { RoundRobinStage } from "./RoundRobinStage"
 import { getTournament } from "../../api/tournament"
 
 export function TournamentDetail() {
-  let { tournamentData } = useLoaderData()
-  tournamentData = catagorizeData(addParticipantNameInMatch(tournamentData))
-
+  const { tournamentData } = useLoaderData()
+  console.log("idid", "tournamentData", tournamentData)
   if (!tournamentData) return "waiting"
   return (
     <Box sx={{ m: 5 }}>
@@ -38,5 +37,7 @@ export function TournamentDetail() {
 export async function loader({ params }) {
   const tournamentId = params.id
   const tournament = await getTournament(tournamentId)
-  return { tournamentData: tournament }
+  return {
+    tournamentData: catagorizeData(addParticipantNameInMatch(tournament)),
+  }
 }

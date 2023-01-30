@@ -3,9 +3,6 @@ import { BracketsManager } from "brackets-manager"
 import ls from "../utils/localStorage"
 import { nanoid } from "nanoid"
 
-const storage = new InMemoryDatabase()
-const bracketsManager = new BracketsManager(storage)
-
 export const stageType = {
   singleElimination: "single_elimination",
   doubleElimination: "double_elimination",
@@ -18,6 +15,8 @@ export async function createTournament(
   participants,
   stageType,
 ) {
+  const storage = new InMemoryDatabase()
+  const bracketsManager = new BracketsManager(storage)
   //create a tournament
   let query = {
     name,
