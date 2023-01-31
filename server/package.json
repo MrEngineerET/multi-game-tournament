@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "nodemon server.js",
     "prettier": "prettier --ignore-path ./.gitignore .",
     "format_check": "npm run prettier -- --check",
     "format": "npm run prettier -- --write",
@@ -19,6 +19,7 @@
   "devDependencies": {
     "eslint": "^8.33.0",
     "eslint-config-prettier": "^8.6.0",
+    "nodemon": "^2.0.20",
     "prettier": "2.8.3"
   }
 }
