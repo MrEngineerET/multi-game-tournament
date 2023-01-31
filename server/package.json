@@ -1,0 +1,24 @@
+{
+  "name": "server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node server.js",
+    "prettier": "prettier --ignore-path ./.gitignore .",
+    "format_check": "npm run prettier -- --check",
+    "format": "npm run prettier -- --write",
+    "lint": "eslint --ignore-path ./.gitignore ."
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "eslint": "^8.33.0",
+    "eslint-config-prettier": "^8.6.0",
+    "prettier": "2.8.3"
+  }
+}
