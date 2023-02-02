@@ -11,6 +11,8 @@ const styles = {
     minWidth: "100%",
     overflow: "scroll",
     border: 1,
+    pl: 5,
+    pb: 5,
   },
   group: {
     display: "flex",

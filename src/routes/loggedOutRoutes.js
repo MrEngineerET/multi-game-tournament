@@ -5,10 +5,7 @@ import { LogIn } from "../pages/LogIn"
 import { SignUp } from "../pages/SignUp"
 import { TournamentExampleComplete } from "../components/Tournament/TournamentExampleComplete"
 import { TournamentExample } from "../components/Tournament/TournamentExample"
-import {
-  TournamentDetail,
-  loader as tournamentDetailLoader,
-} from "../components/Tournament/TournamentDetail"
+import { TournamentDetail } from "../components/Tournament/TournamentDetail"
 import { Tournament, loader as tournamentsLoader } from "../pages/Tournament"
 import {
   CreateTournament,
@@ -16,6 +13,10 @@ import {
 } from "../pages/CreateTournament"
 import { LoggedOutHeader } from "../components/LoggedOutHeader"
 import { Box } from "@mui/material"
+import {
+  TournamentProvider,
+  loader as tournamentDetailLoader,
+} from "../context/TournamentContext"
 
 /**
  *  /login
@@ -39,7 +40,11 @@ export const routes = (
         <Route index element={<Tournament />} loader={tournamentsLoader} />
         <Route
           path=":id"
-          element={<TournamentDetail />}
+          element={
+            <TournamentProvider>
+              <TournamentDetail />
+            </TournamentProvider>
+          }
           loader={tournamentDetailLoader}
         />
         <Route

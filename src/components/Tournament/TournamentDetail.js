@@ -1,15 +1,13 @@
 import React from "react"
-import { useLoaderData } from "react-router-dom"
-import { addParticipantNameInMatch, catagorizeData } from "../../testData"
 import { Typography, Box, Divider } from "@mui/material"
 import { SingleEliminationStage } from "./SingleEliminationStage"
 import { DoubleEliminationStage } from "./DoubleEliminationStage"
 import { RoundRobinStage } from "./RoundRobinStage"
-import { getTournament } from "../../api/tournament"
+import { useTournamentContext } from "../../context/TournamentContext"
 
 export function TournamentDetail() {
-  const { tournamentData } = useLoaderData()
-  console.log("idid", "tournamentData", tournamentData)
+  const { tournamentData } = useTournamentContext()
+
   if (!tournamentData) return "waiting"
   return (
     <Box sx={{ m: 5 }}>
@@ -32,12 +30,4 @@ export function TournamentDetail() {
       })}
     </Box>
   )
-}
-
-export async function loader({ params }) {
-  const tournamentId = params.id
-  const tournament = await getTournament(tournamentId)
-  return {
-    tournamentData: catagorizeData(addParticipantNameInMatch(tournament)),
-  }
 }

@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { Box, Divider, IconButton, Typography } from "@mui/material"
 import BorderColorIcon from "@mui/icons-material/BorderColor"
+import { MatchEditDialog } from "./MatchScoreEditDialog"
 
 const styleConstants = {
   borderRadius: "5px",
@@ -122,6 +123,8 @@ export function Match({
       match.participants[0].score > match.participants[1].score ? 0 : 1
   }
 
+  const [openMatchEditDialog, setOpenMatchEditDialog] = useState(false)
+
   return (
     <Box sx={styles.match}>
       {match.participants.map((participant, i) => {
@@ -158,11 +161,16 @@ export function Match({
       })}
       {showEditButton && (
         <Box sx={styles.editScore}>
-          <IconButton>
+          <IconButton onClick={() => setOpenMatchEditDialog((prev) => !prev)}>
             <BorderColorIcon sx={styles.editIcon} />
           </IconButton>
         </Box>
       )}
+      <MatchEditDialog
+        open={openMatchEditDialog}
+        onClose={() => setOpenMatchEditDialog(false)}
+        match={match}
+      />
     </Box>
   )
 }
