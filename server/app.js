@@ -1,9 +1,15 @@
-const express = require("express")
-const path = require("path")
-const app = express()
-const tournamentRouter = require("./routes/tournamentRoutes")
+import express from "express"
+import tournamentRouter from "./routes/tournamentRoutes.js"
 
-app.use(express.static(path.join(__dirname, "public")))
+const app = express()
+app.use(express.static("public"))
+
+app.use(express.json())
+app.use(
+  express.urlencoded({
+    extended: true,
+  }),
+)
 
 app.get("/", (req, res) => {
   res.send("Hello World!")
@@ -11,4 +17,4 @@ app.get("/", (req, res) => {
 
 app.use("/tournament", tournamentRouter)
 
-module.exports = { app }
+export { app }
