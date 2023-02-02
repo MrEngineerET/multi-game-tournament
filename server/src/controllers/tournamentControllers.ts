@@ -11,11 +11,12 @@ export const getAllTournaments = async (req, res) => {
 }
 
 export const createTournament = async (req, res) => {
-  let { name, participants, type } = req.body
+  const { name, type } = req.body
+  const participants = req.body.participants.split(",")
+
   const jsonStorage = new JsonDatabase(
     path.join(__dirname, "..", "data", "tournaments.json"),
   )
-  participants = participants.split(",")
 
   const manager = new BracketsManager(jsonStorage)
 
@@ -29,11 +30,13 @@ export const createTournament = async (req, res) => {
       seedOrdering: ["natural"],
     },
   })
-
+  // const data = await jsonStorage.select()
   res.send({
     status: "",
-    data: { ...stage, ...jsonStorage.data, id: nanoid() },
+    data: { ...stage, id: nanoid() },
   })
 }
 
-export const getTournament = async () => {}
+export const getTournament = async () => {
+  console.log("working")
+}

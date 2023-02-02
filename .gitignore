@@ -25,4 +25,4 @@ yarn-error.log*
 /todo.js
 
 /server/src/data
-/server/dist/data
+/server/dist/
