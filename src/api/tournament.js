@@ -51,3 +51,36 @@ export async function getTournament(id) {
   const tournament = tournaments.find((tournament) => tournament.id == id)
   return tournament
 }
+
+export async function updateTournament(match, tournamentId) {
+  //get the tournament data
+  const tournamentData = await getTournament(tournamentId)
+
+  // console.log("idid", "match in updateTournament function ", match)
+  // console.log("idid", "tournament Data ", tournamentId, tournamentData)
+
+  const storage = new InMemoryDatabase()
+  const bracketsManager = new BracketsManager(storage)
+  await bracketsManager.import(tournamentData)
+  await bracketsManager.update.match(match)
+  const newTournamentData = await bracketsManager.export()
+  newTournamentData.id = tournamentId
+  newTournamentData.name = tournamentData.name
+  newTournamentData.type = tournamentData.type
+  newTournamentData.number = tournamentData.number
+
+  // reflect the update onto local storage
+  let tournaments = ls.getItem("tournaments")
+  if (!tournaments) tournaments = [newTournamentData]
+  else {
+    tournaments = tournaments.map((tournament) => {
+      if (tournament.id === tournamentId) return newTournamentData
+      else return tournament
+    })
+  }
+
+  ls.setItem("tournaments", tournaments)
+
+  //return the updated tournament
+  return newTournamentData
+}
