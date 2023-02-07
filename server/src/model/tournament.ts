@@ -1,19 +1,27 @@
 import { Schema, Model, model } from "mongoose"
-import { InputStage } from "brackets-model"
+import {
+  InputStage,
+  Group,
+  Match,
+  Participant,
+  Round,
+  MatchGame,
+} from "brackets-model"
 
 export const tournamentStageType = {
   singleElimination: "single_elimination",
   doubleElimination: "double_elimination",
   roundRobin: "round_robin",
 }
-interface ITournament {
+export interface ITournament {
+  _id: number
   name: string
-  participant: [object]
-  stage: [object]
-  group: [object]
-  round: [object]
-  match: [object]
-  match_game: [object]
+  participant: Participant[]
+  stage: object[]
+  group: Group[]
+  round: Round[]
+  match: Match[]
+  match_game: MatchGame[]
 }
 
 interface ITournamentMethods {
@@ -23,8 +31,9 @@ interface ITournamentMethods {
   select(): boolean
 }
 
-// eslint-disable-next-line @typescript-eslint/ban-types
-interface TournamentModel extends Model<ITournament, {}, ITournamentMethods> {
+export interface TournamentModel
+  // eslint-disable-next-line @typescript-eslint/ban-types
+  extends Model<ITournament, {}, ITournamentMethods> {
   createTournament(stage: InputStage): Promise<boolean>
 }
 
@@ -33,6 +42,7 @@ const TournamentSchema = new Schema<
   TournamentModel,
   ITournamentMethods
 >({
+  _id: Number,
   name: { type: String, required: true },
   participant: [
     {
