@@ -77,7 +77,8 @@ export class MyDB implements CrudInterface {
         const newValue = {
           ...arg,
           id,
-        }
+        } as DataTypes[T]
+
         this.tournament[table].push(newValue)
         await this.tournament.save()
         return id
@@ -87,7 +88,9 @@ export class MyDB implements CrudInterface {
     }
     try {
       // add the array to the database
-      const newValues = arg.map((el) => ({ ...el, id: ++lastIndex }))
+      const newValues = arg.map(
+        (el) => ({ ...el, id: ++lastIndex } as DataTypes[T]),
+      )
       this.tournament[table].push(...newValues)
       await this.tournament.save()
       return true
@@ -139,7 +142,7 @@ export class MyDB implements CrudInterface {
     console.log("arg", arg)
     try {
       if (arg === undefined) {
-        const res = this.tournament[table]
+        const res = this.tournament[table] as Array<DataTypes[T]>
         if (res.length === 0) return null
         return res
       }
@@ -149,7 +152,7 @@ export class MyDB implements CrudInterface {
           (value) => value.id == arg,
         )
         if (index == -1) return null
-        return this.tournament[table][index]
+        return this.tournament[table][index] as DataTypes[T]
       }
       // there is a filter, and use the filter to select the data
       const filteredArr = filterArrayOfObjects(this.tournament[table], arg)
@@ -207,7 +210,6 @@ export class MyDB implements CrudInterface {
         // update the value and return true or false based on the succeess
         const index = this.tournament[table].findIndex((val) => val.id === arg)
         if (index === -1) return false
-        // this.tournament[table][index] = { ...this.tournament[table][index], ...value }
         this.tournament[table].set(index, value)
         await this.tournament.save()
         return true
@@ -275,9 +277,9 @@ export class MyDB implements CrudInterface {
       return true
     }
     // use this place to delete data using the filter provided
-    this.tournament[table] = this.tournament[table].filter((val) => {
-      Object.entries(filter).some(([key, value]) => val[key] !== value)
-    })
+    this.tournament[table] = this.tournament[table].filter((val) =>
+      Object.entries(filter).some(([key, value]) => val[key] !== value),
+    )
     this.tournament.save()
     return true
   }

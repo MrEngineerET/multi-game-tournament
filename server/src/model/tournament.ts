@@ -1,11 +1,11 @@
-import { Schema, Model, model } from "mongoose"
+import { Schema, model, Model } from "mongoose"
 import {
-  InputStage,
   Group,
   Match,
   Participant,
   Round,
   MatchGame,
+  Stage,
 } from "brackets-model"
 
 export const tournamentStageType = {
@@ -17,31 +17,16 @@ export interface ITournament {
   _id: number
   name: string
   participant: Participant[]
-  stage: object[]
+  stage: Stage[]
   group: Group[]
   round: Round[]
   match: Match[]
   match_game: MatchGame[]
 }
 
-interface ITournamentMethods {
-  update(): boolean
-  delete(): boolean
-  insert(): boolean
-  select(): boolean
-}
+type TournamentModelType = Model<ITournament>
 
-export interface TournamentModel
-  // eslint-disable-next-line @typescript-eslint/ban-types
-  extends Model<ITournament, {}, ITournamentMethods> {
-  createTournament(stage: InputStage): Promise<boolean>
-}
-
-const TournamentSchema = new Schema<
-  ITournament,
-  TournamentModel,
-  ITournamentMethods
->({
+const TournamentSchema = new Schema<ITournament, TournamentModelType>({
   _id: Number,
   name: { type: String, required: true },
   participant: [
@@ -118,22 +103,7 @@ const TournamentSchema = new Schema<
   match_game: [],
 })
 
-TournamentSchema.methods.update = function () {
-  return true
-}
-TournamentSchema.methods.delete = function () {
-  return true
-}
-TournamentSchema.methods.select = function () {
-  return true
-}
-
-TournamentSchema.statics.createTournament = async function (stage: InputStage) {
-  console.log("stage===== >>>>>>", stage)
-  return true
-}
-
-export const Tournament = model<ITournament, TournamentModel>(
+export const Tournament = model<ITournament, TournamentModelType>(
   "tournament",
   TournamentSchema,
 )
