@@ -6,10 +6,10 @@ import { MyDB } from "../utils/MyDB.js"
 
 export const getAllTournaments = async (req, res) => {
   try {
-    const allTournaments = Tournament.find({})
-    res.json({ success: true, data: allTournaments })
+    const allTournaments = await Tournament.find()
+    res.status(200).send({ status: "success", data: allTournaments })
   } catch (error) {
-    res.json({ status: "failed", message: error.message })
+    res.status(500).send({ status: "failed", message: error.message })
   }
 }
 
@@ -25,40 +25,44 @@ export const updateTournamenMatch = async (req, res) => {
     await manager.update.match(match)
     const updatedTournament = await Tournament.findById(tournamentId)
 
-    res.json(updatedTournament)
+    res.status(200).send({ status: "success", data: updatedTournament })
   } catch (error) {
-    res.json({ status: "failed", message: error.message })
+    res.status(500).send({ status: "failed", message: error.message })
   }
 }
 
 export const createTournament = async (req, res) => {
-  const { name, type } = req.body
-  const participants = req.body.participants.split(",")
+  try {
+    const { name, type, consolationFinal = false } = req.body
+    const participants = req.body.participants.split(",")
 
-  const tournament = new Tournament({
-    _id: Date.now(),
-    name,
-  })
-  await tournament.save()
+    const tournament = new Tournament({
+      _id: Date.now(),
+      name,
+    })
+    await tournament.save()
 
-  const myDB = await MyDB.build(tournament._id)
+    const myDB = await MyDB.build(tournament._id)
 
-  const manager = new BracketsManager(myDB)
+    const manager = new BracketsManager(myDB)
 
-  const stage = await manager.create({
-    tournamentId: tournament._id,
-    name,
-    type,
-    seeding: participants,
-    settings: {
-      consolationFinal: false,
-      seedOrdering: ["natural"],
-    },
-  })
-  res.send({
-    status: "",
-    data: { ...stage, id: nanoid() },
-  })
+    const stage = await manager.create({
+      tournamentId: tournament._id,
+      name,
+      type,
+      seeding: participants,
+      settings: {
+        consolationFinal,
+        seedOrdering: ["natural"],
+      },
+    })
+    res.status(200).send({
+      status: "success",
+      data: { ...stage, id: nanoid() },
+    })
+  } catch (error) {
+    res.status(500).send({ status: "failed", message: error.message })
+  }
 }
 
 export const getTournament = async (req, res) => {
@@ -68,10 +72,10 @@ export const getTournament = async (req, res) => {
     if (!tournament)
       return res.send({ status: "Failed", message: "Invalid tournament id" })
 
-    res.send(tournament)
+    res.statu(200).send(tournament)
   } catch (error) {
-    res.send({
-      status: "Failed",
+    res.status(500).send({
+      status: "failed",
       message: error.message,
     })
   }
