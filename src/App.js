@@ -12,6 +12,7 @@ import { useAuth } from "./context/AuthContext"
 import { CssBaseline } from "@mui/material"
 import { Button } from "@mui/material"
 import { themeModeContext } from "./index"
+import { ErrorPage } from "./pages/ErrorPage"
 
 import "./App.css"
 
@@ -24,7 +25,7 @@ function App() {
   else routes = loggedOutRoutes
 
   routes = (
-    <Route>
+    <Route path="/" errorElement={<ErrorPage />}>
       {routes}
       {commonRoutes}
     </Route>
