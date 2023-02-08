@@ -16,6 +16,7 @@ export const tournamentStageType = {
 export interface ITournament {
   _id: number
   name: string
+  description: string
   participant: Participant[]
   stage: Stage[]
   group: Group[]
@@ -29,6 +30,7 @@ type TournamentModelType = Model<ITournament>
 const TournamentSchema = new Schema<ITournament, TournamentModelType>({
   _id: Number,
   name: { type: String, required: true },
+  description: String,
   participant: [
     {
       id: Number,
