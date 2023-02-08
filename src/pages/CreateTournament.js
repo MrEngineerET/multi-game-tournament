@@ -140,7 +140,7 @@ export function CreateTournament() {
 export async function action({ request }) {
   const formData = await request.formData()
   const name = formData.get("tournament_name")
-  const desc = formData.get("tournament_desc")
+  const description = formData.get("tournament_desc")
   const stageType = formData.get("stage_type")
   let participants = formData.get("participants").split(",")
   participants = participants.map((p) => {
@@ -149,6 +149,11 @@ export async function action({ request }) {
   })
   participants = participants.filter((p) => p)
 
-  const tournament = await createTournament(name, desc, participants, stageType)
+  const tournament = await createTournament({
+    name,
+    description,
+    participants,
+    stageType,
+  })
   return redirect(`/tournament/${tournament._id}`)
 }
