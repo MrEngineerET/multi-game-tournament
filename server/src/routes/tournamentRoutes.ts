@@ -11,6 +11,6 @@ const tournamentRouter = express.Router()
 tournamentRouter.get("/", getAllTournaments)
 tournamentRouter.post("/", createTournament)
 tournamentRouter.get("/:id", getTournament)
-tournamentRouter.post("/:id", updateTournamenMatch)
+tournamentRouter.patch("/:id/update-match", updateTournamenMatch)
 
 export default tournamentRouter
