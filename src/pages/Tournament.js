@@ -73,6 +73,5 @@ export function Tournament() {
 
 export async function loader() {
   const tournaments = await getTournaments()
-  // console.log("idid", "getting tournaments ", tournaments)
   return { tournaments }
 }

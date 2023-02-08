@@ -2,6 +2,7 @@ import { InMemoryDatabase } from "brackets-memory-db"
 import { BracketsManager } from "brackets-manager"
 import ls from "../utils/localStorage"
 import { nanoid } from "nanoid"
+import { axios } from "../utils/axios"
 
 export const stageType = {
   singleElimination: "single_elimination",
@@ -41,10 +42,10 @@ export async function createTournament(
 }
 
 export async function getTournaments() {
-  const tournaments = ls.getItem("tournaments")
-  if (!tournaments) return []
+  const { data: tournaments } = (await axios.get("/tournament")).data
   return tournaments
 }
+
 export async function getTournament(id) {
   const tournaments = ls.getItem("tournaments")
   if (!tournaments) return null
