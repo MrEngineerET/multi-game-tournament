@@ -1,6 +1,5 @@
 import { BracketsManager } from "brackets-manager"
 import { Tournament } from "../model/tournament.js"
-import { nanoid } from "nanoid"
 
 import { MyDB } from "../utils/MyDB.js"
 
@@ -33,12 +32,18 @@ export const updateTournamenMatch = async (req, res) => {
 
 export const createTournament = async (req, res) => {
   try {
-    const { name, type, consolationFinal = false } = req.body
-    const participants = req.body.participants.split(",")
+    const {
+      name,
+      stageType,
+      description,
+      participants,
+      consolationFinal = false,
+    } = req.body
 
     const tournament = new Tournament({
       _id: Date.now(),
       name,
+      description,
     })
     await tournament.save()
 
@@ -46,19 +51,20 @@ export const createTournament = async (req, res) => {
 
     const manager = new BracketsManager(myDB)
 
-    const stage = await manager.create({
+    await manager.create({
       tournamentId: tournament._id,
       name,
-      type,
+      type: stageType,
       seeding: participants,
       settings: {
         consolationFinal,
         seedOrdering: ["natural"],
       },
     })
+    const tournamentData = await Tournament.findById(tournament._id)
     res.status(200).send({
       status: "success",
-      data: { ...stage, id: nanoid() },
+      data: tournamentData,
     })
   } catch (error) {
     res.status(500).send({ status: "failed", message: error.message })
