@@ -47,9 +47,7 @@ export async function getTournaments() {
 }
 
 export async function getTournament(id) {
-  const tournaments = ls.getItem("tournaments")
-  if (!tournaments) return null
-  const tournament = tournaments.find((tournament) => tournament.id == id)
+  const { data: tournament } = (await axios.get(`/tournament/${id}`)).data
   return tournament
 }
 

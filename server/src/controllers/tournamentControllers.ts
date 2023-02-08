@@ -72,7 +72,7 @@ export const getTournament = async (req, res) => {
     if (!tournament)
       return res.send({ status: "Failed", message: "Invalid tournament id" })
 
-    res.statu(200).send(tournament)
+    res.status(200).send({ status: "success", data: tournament })
   } catch (error) {
     res.status(500).send({
       status: "failed",

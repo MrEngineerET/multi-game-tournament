@@ -150,5 +150,5 @@ export async function action({ request }) {
   participants = participants.filter((p) => p)
 
   const tournament = await createTournament(name, desc, participants, stageType)
-  return redirect(`/tournament/${tournament.id}`)
+  return redirect(`/tournament/${tournament._id}`)
 }

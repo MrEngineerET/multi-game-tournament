@@ -17,6 +17,7 @@ import {
   TournamentProvider,
   loader as tournamentDetailLoader,
 } from "../context/TournamentContext"
+import { ErrorPage } from "../pages/ErrorPage"
 
 /**
  *  /login
@@ -46,6 +47,7 @@ export const routes = (
             </TournamentProvider>
           }
           loader={tournamentDetailLoader}
+          errorElement={<ErrorPage />}
         />
         <Route
           path="new"

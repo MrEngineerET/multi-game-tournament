@@ -493,7 +493,7 @@ export const singleEliminationTournament = {
 
 export function catagorizeData(tournamentData) {
   const organizedData = {
-    id: tournamentData.id,
+    _id: tournamentData._id,
     name: tournamentData.name,
     participants: tournamentData.participant,
     stages: tournamentData.stage,

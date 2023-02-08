@@ -56,7 +56,7 @@ export function Tournament() {
               {tournaments.map((tournament, i) => {
                 return (
                   <Box key={i}>
-                    <ListItemButton to={`${tournament.id}`} component={Link}>
+                    <ListItemButton to={`${tournament._id}`} component={Link}>
                       {tournament.name}
                     </ListItemButton>
                     <Divider />
