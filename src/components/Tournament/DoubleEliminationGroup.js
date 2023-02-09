@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { Box, Typography } from "@mui/material"
-import { Round } from "./Round"
+import { Round } from "./Round/Round"
 
 const styleConstants = {
   gapBetweenRounds: { xs: 10, sm: 15 },
@@ -19,7 +19,7 @@ const styles = {
     gap: styleConstants.gapBetweenRounds,
   },
 }
-export function Group({ group }) {
+export function DoubleEliminationGroup({ group, isLoserGroup = false }) {
   return (
     <Box sx={styles.root}>
       <Typography>Group</Typography>
@@ -29,9 +29,10 @@ export function Group({ group }) {
             <Round
               key={i}
               round={round}
-              isFirstRound={i === 0}
+              roundIndex={i}
               isLastRound={i === rounds.length - 1}
               gapBetweenRounds={styleConstants.gapBetweenRounds}
+              isLoserGroup={isLoserGroup}
             />
           )
         })}
@@ -40,6 +41,7 @@ export function Group({ group }) {
   )
 }
 
-Group.propTypes = {
+DoubleEliminationGroup.propTypes = {
   group: PropTypes.object,
+  isLoserGroup: PropTypes.bool,
 }

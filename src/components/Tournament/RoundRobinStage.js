@@ -1,8 +1,8 @@
 import React from "react"
-import { Group } from "./Group"
 
 export function RoundRobinStage() {
-  //TODO: render the three different type of stages using the stage.type property
-  // Prepare three types of stages, SingleEliminationStage, DoubleEliminationStage, RoundRobinStage
-  return <Group />
+  return <>Coming soon</>
 }
+
+// see the data generated for a round robin
+// check out the ui of the round robin in both brakets-manager viewer and challonge

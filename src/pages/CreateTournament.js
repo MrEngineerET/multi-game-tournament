@@ -105,9 +105,6 @@ export function CreateTournament() {
                         <MenuItem value={stageType.doubleElimination}>
                           Double Elimination
                         </MenuItem>
-                        <MenuItem value={stageType.round_robin}>
-                          Round Robin
-                        </MenuItem>
                       </TextField>
                     </Box>
                   </Stack>

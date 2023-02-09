@@ -1,8 +1,24 @@
 import React from "react"
-import { Group } from "./Group"
+import PropTypes from "prop-types"
+import { DoubleEliminationGroup } from "./DoubleEliminationGroup"
+import { Box } from "@mui/material"
 
-export function DoubleEliminationStage() {
-  //TODO: render the three different type of stages using the stage.type property
-  // Prepare three types of stages, SingleEliminationStage, DoubleEliminationStage, RoundRobinStage
-  return <Group />
+export function DoubleEliminationStage({ stage }) {
+  return (
+    <Box>
+      {stage.groups.map((group, i) => {
+        return (
+          <DoubleEliminationGroup
+            key={i}
+            group={group}
+            isLoserGroup={i === 1}
+          />
+        )
+      })}
+    </Box>
+  )
+}
+
+DoubleEliminationStage.propTypes = {
+  stage: PropTypes.object.isRequired,
 }
