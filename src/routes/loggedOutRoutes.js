@@ -3,8 +3,6 @@ import { Outlet, Route } from "react-router-dom"
 import { LandingPage } from "../pages/LandingPage"
 import { LogIn } from "../pages/LogIn"
 import { SignUp } from "../pages/SignUp"
-import { TournamentExampleComplete } from "../components/Tournament/TournamentExampleComplete"
-import { TournamentExample } from "../components/Tournament/TournamentExample"
 import { TournamentDetail } from "../components/Tournament/TournamentDetail"
 import { Tournament, loader as tournamentsLoader } from "../pages/Tournament"
 import {
@@ -53,11 +51,6 @@ export const routes = (
           path="new"
           element={<CreateTournament />}
           action={createTournamentAction}
-        />
-        <Route path="example-one" element={<TournamentExample />} />
-        <Route
-          path="example-completed"
-          element={<TournamentExampleComplete />}
         />
       </Route>
     </Route>
