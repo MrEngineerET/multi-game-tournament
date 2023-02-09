@@ -2,7 +2,10 @@ import React, { createContext, useContext, useState } from "react"
 import PropTypes from "prop-types"
 import { useLoaderData } from "react-router-dom"
 import { getTournament, updateMatch } from "../api/tournament"
-import { catagorizeData, addParticipantNameInMatch } from "../testData"
+import {
+  catagorizeData,
+  addParticipantNameInMatch,
+} from "../utils/dataProcessors"
 
 const tournamentContext = createContext(null)
 
