@@ -7,6 +7,7 @@ import {
   MatchGame,
   Stage,
 } from "brackets-model"
+import { Game, IGame } from "./game.js"
 
 export const tournamentStageType = {
   singleElimination: "single_elimination",
@@ -23,6 +24,7 @@ export interface ITournament {
   round: Round[]
   match: Match[]
   match_game: MatchGame[]
+  game: IGame[]
 }
 
 type TournamentModelType = Model<ITournament>
@@ -103,6 +105,15 @@ const TournamentSchema = new Schema<ITournament, TournamentModelType>({
     },
   ],
   match_game: [],
+  game: [
+    {
+      gameId: {
+        type: Schema.Types.ObjectId,
+        ref: Game,
+      },
+      count: Number,
+    },
+  ],
 })
 
 export const Tournament = model<ITournament, TournamentModelType>(

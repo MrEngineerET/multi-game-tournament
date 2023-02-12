@@ -1,6 +1,7 @@
 import express from "express"
 import tournamentRouter from "./routes/tournamentRoutes.js"
 import { errorHandler } from "./controllers/errorController.js"
+import gameRouter from "./routes/gameRoutes.js"
 import morgan from "morgan"
 import cors from "cors"
 
@@ -18,6 +19,7 @@ app.use(
 app.use(morgan("tiny"))
 const appRouter = express.Router()
 appRouter.use("/tournament", tournamentRouter)
+appRouter.use("/game", gameRouter)
 
 app.use("/api/v1", appRouter)
 
