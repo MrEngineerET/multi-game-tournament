@@ -1,5 +1,6 @@
 import express from "express"
 import tournamentRouter from "./routes/tournamentRoutes.js"
+import { errorHandler } from "./controllers/errorController.js"
 import morgan from "morgan"
 import cors from "cors"
 
@@ -15,6 +16,12 @@ app.use(
   }),
 )
 app.use(morgan("tiny"))
-app.use("/api/v1/tournament", tournamentRouter)
+const appRouter = express.Router()
+appRouter.use("/tournament", tournamentRouter)
+
+app.use("/api/v1", appRouter)
+
+// error handler middleware should be the last midleware
+app.use(errorHandler)
 
 export { app }

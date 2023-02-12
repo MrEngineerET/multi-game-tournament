@@ -1,18 +1,17 @@
 import { BracketsManager } from "brackets-manager"
 import { Tournament } from "../model/tournament.js"
-
 import { MyDB } from "../utils/MyDB.js"
 
-export const getAllTournaments = async (req, res) => {
+export const getAllTournaments = async (req, res, next) => {
   try {
     const allTournaments = await Tournament.find()
     res.status(200).send({ status: "success", data: allTournaments })
   } catch (error) {
-    res.status(500).send({ status: "failed", message: error.message })
+    next(error)
   }
 }
 
-export const updateTournamenMatch = async (req, res) => {
+export const updateTournamenMatch = async (req, res, next) => {
   try {
     const match = req.body
     const tournamentId = req.params.id
@@ -26,11 +25,11 @@ export const updateTournamenMatch = async (req, res) => {
 
     res.status(200).send({ status: "success", data: updatedTournament })
   } catch (error) {
-    res.status(500).send({ status: "failed", message: error.message })
+    next(error)
   }
 }
 
-export const createTournament = async (req, res) => {
+export const createTournament = async (req, res, next) => {
   try {
     const {
       name,
@@ -67,11 +66,11 @@ export const createTournament = async (req, res) => {
       data: tournamentData,
     })
   } catch (error) {
-    res.status(500).send({ status: "failed", message: error.message })
+    next(error)
   }
 }
 
-export const getTournament = async (req, res) => {
+export const getTournament = async (req, res, next) => {
   try {
     const tournamentId = req.params.id
     const tournament = await Tournament.findById(tournamentId)
@@ -80,9 +79,6 @@ export const getTournament = async (req, res) => {
 
     res.status(200).send({ status: "success", data: tournament })
   } catch (error) {
-    res.status(500).send({
-      status: "failed",
-      message: error.message,
-    })
+    next(error)
   }
 }
