@@ -50,12 +50,14 @@ const createTournament = async (
       description,
       participants,
       consolationFinal = false,
+      games = [],
     } = req.body
 
     const tournament = new Tournament({
       _id: Date.now(),
       name,
       description,
+      game: games,
     })
     await tournament.save()
 
@@ -90,7 +92,10 @@ const getTournament = async (
 ) => {
   try {
     const tournamentId = req.params.id
-    const tournament = await Tournament.findById(tournamentId)
+    const tournament = await Tournament.findById(tournamentId).populate({
+      path: "game.gameId",
+      options: { name: "games" },
+    })
     if (!tournament)
       return res.send({ status: "Failed", message: "Invalid tournament id" })
 
