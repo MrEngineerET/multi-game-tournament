@@ -15,6 +15,27 @@ const getAllTournaments = async (
     next(error)
   }
 }
+const updateTournament = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { name, description } = req.body
+    const data = { name, description }
+    const id = req.params.id
+    const updatedTournament = await Tournament.findByIdAndUpdate(id, data, {
+      new: true,
+      runValidators: true,
+    })
+    res.status(200).send({
+      status: "success",
+      data: updatedTournament,
+    })
+  } catch (error) {
+    next(error)
+  }
+}
 
 const updateTournamenMatch = async (
   req: Request,
@@ -94,7 +115,6 @@ const getTournament = async (
     const tournamentId = req.params.id
     const tournament = await Tournament.findById(tournamentId).populate({
       path: "game.gameId",
-      options: { name: "games" },
     })
     if (!tournament)
       return res.send({ status: "Failed", message: "Invalid tournament id" })
@@ -118,10 +138,42 @@ const deleteTournament = async (
   }
 }
 
+const updateTournamentGame = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { tournamentId, gameId } = req.params
+    const tournament = await Tournament.findById(tournamentId)
+    const game = tournament.game.find((game) => game._id.toString() === gameId)
+    if (!game) throw { statusCode: 404, message: "game not found" }
+    game.count = req.body.count
+    await tournament.save()
+
+    const updatedGames = (
+      await Tournament.findById(tournamentId)
+        .select("game")
+        .populate("game.gameId")
+    ).game
+    const updatedGame = updatedGames.find((g) => g._id.toString() === gameId)
+
+    res.status(200).send({ status: "success", data: updatedGame })
+  } catch (error) {
+    next(error)
+  }
+}
+
+// const deleteTournamentGame = async () => {}
+
+// const addTournamentGame = async () => {}
+
 export default {
   getAllTournaments,
   getTournament,
   createTournament,
   updateTournamenMatch,
   deleteTournament,
+  updateTournament,
+  updateTournamentGame,
 }

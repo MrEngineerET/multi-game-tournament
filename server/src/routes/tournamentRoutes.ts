@@ -16,9 +16,9 @@ tournamentRouter.get(
   tournamentController.getTournament,
 )
 tournamentRouter.patch(
-  "/:id/update-match",
-  validator.updateTournamentMatch,
-  tournamentController.updateTournamenMatch,
+  "/:id",
+  validator.updateTournament,
+  tournamentController.updateTournament,
 )
 tournamentRouter.delete(
   "/:id",
@@ -26,4 +26,15 @@ tournamentRouter.delete(
   tournamentController.deleteTournament,
 )
 
+tournamentRouter.patch(
+  "/:id/update-match",
+  validator.updateTournamentMatch,
+  tournamentController.updateTournamenMatch,
+)
+
+tournamentRouter.patch(
+  "/:tournamentId/game/:gameId",
+  validator.updateTournamentGame,
+  tournamentController.updateTournamentGame,
+)
 export default tournamentRouter

@@ -1,4 +1,4 @@
-import { Schema, model, Model } from "mongoose"
+import { Schema, model, Model, Types } from "mongoose"
 import {
   Group,
   Match,
@@ -7,7 +7,7 @@ import {
   MatchGame,
   Stage,
 } from "brackets-model"
-import { Game, IGame } from "./game.js"
+import { Game } from "./game.js"
 
 export const tournamentStageType = {
   singleElimination: "single_elimination",
@@ -24,7 +24,7 @@ export interface ITournament {
   round: Round[]
   match: Match[]
   match_game: MatchGame[]
-  game: IGame[]
+  game: { _id: Types.ObjectId; gameId: Types.ObjectId; count: number }[]
 }
 
 type TournamentModelType = Model<ITournament>

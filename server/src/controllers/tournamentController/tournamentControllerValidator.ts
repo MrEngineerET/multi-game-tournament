@@ -24,6 +24,11 @@ export const tournamentControllerValidator = {
     if (!id) throw { statusCode: 400, message: "tournament id is required" }
     next()
   },
+  updateTournament(req, res, next) {
+    const id = req.params.id
+    if (!id) throw { statusCode: 400, message: "tournament id is required" }
+    next()
+  },
   deleteTournament(req, res, next) {
     const id = req.params.id
     if (!id) throw { statusCode: 400, message: "tournament id is required" }
@@ -32,6 +37,11 @@ export const tournamentControllerValidator = {
   updateTournamentMatch(req, res, next) {
     const match = req.body
     if (!match) throw { statusCode: 400, message: "no match object found" }
+    next()
+  },
+  updateTournamentGame(req, res, next) {
+    const count = req.body.count
+    if (!count) throw { statusCode: 400, message: "insufficient data" }
     next()
   },
 }

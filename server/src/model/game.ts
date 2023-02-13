@@ -1,6 +1,7 @@
-import { Schema, model } from "mongoose"
+import { Schema, model, Types } from "mongoose"
 
-export interface IGame {
+interface IGame {
+  _id: Types.ObjectId
   name: string
   images?: string[]
   description?: string

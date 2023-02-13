@@ -1,4 +1,4 @@
-import mongoose from "mongoose"
+import { Types } from "mongoose"
 
 export const gameControllerValidator = {
   createGame(req, res, next) {
@@ -15,21 +15,21 @@ export const gameControllerValidator = {
   getGame(req, res, next) {
     const id = req.params.id
     if (!id) throw { statusCode: 400, message: "game id is required" }
-    const status = mongoose.Types.ObjectId.isValid(id)
+    const status = Types.ObjectId.isValid(id)
     if (!status) throw { statusCode: 400, message: "invalid game id" }
     next()
   },
   deleteGame(req, res, next) {
     const id = req.params.id
     if (!id) throw { statusCode: 400, message: "game id is required" }
-    const status = mongoose.Types.ObjectId.isValid(id)
+    const status = Types.ObjectId.isValid(id)
     if (!status) throw { statusCode: 400, message: "invalid game id" }
     next()
   },
   updateGame(req, res, next) {
     const id = req.params.id
     if (!id) throw { statusCode: 400, message: "game id is required" }
-    const status = mongoose.Types.ObjectId.isValid(id)
+    const status = Types.ObjectId.isValid(id)
     if (!status) throw { statusCode: 400, message: "invalid game id" }
     next()
   },
