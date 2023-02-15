@@ -8,7 +8,8 @@
     "prettier": "prettier --ignore-path ./.gitignore .",
     "format_check": "npm run prettier -- --check",
     "format": "npm run prettier -- --write",
-    "lint": "eslint --ignore-path ./.gitignore --ext .ts ."
+    "lint": "eslint --ignore-path ./.gitignore --ext .ts .",
+    "install:backend": "npm install"
   },
   "keywords": [],
   "author": "",
