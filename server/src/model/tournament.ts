@@ -110,6 +110,8 @@ const TournamentSchema = new Schema<ITournament, TournamentModelType>({
       gameId: {
         type: Schema.Types.ObjectId,
         ref: Game,
+        unique: true,
+        required: true,
       },
       count: { type: Number, default: 1 },
     },

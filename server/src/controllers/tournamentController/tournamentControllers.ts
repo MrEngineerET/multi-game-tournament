@@ -1,6 +1,7 @@
 import { BracketsManager } from "brackets-manager"
 import { Request, Response, NextFunction } from "express"
 import { Tournament } from "../../model/tournament.js"
+import { Game } from "../../model/game.js"
 import { MyDB } from "../../utils/MyDB.js"
 
 const getAllTournaments = async (
@@ -97,7 +98,7 @@ const createTournament = async (
       },
     })
     const tournamentData = await Tournament.findById(tournament._id)
-    res.status(200).send({
+    res.status(201).send({
       status: "success",
       data: tournamentData,
     })
@@ -164,9 +165,34 @@ const updateTournamentGame = async (
   }
 }
 
-// const deleteTournamentGame = async () => {}
+const addTournamentGame = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { tournamentId } = req.params
+    const { count, gameId } = req.body
+    const game = await Game.findById(gameId)
+    if (!game) throw { statusCode: 400, message: "game not found" }
+    const tournament = await Tournament.findByIdAndUpdate(
+      tournamentId,
+      {
+        $push: {
+          game: { gameId, count },
+        },
+      },
+      { new: true, runValidators: true },
+    )
+    const newGame = tournament.game.find((g) => g.gameId.toString() === gameId)
 
-// const addTournamentGame = async () => {}
+    res.status(201).send({ status: "success", data: newGame })
+  } catch (error) {
+    next()
+  }
+}
+
+// const deleteTournamentGame = async () => {}
 
 export default {
   getAllTournaments,
@@ -176,4 +202,5 @@ export default {
   deleteTournament,
   updateTournament,
   updateTournamentGame,
+  addTournamentGame,
 }

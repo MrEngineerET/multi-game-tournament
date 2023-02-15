@@ -44,4 +44,13 @@ export const tournamentControllerValidator = {
     if (!count) throw { statusCode: 400, message: "insufficient data" }
     next()
   },
+  addTournamentGame(req, res, next) {
+    const tournamentId = req.params.tournamentId
+    const gameId = req.body.gameId
+    if (!tournamentId || !gameId)
+      throw { statusCode: 400, message: "insufficient data" }
+    if (!mongoose.Types.ObjectId.isValid(gameId))
+      throw { statusCode: 400, message: "invalid gameId" }
+    next()
+  },
 }

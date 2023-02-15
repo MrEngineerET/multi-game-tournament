@@ -32,6 +32,12 @@ tournamentRouter.patch(
   tournamentController.updateTournamenMatch,
 )
 
+tournamentRouter.post(
+  "/:tournamentId/game",
+  validator.addTournamentGame,
+  tournamentController.addTournamentGame,
+)
+
 tournamentRouter.patch(
   "/:tournamentId/game/:gameId",
   validator.updateTournamentGame,
