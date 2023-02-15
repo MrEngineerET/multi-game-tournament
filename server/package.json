@@ -4,12 +4,13 @@
   "description": "",
   "type": "module",
   "scripts": {
-    "start": "tsc && node dist/server.js",
+    "start": "node dist/server.js",
     "prettier": "prettier --ignore-path ./.gitignore .",
     "format_check": "npm run prettier -- --check",
     "format": "npm run prettier -- --write",
     "lint": "eslint --ignore-path ./.gitignore --ext .ts .",
-    "install:backend": "npm install"
+    "install:backend": "npm install",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",
