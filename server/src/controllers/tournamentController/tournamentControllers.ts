@@ -192,7 +192,25 @@ const addTournamentGame = async (
   }
 }
 
-// const deleteTournamentGame = async () => {}
+const deleteTournamentGame = async (
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    const { tournamentId, gameId } = req.params
+    await Tournament.findByIdAndUpdate(tournamentId, {
+      $pull: {
+        game: {
+          gameId,
+        },
+      },
+    })
+    res.status(204).send()
+  } catch (error) {
+    next(error)
+  }
+}
 
 export default {
   getAllTournaments,
@@ -203,4 +221,5 @@ export default {
   updateTournament,
   updateTournamentGame,
   addTournamentGame,
+  deleteTournamentGame,
 }

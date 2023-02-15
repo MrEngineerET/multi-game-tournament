@@ -43,4 +43,9 @@ tournamentRouter.patch(
   validator.updateTournamentGame,
   tournamentController.updateTournamentGame,
 )
+
+tournamentRouter.delete(
+  "/:tournamentId/game/:gameId",
+  tournamentController.deleteTournamentGame,
+)
 export default tournamentRouter
