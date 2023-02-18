@@ -7,8 +7,7 @@ import {
   MatchGame,
   Participant,
 } from "brackets-model"
-import { Tournament, ITournament } from "../model/tournament.js"
-import { HydratedDocument } from "mongoose"
+import { Tournament, TournamentType } from "../model/tournament.js"
 import { deepMerge, filterArrayOfObjects } from "./utils.js"
 
 interface DataTypes {
@@ -21,7 +20,7 @@ interface DataTypes {
 }
 
 export class MyDB implements CrudInterface {
-  private tournament: HydratedDocument<ITournament>
+  private tournament: TournamentType
   constructor(tournament) {
     this.tournament = tournament
   }
@@ -79,7 +78,7 @@ export class MyDB implements CrudInterface {
           id,
         } as DataTypes[T]
 
-        this.tournament[table].push(newValue)
+        this.tournament[table].push(newValue as any)
         await this.tournament.save()
         return id
       } catch (error) {
@@ -91,7 +90,7 @@ export class MyDB implements CrudInterface {
       const newValues = arg.map(
         (el) => ({ ...el, id: ++lastIndex } as DataTypes[T]),
       )
-      this.tournament[table].push(...newValues)
+      this.tournament[table].push(...(newValues as any))
       await this.tournament.save()
       return true
     } catch (error) {
@@ -142,7 +141,7 @@ export class MyDB implements CrudInterface {
     console.log("arg", arg)
     try {
       if (arg === undefined) {
-        const res = this.tournament[table] as Array<DataTypes[T]>
+        const res = this.tournament[table]
         if (res.length === 0) return null
         return res
       }
@@ -210,7 +209,7 @@ export class MyDB implements CrudInterface {
         // update the value and return true or false based on the succeess
         const index = this.tournament[table].findIndex((val) => val.id === arg)
         if (index === -1) return false
-        this.tournament[table].set(index, value)
+        this.tournament[table].set(`${index}`, value)
         await this.tournament.save()
         return true
       } catch (error) {
@@ -272,14 +271,14 @@ export class MyDB implements CrudInterface {
 
     if (!filter) {
       // delete all the data
-      this.tournament[table] = []
+      this.tournament[table] = [] as any[T]
       await this.tournament.save()
       return true
     }
     // use this place to delete data using the filter provided
-    this.tournament[table] = this.tournament[table].filter((val) =>
-      Object.entries(filter).some(([key, value]) => val[key] !== value),
-    )
+    // this.tournament[table] = this.tournament[table].filter((val) =>
+    //   Object.entries(filter).some(([key, value]) => val[key] !== value),
+    // )
     this.tournament.save()
     return true
   }

@@ -5,17 +5,19 @@ export const tournamentControllerValidator = {
     const { name, stageType, description, participants, games } = req.body
     if (!name || !stageType || !description || !participants)
       throw { statusCode: 400, message: "insufficient data" }
-    if (!Array.isArray(participants) || !Array.isArray(games))
+    if (!Array.isArray(participants) || (games && !Array.isArray(games)))
       throw {
         statusCode: 400,
         message: "participants and games should be of type array",
       }
-    for (let i = 0; i < games.length; i++) {
-      if (!mongoose.Types.ObjectId.isValid(games[i].gameId))
-        throw {
-          statusCode: 400,
-          message: "invalid gameId",
-        }
+    if (games) {
+      for (let i = 0; i < games.length; i++) {
+        if (!mongoose.Types.ObjectId.isValid(games[i].gameId))
+          throw {
+            statusCode: 400,
+            message: "invalid gameId",
+          }
+      }
     }
     next()
   },

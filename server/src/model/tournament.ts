@@ -1,4 +1,4 @@
-import { Schema, model, Model, Types } from "mongoose"
+import { Schema, model, Model, Types, HydratedDocument } from "mongoose"
 import {
   Group,
   Match,
@@ -27,7 +27,20 @@ export interface ITournament {
   game: { _id: Types.ObjectId; gameId: Types.ObjectId; count: number }[]
 }
 
-type TournamentModelType = Model<ITournament>
+type TournamentDocumentOverrides = {
+  stage: Types.Subdocument<Types.ObjectId> & Stage
+  group: Types.Subdocument<Types.ObjectId> & Group
+  round: Types.Subdocument<Types.ObjectId> & Round
+  participant: Types.Subdocument<Types.ObjectId> & Participant
+  match: Types.Subdocument<Types.ObjectId> & Match
+  match_game: Types.Subdocument<Types.ObjectId> & MatchGame
+}
+
+type TournamentModelType = Model<
+  ITournament,
+  object,
+  TournamentDocumentOverrides
+>
 
 const TournamentSchema = new Schema<ITournament, TournamentModelType>({
   _id: Number,
@@ -110,7 +123,6 @@ const TournamentSchema = new Schema<ITournament, TournamentModelType>({
       gameId: {
         type: Schema.Types.ObjectId,
         ref: Game,
-        unique: true,
         required: true,
       },
       count: { type: Number, default: 1 },
@@ -122,3 +134,9 @@ export const Tournament = model<ITournament, TournamentModelType>(
   "tournament",
   TournamentSchema,
 )
+
+export type TournamentType = HydratedDocument<
+  ITournament,
+  object,
+  TournamentDocumentOverrides
+>
