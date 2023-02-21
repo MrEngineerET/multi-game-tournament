@@ -1,19 +1,12 @@
-import mongoose from "mongoose"
 import { config } from "dotenv"
+import { openMongooseConnection, PORT } from "./db.js"
 config()
 import { app } from "./app.js"
 
-const PORT = process.env.PORT || 9090
-
-mongoose
-  .connect(process.env.DB_URI)
+openMongooseConnection()
   .then(() => {
-    console.log("Mongodb connected successfully")
+    app.listen(PORT, () => {
+      console.log(`Example app listening on port ${PORT}`)
+    })
   })
-  .catch((err) => {
-    console.log("mongodb connection error ===> ", err)
-  })
-
-app.listen(PORT, () => {
-  console.log(`Example app listening on port ${PORT}`)
-})
+  .catch((error) => console.log("Error opening Mongoose connection", error))
