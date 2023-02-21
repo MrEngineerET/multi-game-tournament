@@ -13,6 +13,10 @@ export interface Match extends M {
   gameId: Types.ObjectId | null
 }
 
+export interface Match extends M {
+  gameId: Types.ObjectId | null
+}
+
 export interface Game {
   _id: Types.ObjectId
   gameId: Types.ObjectId
@@ -24,6 +28,13 @@ export const tournamentStageType = {
   doubleElimination: "double_elimination",
   roundRobin: "round_robin",
 }
+
+export interface Game {
+  _id: Types.ObjectId
+  gameId: Types.ObjectId
+  count: number
+}
+
 export interface ITournament {
   _id: number
   name: string
@@ -34,8 +45,8 @@ export interface ITournament {
   round: Round[]
   match: Match[]
   match_game: MatchGame[]
-  game: { _id: Types.ObjectId; gameId: Types.ObjectId; count: number }[]
-  participantGameMatrix: Array<Array<Game>>
+  game: Game[]
+  participantGameMatrix: { participantId: number; games: Game[] }[]
 }
 
 type TournamentDocumentOverrides = {
@@ -46,7 +57,10 @@ type TournamentDocumentOverrides = {
   match: Types.DocumentArray<Match>
   match_game: Types.DocumentArray<MatchGame>
   game: Types.DocumentArray<Game>
-  participantGameMatrix: Types.Array<Types.DocumentArray<Game>>
+  participantGameMatrix: Types.DocumentArray<{
+    participantId: number
+    games: Types.DocumentArray<Game>
+  }>
 }
 
 type TournamentModelType = Model<
@@ -128,6 +142,11 @@ const TournamentSchema = new Schema<ITournament, TournamentModelType>({
         score: Number,
         result: { type: String, enum: ["win", "loss"] },
       },
+      gameId: {
+        type: Schema.Types.ObjectId,
+        ref: Game,
+        default: null,
+      },
     },
   ],
   match_game: [],
@@ -139,6 +158,17 @@ const TournamentSchema = new Schema<ITournament, TournamentModelType>({
         required: true,
       },
       count: { type: Number, default: 1 },
+    },
+  ],
+  participantGameMatrix: [
+    {
+      participantId: Number,
+      games: [
+        {
+          gameId: Schema.Types.ObjectId,
+          count: Number,
+        },
+      ],
     },
   ],
 })
