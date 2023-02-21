@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express"
 import { Tournament } from "../../model/tournament.js"
 import { Game } from "../../model/game.js"
 import { MyDB } from "../../utils/MyDB.js"
+import { GameManagement } from "../../utils/GameManagement.js"
 
 const getAllTournaments = async (
   req: Request,
@@ -53,6 +54,8 @@ const updateTournamenMatch = async (
 
     await manager.update.match(match)
     const updatedTournament = await Tournament.findById(tournamentId)
+    const gameManagement = new GameManagement(updatedTournament)
+    await gameManagement.addGameToMatches()
 
     res.status(200).send({ status: "success", data: updatedTournament })
   } catch (error) {
@@ -98,6 +101,8 @@ const createTournament = async (
       },
     })
     const tournamentData = await Tournament.findById(tournament._id)
+    const gameManagement = new GameManagement(tournamentData)
+    await gameManagement.addGameToMatches()
     res.status(201).send({
       status: "success",
       data: tournamentData,
