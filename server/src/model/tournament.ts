@@ -1,13 +1,23 @@
 import { Schema, model, Model, Types, HydratedDocument } from "mongoose"
 import {
   Group,
-  Match,
+  Match as M,
   Participant,
   Round,
   MatchGame,
   Stage,
 } from "brackets-model"
 import { Game } from "./game.js"
+
+export interface Match extends M {
+  gameId: Types.ObjectId | null
+}
+
+export interface Game {
+  _id: Types.ObjectId
+  gameId: Types.ObjectId
+  count: number
+}
 
 export const tournamentStageType = {
   singleElimination: "single_elimination",
@@ -25,15 +35,18 @@ export interface ITournament {
   match: Match[]
   match_game: MatchGame[]
   game: { _id: Types.ObjectId; gameId: Types.ObjectId; count: number }[]
+  participantGameMatrix: Array<Array<Game>>
 }
 
 type TournamentDocumentOverrides = {
-  stage: Types.Subdocument<Types.ObjectId> & Stage
-  group: Types.Subdocument<Types.ObjectId> & Group
-  round: Types.Subdocument<Types.ObjectId> & Round
-  participant: Types.Subdocument<Types.ObjectId> & Participant
-  match: Types.Subdocument<Types.ObjectId> & Match
-  match_game: Types.Subdocument<Types.ObjectId> & MatchGame
+  stage: Types.DocumentArray<Stage>
+  group: Types.DocumentArray<Group>
+  round: Types.DocumentArray<Round>
+  participant: Types.DocumentArray<Participant>
+  match: Types.DocumentArray<Match>
+  match_game: Types.DocumentArray<MatchGame>
+  game: Types.DocumentArray<Game>
+  participantGameMatrix: Types.Array<Types.DocumentArray<Game>>
 }
 
 type TournamentModelType = Model<

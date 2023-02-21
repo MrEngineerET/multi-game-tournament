@@ -78,7 +78,9 @@ export class MyDB implements CrudInterface {
           id,
         } as DataTypes[T]
 
-        this.tournament[table].push(newValue as any)
+        const arr = this.tournament[table].toObject()
+        arr.push(newValue)
+        this.tournament[table] = arr
         await this.tournament.save()
         return id
       } catch (error) {
@@ -90,7 +92,9 @@ export class MyDB implements CrudInterface {
       const newValues = arg.map(
         (el) => ({ ...el, id: ++lastIndex } as DataTypes[T]),
       )
-      this.tournament[table].push(...(newValues as any))
+      const arr = this.tournament[table].toObject()
+      arr.push(...newValues)
+      this.tournament[table] = arr
       await this.tournament.save()
       return true
     } catch (error) {
@@ -143,15 +147,15 @@ export class MyDB implements CrudInterface {
       if (arg === undefined) {
         const res = this.tournament[table]
         if (res.length === 0) return null
-        return res
+        return res.toObject() as Array<DataTypes[T]>
       }
       if (typeof arg === "number") {
         // return the specific data
-        const index = this.tournament[table].findIndex(
-          (value) => value.id == arg,
-        )
+        const index = this.tournament[table]
+          .toObject()
+          .findIndex((value) => value.id == arg)
         if (index == -1) return null
-        return this.tournament[table][index] as DataTypes[T]
+        return this.tournament[table].toObject()[index] as DataTypes[T]
       }
       // there is a filter, and use the filter to select the data
       const filteredArr = filterArrayOfObjects(this.tournament[table], arg)
@@ -207,9 +211,11 @@ export class MyDB implements CrudInterface {
     if (typeof arg === "number") {
       try {
         // update the value and return true or false based on the succeess
-        const index = this.tournament[table].findIndex((val) => val.id === arg)
+        const index = this.tournament[table]
+          .toObject()
+          .findIndex((val) => val.id === arg)
         if (index === -1) return false
-        this.tournament[table].set(`${index}`, value)
+        this.tournament[table].set(index, value as any)
         await this.tournament.save()
         return true
       } catch (error) {
@@ -219,7 +225,7 @@ export class MyDB implements CrudInterface {
     }
     // use this place to update the data using the filter
     try {
-      this.tournament[table].forEach((el, index) => {
+      this.tournament[table].toObject().forEach((el, index) => {
         const update = Object.entries(arg).every(
           ([key, value]) => el[key] === value,
         )

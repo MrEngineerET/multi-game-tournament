@@ -1,4 +1,4 @@
-function assignGames(players, games, matches) {
+export function assignGames(players, games, matches) {
   // Create an array to store the available games
   let availableGames = []
   // Loop over the games array and add each game to the availableGames array the specified number of times

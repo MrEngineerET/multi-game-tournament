@@ -1,4 +1,4 @@
-function assignGames(
+export function assignGames(
   players: number[],
   games: { id: number; count: number }[],
   matches: [number, number][],
