@@ -31,7 +31,6 @@ const styles = {
   fieldName: {
     width: 200,
     fontSize: { xs: 16, md: 20 },
-    mb: 1,
   },
   fieldInput: {
     flex: 1,

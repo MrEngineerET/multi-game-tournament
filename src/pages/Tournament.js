@@ -13,7 +13,6 @@ import { getTournaments } from "../api/tournament"
 import { Link } from "react-router-dom"
 
 const styles = {
-  root: {},
   bannerWrapper: {
     bgcolor: "background.paper",
     p: 20,
@@ -35,17 +34,23 @@ const styles = {
 }
 
 export function Tournament() {
-  let { tournaments } = useLoaderData()
+  let tournaments = useLoaderData()
   return (
-    <Box sx={styles.root}>
+    <Box>
       <Box sx={styles.bannerWrapper}>
-        <Container sx={styles.banner}>
-          <Typography variant="h3" component="h1" sx={styles.yourTournament}>
-            Your Tournaments
-          </Typography>
-          <Button href="new" fullWidth={false}>
-            Create Tournament
-          </Button>
+        <Container>
+          <Box sx={styles.banner}>
+            <Typography
+              variant="h3"
+              component="h1"
+              sx={{ textAlign: { xs: "center", sm: "start" } }}
+            >
+              Your Tournaments
+            </Typography>
+            <Button href="new" fullWidth={false}>
+              Create Tournament
+            </Button>
+          </Box>
         </Container>
       </Box>
       <Box sx={styles.content}>
@@ -72,6 +77,5 @@ export function Tournament() {
 }
 
 export async function loader() {
-  const tournaments = await getTournaments()
-  return { tournaments }
+  return getTournaments()
 }
