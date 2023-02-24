@@ -16,6 +16,14 @@ import {
   loader as tournamentDetailLoader,
 } from "../context/TournamentContext"
 import { ErrorPage } from "../pages/ErrorPage"
+import { Game, loader as gameLoader } from "../pages/Game"
+import { action as deleteGameAction } from "../pages/deleteGame"
+import { CreateGame, action as createGameAction } from "../pages/CreateGame"
+import {
+  EditGame,
+  laoder as editGameLoader,
+  action as editGameAction,
+} from "../pages/EditGame"
 
 /**
  *  /login
@@ -53,6 +61,19 @@ export const routes = (
           action={createTournamentAction}
         />
       </Route>
+      <Route path="game" element={<Game />} loader={gameLoader} />
+      <Route
+        path="game/new"
+        element={<CreateGame />}
+        action={createGameAction}
+      />
+      <Route
+        path="game/:id/edit"
+        element={<EditGame />}
+        loader={editGameLoader}
+        action={editGameAction}
+      />
+      <Route path="game/:id/destroy" action={deleteGameAction} />
     </Route>
     <Route path={"/login"} element={<LogIn />} />
     <Route path="/signup" element={<SignUp />} />
