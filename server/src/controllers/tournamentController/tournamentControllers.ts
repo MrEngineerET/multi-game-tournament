@@ -137,7 +137,8 @@ const deleteTournament = async (
   next: NextFunction,
 ) => {
   try {
-    await Tournament.deleteOne({ id: req.params.id })
+    const result = await Tournament.findByIdAndDelete(req.params.id)
+    if (!result) throw { status: 404, message: "tournament not found" }
     res.status(204).send()
   } catch (error) {
     next(error)
@@ -204,13 +205,18 @@ const deleteTournamentGame = async (
 ) => {
   try {
     const { tournamentId, gameId } = req.params
-    await Tournament.findByIdAndUpdate(tournamentId, {
-      $pull: {
-        game: {
-          gameId,
-        },
-      },
-    })
+    const tournament = await Tournament.findById(tournamentId)
+    if (!tournament) {
+      throw { statusCode: 404, message: "Tournament not found" }
+    }
+    const gameIndex = tournament.game.findIndex(
+      (game) => game._id.toString() === gameId,
+    )
+    if (gameIndex === -1) {
+      throw { statusCode: 404, message: "Game not found" }
+    }
+    tournament.game.splice(gameIndex, 1)
+    await tournament.save()
     res.status(204).send()
   } catch (error) {
     next(error)

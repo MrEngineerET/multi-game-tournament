@@ -71,7 +71,10 @@ export const deleteGame = async (
   next: NextFunction,
 ) => {
   try {
-    await Game.deleteOne({ id: req.params.id })
+    const result = await Game.deleteOne({ _id: req.params.id })
+    if (result.deletedCount === 0) {
+      throw { statusCode: 404, message: "Game not found" }
+    }
     res.status(204).send()
   } catch (error) {
     next(error)
