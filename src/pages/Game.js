@@ -42,16 +42,27 @@ export function Game() {
           </Box>
         </Container>
       </Box>
-      <Box>
-        <Container>
-          {/* <GameCard game={games[0]} /> */}
-          <Box sx={{ display: "flex", gap: 5, flexWrap: "wrap" }}>
-            {games.map((game) => {
-              return <GameCard key={game._id} game={game} />
-            })}
-          </Box>
-        </Container>
-      </Box>
+      <Container
+        sx={{
+          display: "flex",
+          gap: 5,
+          flexWrap: "wrap",
+          justifyContent: "center",
+        }}
+      >
+        {games.map((game) => {
+          return (
+            <Box
+              sx={{
+                width: 280,
+              }}
+              key={game._id}
+            >
+              <GameCard game={game} />
+            </Box>
+          )
+        })}
+      </Container>
     </Box>
   )
 }
@@ -59,3 +70,5 @@ export function Game() {
 export async function loader() {
   return getAllGames()
 }
+
+//TODO: move all the styling to sxStyles

@@ -11,6 +11,7 @@ import {
 } from "@mui/material"
 import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material"
 import { GameDeleteDialog } from "./GameDeleteDialog"
+import { EllipsisText } from "../Common/EllipsisText"
 
 export function GameCard({ game }) {
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
@@ -24,7 +25,7 @@ export function GameCard({ game }) {
 
   return (
     <Box>
-      <Card>
+      <Card elevation={2}>
         <CardMedia
           sx={{ height: { xs: 150, sm: 200 }, bgcolor: "background.default" }}
           component={"img"}
@@ -32,10 +33,14 @@ export function GameCard({ game }) {
           onError={handleImageOnError}
         />
         <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {game.name}
+          <Typography gutterBottom variant="h6" component="div">
+            <EllipsisText text={game.name} />
           </Typography>
-          <Typography variant="body1" color="text.secondary">
+          <Typography
+            variant="body2"
+            color="text.secondary"
+            sx={{ height: 70, overflow: "scroll" }}
+          >
             {game.description}
           </Typography>
         </CardContent>
