@@ -19,7 +19,6 @@ export function GameCard({ game }) {
     setDeleteDialogOpen(false)
   }
   const handleImageOnError = (e) => {
-    console.log("idid", "error", game.images[0])
     return (e.target.src = "/images/image-loading-error.jpg")
   }
 
@@ -27,7 +26,11 @@ export function GameCard({ game }) {
     <Box>
       <Card elevation={2}>
         <CardMedia
-          sx={{ height: { xs: 150, sm: 200 }, bgcolor: "background.default" }}
+          sx={{
+            height: { xs: 150, sm: 200 },
+            bgcolor: "background.default",
+            borderBottom: "1px solid whitesmoke",
+          }}
           component={"img"}
           image={game.images[0]}
           onError={handleImageOnError}

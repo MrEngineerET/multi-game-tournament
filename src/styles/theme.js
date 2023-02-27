@@ -38,7 +38,11 @@ const lightModeTheme = {
     secondary: {
       main: "#288CBE",
     },
-
+    text: {
+      primary: "#28323C",
+      secondary: "#646E78",
+      disabled: "#C8D2DC",
+    },
     bracket: {
       background: "#58595E",
       score: "#777A7F",
