@@ -2,6 +2,7 @@ import React from "react"
 import { Form, redirect, useLoaderData } from "react-router-dom"
 import { Box, Container, Stack, Typography, Button } from "@mui/material"
 import { BasicInfo } from "../components/Tournament/CreateTournament/BasicInfo"
+import { GameInfo } from "../components/Tournament/CreateTournament/GameInfo"
 import { createTournament } from "../api/tournament"
 import { getAllGames } from "../api/game"
 
@@ -21,7 +22,6 @@ const styles = {
 
 export function CreateTournament() {
   const { games } = useLoaderData()
-  console.log(games)
   return (
     <Box>
       <Box sx={styles.bannerWrapper}>
@@ -36,6 +36,7 @@ export function CreateTournament() {
           <Form method="post">
             <Stack gap={10}>
               <BasicInfo />
+              <GameInfo games={games} />
               <Box align="right">
                 <Button type="submit">Save and continue</Button>
               </Box>
