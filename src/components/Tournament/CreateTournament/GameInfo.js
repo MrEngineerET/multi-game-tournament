@@ -82,7 +82,7 @@ export function GameInfo({ games }) {
   return (
     <Card elevation={3}>
       <CardHeader title="Game Info" sx={{ bgcolor: "background.default" }} />
-      <CardContent sx={{ m: 1, width: { xs: "100%", md: "70%" } }}>
+      <CardContent>
         <FormControl sx={{ width: "100%", mb: { xs: 5, md: 10 } }}>
           <InputLabel>Game</InputLabel>
           <Select

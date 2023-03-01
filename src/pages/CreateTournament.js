@@ -34,7 +34,7 @@ export function CreateTournament() {
       <Box>
         <Container sx={styles.content}>
           <Form method="post">
-            <Stack gap={10}>
+            <Stack gap={10} sx={{ width: { xs: "100%", md: "80%" } }}>
               <BasicInfo />
               <GameInfo games={games} />
               <Box align="right">
