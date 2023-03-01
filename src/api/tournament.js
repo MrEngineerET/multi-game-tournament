@@ -11,6 +11,7 @@ export async function createTournament({
   description,
   participants,
   stageType,
+  games,
 }) {
   const { data: tournament } = (
     await axios.post("/tournament", {
@@ -18,6 +19,7 @@ export async function createTournament({
       description,
       participants,
       stageType,
+      games,
     })
   ).data
   return tournament
