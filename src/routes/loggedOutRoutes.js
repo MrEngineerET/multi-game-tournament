@@ -8,6 +8,7 @@ import { Tournament, loader as tournamentsLoader } from "../pages/Tournament"
 import {
   CreateTournament,
   action as createTournamentAction,
+  loader as createTournamentLoader,
 } from "../pages/CreateTournament"
 import { LoggedOutHeader } from "../components/LoggedOutHeader"
 import { Box } from "@mui/material"
@@ -59,6 +60,7 @@ export const routes = (
           path="new"
           element={<CreateTournament />}
           action={createTournamentAction}
+          loader={createTournamentLoader}
         />
       </Route>
       <Route path="game" element={<Game />} loader={gameLoader} />

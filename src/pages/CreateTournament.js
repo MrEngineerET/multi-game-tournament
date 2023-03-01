@@ -1,20 +1,9 @@
 import React from "react"
-import { redirect } from "react-router-dom"
-import {
-  Box,
-  Container,
-  Typography,
-  Card,
-  Stack,
-  TextField,
-  MenuItem,
-  CardActions,
-  Button,
-  CardContent,
-} from "@mui/material"
-import { useMediaQuery, useTheme } from "@mui/material"
-import { Form } from "react-router-dom"
-import { createTournament, stageType } from "../api/tournament"
+import { Form, redirect, useLoaderData } from "react-router-dom"
+import { Box, Container, Stack, Typography, Button } from "@mui/material"
+import { BasicInfo } from "../components/Tournament/CreateTournament/BasicInfo"
+import { createTournament } from "../api/tournament"
+import { getAllGames } from "../api/game"
 
 const styles = {
   bannerWrapper: {
@@ -28,19 +17,11 @@ const styles = {
   content: {
     pt: 10,
   },
-  fieldName: {
-    width: 200,
-    fontSize: { xs: 16, md: 20 },
-  },
-  fieldInput: {
-    flex: 1,
-  },
 }
 
 export function CreateTournament() {
-  const theme = useTheme()
-  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
-
+  const { games } = useLoaderData()
+  console.log(games)
   return (
     <Box>
       <Box sx={styles.bannerWrapper}>
@@ -52,81 +33,15 @@ export function CreateTournament() {
       </Box>
       <Box>
         <Container sx={styles.content}>
-          <Card elevation={3}>
-            <Box sx={{ bgcolor: "background.default", p: 5 }}>
-              <Typography variant="h5">Basic Info</Typography>
-            </Box>
-            <Form method="post">
-              <CardContent sx={{ p: 5 }}>
-                <Stack gap={5}>
-                  <Stack direction={{ xs: "column", md: "row" }} gap={5}>
-                    <Typography sx={styles.fieldName}>
-                      Tournament name
-                    </Typography>
-                    <Box sx={styles.fieldInput}>
-                      <TextField
-                        required
-                        fullWidth
-                        name="tournament_name"
-                        variant="outlined"
-                        size={isSmallScreen ? "small" : "normal"}
-                      />
-                    </Box>
-                  </Stack>
-                  <Stack direction={{ xs: "column", md: "row" }} gap={5}>
-                    <Typography sx={styles.fieldName}>Description</Typography>
-                    <Box sx={styles.fieldInput}>
-                      <TextField
-                        fullWidth
-                        name="tournament_desc"
-                        variant="outlined"
-                        multiline
-                        minRows={3}
-                        maxRows={5}
-                        size={isSmallScreen ? "small" : "normal"}
-                        required
-                      />
-                    </Box>
-                  </Stack>
-                  <Stack direction={{ xs: "column", md: "row" }} gap={5}>
-                    <Typography sx={styles.fieldName}>Type</Typography>
-                    <Box sx={styles.fieldInput}>
-                      <TextField
-                        name="stage_type"
-                        fullWidth
-                        select
-                        defaultValue={stageType.singleElimination}
-                        size={isSmallScreen ? "small" : "normal"}
-                      >
-                        <MenuItem value={stageType.singleElimination}>
-                          Single Elimination
-                        </MenuItem>
-                        <MenuItem value={stageType.doubleElimination}>
-                          Double Elimination
-                        </MenuItem>
-                      </TextField>
-                    </Box>
-                  </Stack>
-                  <Stack direction={{ xs: "column", md: "row" }} gap={5}>
-                    <Typography sx={styles.fieldName}>Participants</Typography>
-                    <Box sx={styles.fieldInput}>
-                      <TextField
-                        name="participants"
-                        fullWidth
-                        size={isSmallScreen ? "small" : "normal"}
-                        multiline
-                        minRows={3}
-                        maxRows={5}
-                      />
-                    </Box>
-                  </Stack>
-                </Stack>
-              </CardContent>
-              <CardActions sx={{ mb: 5, pl: 5 }}>
+          <Form method="post">
+            <Stack gap={10}>
+              <BasicInfo />
+              <Box align="right">
                 <Button type="submit">Save and continue</Button>
-              </CardActions>
-            </Form>
-          </Card>
+              </Box>
+            </Stack>
+          </Form>
+          <Box sx={{ padding: 40 }} />
         </Container>
       </Box>
     </Box>
@@ -144,12 +59,18 @@ export async function action({ request }) {
     return null
   })
   participants = participants.filter((p) => p)
-
+  let selectedGames = JSON.parse(formData.get("selected_games"))
   const tournament = await createTournament({
     name,
     description,
     participants,
     stageType,
+    games: selectedGames.map((g) => ({ gameId: g._id, count: g.count })),
   })
   return redirect(`/tournament/${tournament._id}`)
+}
+
+export async function loader() {
+  const games = await getAllGames()
+  return { games }
 }
