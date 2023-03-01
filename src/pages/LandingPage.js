@@ -14,6 +14,7 @@ export const LandingPage = () => {
         >
           <Typography variant="h4">Simplify Tournament Management</Typography>
           <Button href="tournament">Tournament</Button>
+          <Button href="game">Game</Button>
         </Stack>
       </Container>
     </Box>
