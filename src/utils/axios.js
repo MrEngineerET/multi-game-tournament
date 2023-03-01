@@ -22,26 +22,27 @@ function sleep(ms) {
 }
 
 export const getAxios = () => {
+  const sleepTime = 100
   if (process.env.NODE_ENV === "development") {
     return {
       get: async (...rest) => {
-        await sleep(1000)
+        await sleep(sleepTime)
         return axioss.get(...rest)
       },
       post: async (...rest) => {
-        await sleep(1000)
+        await sleep(sleepTime)
         return axioss.post(...rest)
       },
       delete: async (...rest) => {
-        await sleep(1000)
+        await sleep(sleepTime)
         return axioss.delete(...rest)
       },
       patch: async (...rest) => {
-        await sleep(1000)
+        await sleep(sleepTime)
         return axioss.patch(...rest)
       },
       put: async (...rest) => {
-        await sleep(1000)
+        await sleep(sleepTime)
         return axioss.put(...rest)
       },
     }
