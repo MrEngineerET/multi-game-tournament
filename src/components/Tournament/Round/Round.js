@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Match } from "../Match"
+import { Match } from "../Match/Match"
 import { Box } from "@mui/system"
 import { Typography } from "@mui/material"
 import { BackConnector, FrontConnector } from "./Connector"
@@ -12,7 +12,7 @@ const styles = {
   },
   round: {
     display: "flex",
-    gap: 5,
+    gap: 15,
     flexDirection: "column",
     flex: 1,
   },

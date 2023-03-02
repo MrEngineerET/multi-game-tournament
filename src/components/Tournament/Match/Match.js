@@ -2,6 +2,7 @@ import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { Box, Divider, IconButton, Typography } from "@mui/material"
 import BorderColorIcon from "@mui/icons-material/BorderColor"
+import InfoIcon from "@mui/icons-material/Info"
 import { MatchEditDialog } from "./MatchScoreEditDialog"
 
 const styleConstants = {
@@ -13,16 +14,25 @@ const styleConstants = {
   fontColor: "#eee",
 }
 const styles = {
+  root: {
+    position: "relative",
+    "&:hover .match_tool_tip": {
+      visibility: "visible",
+    },
+  },
   match: {
     position: "relative",
     width: "max-content",
     boxShadow: 3,
     borderRadius: styleConstants.borderRadius,
+    border: "1px solid",
+    borderColor: "bracket.background",
     "&:hover": {
       border: "1px solid",
-      borderColor: "primary.main",
+      borderColor: "primary.light",
       boxShadow: 4,
     },
+    zIndex: 10,
   },
   opponent: {
     display: "flex",
@@ -70,7 +80,7 @@ const styles = {
   editScore: {
     position: "absolute",
     minWidth: { xs: "2rem", sm: "2.5rem" },
-    height: "100%",
+    height: 1,
     bgcolor: "bracket.background",
     top: 0,
     right: 0,
@@ -81,13 +91,38 @@ const styles = {
     borderTopRightRadius: styleConstants.borderRadius,
     borderBottomRightRadius: styleConstants.borderRadius,
   },
-  editIcon: {
+  editIcon: (theme) => ({
     fontSize: { xs: "1rem", sm: "1.25rem" },
-    fill: styleConstants.fontColor,
-  },
+    color: styleConstants.fontColor,
+    ":hover": {
+      color: theme.palette.primary.light,
+    },
+  }),
   winner: {
     bgcolor: "primary.main",
   },
+  matchToolTipWrapper: {
+    position: "absolute",
+    right: -50,
+    top: 0,
+    height: 1,
+    width: 55,
+    visibility: "hidden",
+
+    display: "flex",
+    flexDirection: "column",
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  matchToolTip: (theme) => ({
+    width: 1,
+    height: 0.55,
+    background: theme.palette.bracket.background,
+    borderRadius: 1,
+    opacity: 0.9,
+    display: "flex",
+    justifyContent: "center",
+  }),
 }
 
 export function Match({
@@ -126,46 +161,55 @@ export function Match({
   const [openMatchEditDialog, setOpenMatchEditDialog] = useState(false)
 
   return (
-    <Box sx={styles.match}>
-      {match.participants.map((participant, i) => {
-        const opponent = [
-          <Box sx={styles.opponent} key={i}>
-            <Typography component="span" sx={styles.name}>
-              {participant.name}
-            </Typography>
-            <Typography
-              sx={[
-                styles.score,
-                winnerIndex == i && styles.winner,
-                !bothParticipantsPresent && styles.invisible,
-              ]}
-              component="span"
-            >
-              {participant.score || "-"}
-            </Typography>
-          </Box>,
-        ]
-        if (i == 0)
-          opponent.push(
-            <Divider
-              key="divider"
-              sx={{
-                borderColor: (theme) =>
-                  theme.palette.mode === "light"
-                    ? "#78787c"
-                    : theme.palette.background.default,
-              }}
-            />,
-          )
-        return opponent
-      })}
-      {showEditButton && (
-        <Box sx={styles.editScore}>
-          <IconButton onClick={() => setOpenMatchEditDialog((prev) => !prev)}>
-            <BorderColorIcon sx={styles.editIcon} />
+    <Box sx={styles.root}>
+      <Box sx={styles.match}>
+        {match.participants.map((participant, i) => {
+          const opponent = [
+            <Box sx={styles.opponent} key={i}>
+              <Typography component="span" sx={styles.name}>
+                {participant.name}
+              </Typography>
+              <Typography
+                sx={[
+                  styles.score,
+                  winnerIndex == i && styles.winner,
+                  !bothParticipantsPresent && styles.invisible,
+                ]}
+                component="span"
+              >
+                {participant.score || "-"}
+              </Typography>
+            </Box>,
+          ]
+          if (i == 0)
+            opponent.push(
+              <Divider
+                key="divider"
+                sx={{
+                  borderColor: (theme) =>
+                    theme.palette.mode === "light"
+                      ? "#78787c"
+                      : theme.palette.background.default,
+                }}
+              />,
+            )
+          return opponent
+        })}
+        {showEditButton && (
+          <Box sx={styles.editScore}>
+            <IconButton onClick={() => setOpenMatchEditDialog((prev) => !prev)}>
+              <BorderColorIcon sx={styles.editIcon} />
+            </IconButton>
+          </Box>
+        )}
+      </Box>
+      <Box className="match_tool_tip" sx={styles.matchToolTipWrapper}>
+        <Box sx={styles.matchToolTip}>
+          <IconButton size="small">
+            <InfoIcon sx={{ fill: "lightgrey" }} fontSize="small" />
           </IconButton>
         </Box>
-      )}
+      </Box>
       <MatchEditDialog
         open={openMatchEditDialog}
         onClose={() => setOpenMatchEditDialog(false)}

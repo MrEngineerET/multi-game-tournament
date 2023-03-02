@@ -22,7 +22,7 @@ function sleep(ms) {
 }
 
 export const getAxios = () => {
-  const sleepTime = 100
+  const sleepTime = 1000
   if (process.env.NODE_ENV === "development") {
     return {
       get: async (...rest) => {

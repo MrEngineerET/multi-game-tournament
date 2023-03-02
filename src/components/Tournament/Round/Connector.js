@@ -11,6 +11,7 @@ const styles = {
     borderTop: 2,
     borderRight: 2,
     borderColor: "bracket.line",
+    zIndex: -1,
   },
   connectUp: {
     position: "absolute",
@@ -20,6 +21,7 @@ const styles = {
     borderBottom: 2,
     borderRight: 2,
     borderColor: "bracket.line",
+    zIndex: -1,
   },
   connectBehind: {
     position: "absolute",

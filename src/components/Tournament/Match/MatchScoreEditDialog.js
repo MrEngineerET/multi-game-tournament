@@ -15,7 +15,7 @@ import {
 } from "@mui/material"
 import { useTheme, useMediaQuery } from "@mui/material"
 import PropTypes from "prop-types"
-import { useTournamentContext } from "../../context/TournamentContext"
+import { useTournamentContext } from "../../../context/TournamentContext"
 
 const styles = {
   scoreInputField: {
