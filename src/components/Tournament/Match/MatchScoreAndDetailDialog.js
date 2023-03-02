@@ -12,7 +12,12 @@ export const tabs = {
   reportScore: 1,
 }
 
-export const MatchEditDialog = ({ open, onClose, match, tab = 0 }) => {
+export const MatchScoreAndDetailDialog = ({
+  open,
+  onClose,
+  match,
+  tab = 0,
+}) => {
   const [tabValue, setTabValue] = useState(tab)
   useEffect(() => {
     setTabValue(tab)
@@ -43,7 +48,7 @@ export const MatchEditDialog = ({ open, onClose, match, tab = 0 }) => {
   )
 }
 
-MatchEditDialog.propTypes = {
+MatchScoreAndDetailDialog.propTypes = {
   open: PropTypes.bool,
   onClose: PropTypes.func,
   match: PropTypes.object,

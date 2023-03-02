@@ -4,9 +4,9 @@ import { Box, Divider, IconButton, Typography } from "@mui/material"
 import InfoIcon from "@mui/icons-material/Info"
 import SportsScoreIcon from "@mui/icons-material/SportsScore"
 import {
-  MatchEditDialog,
+  MatchScoreAndDetailDialog,
   tabs as matchEditDialogTabs,
-} from "./MatchScoreEditDialog"
+} from "./MatchScoreAndDetailDialog"
 
 const styleConstants = {
   borderRadius: "5px",
@@ -132,7 +132,7 @@ export function Match({ match }) {
   const matchCompleted = match.status === 4
   const showEditScoreButton = match.status === 2
 
-  const [openMatchEditDialog, setOpenMatchEditDialog] = useState({
+  const [openMatchDialog, setopenMatchDialog] = useState({
     status: false,
     tab: matchEditDialogTabs.reportScore,
   })
@@ -176,7 +176,7 @@ export function Match({ match }) {
           <Box sx={styles.editScore}>
             <IconButton
               onClick={() =>
-                setOpenMatchEditDialog((prev) => ({
+                setopenMatchDialog((prev) => ({
                   status: !prev.status,
                   tab: matchEditDialogTabs.reportScore,
                 }))
@@ -191,7 +191,7 @@ export function Match({ match }) {
         <Box sx={styles.matchToolTip}>
           <IconButton
             onClick={() =>
-              setOpenMatchEditDialog((prev) => ({
+              setopenMatchDialog((prev) => ({
                 status: !prev.status,
                 tab: matchEditDialogTabs.matchDetail,
               }))
@@ -207,13 +207,13 @@ export function Match({ match }) {
           </IconButton>
         </Box>
       </Box>
-      <MatchEditDialog
-        open={openMatchEditDialog.status}
+      <MatchScoreAndDetailDialog
+        open={openMatchDialog.status}
         onClose={() =>
-          setOpenMatchEditDialog((prev) => ({ ...prev, status: false }))
+          setopenMatchDialog((prev) => ({ ...prev, status: false }))
         }
         match={match}
-        tab={openMatchEditDialog.tab}
+        tab={openMatchDialog.tab}
       />
     </Box>
   )
