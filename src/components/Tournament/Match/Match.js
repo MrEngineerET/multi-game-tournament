@@ -125,38 +125,9 @@ const styles = {
   }),
 }
 
-export function Match({
-  match = {
-    id: 0,
-    number: 1,
-    round_id: 0,
-    participants: [
-      {
-        id: null,
-        score: 2,
-        name: "Belay Adamu",
-      },
-      {
-        id: null,
-        score: 4,
-        name: "Biruk Berhanu",
-      },
-    ],
-  },
-}) {
-  const bothParticipantsPresent =
-    match.participants[0].name && match.participants[1].name
-  const showEditButton =
-    bothParticipantsPresent &&
-    !match.participants[0].score &&
-    !match.participants[1].score
-
-  const isGameOver = match.participants[0].score && match.participants[1].score
-  let winnerIndex = null
-  if (isGameOver) {
-    winnerIndex =
-      match.participants[0].score > match.participants[1].score ? 0 : 1
-  }
+export function Match({ match }) {
+  const matchCompleted = match.status === 4
+  const showEditScoreButton = match.status === 2
 
   const [openMatchEditDialog, setOpenMatchEditDialog] = useState(false)
 
@@ -172,8 +143,8 @@ export function Match({
               <Typography
                 sx={[
                   styles.score,
-                  winnerIndex == i && styles.winner,
-                  !bothParticipantsPresent && styles.invisible,
+                  !matchCompleted && styles.invisible,
+                  participant.result === "win" && styles.winner,
                 ]}
                 component="span"
               >
@@ -195,7 +166,7 @@ export function Match({
             )
           return opponent
         })}
-        {showEditButton && (
+        {showEditScoreButton && (
           <Box sx={styles.editScore}>
             <IconButton onClick={() => setOpenMatchEditDialog((prev) => !prev)}>
               <BorderColorIcon sx={styles.editIcon} />
