@@ -17,11 +17,13 @@ export const MatchScoreAndDetailDialog = ({
   onClose,
   match,
   tab = 0,
+  hideScoreEdit = false,
 }) => {
   const [tabValue, setTabValue] = useState(tab)
   useEffect(() => {
-    setTabValue(tab)
-  }, [tab])
+    if (hideScoreEdit) setTabValue(0)
+    else setTabValue(tab)
+  }, [tab, hideScoreEdit])
 
   return (
     <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
@@ -31,9 +33,10 @@ export const MatchScoreAndDetailDialog = ({
           variant="fullWidth"
           textColor="inherit"
           onChange={(e, newValue) => setTabValue(newValue)}
+          indicatorColor={hideScoreEdit ? "inherit" : "primary"}
         >
           <Tab label="Match Detail" />
-          <Tab label="Report Score" />
+          {!hideScoreEdit && <Tab label="Report Score" />}
         </Tabs>
       </Box>
       <DialogContent>
@@ -53,4 +56,5 @@ MatchScoreAndDetailDialog.propTypes = {
   onClose: PropTypes.func,
   match: PropTypes.object,
   tab: PropTypes.number,
+  hideScoreEdit: PropTypes.bool,
 }

@@ -130,7 +130,7 @@ const styles = {
 
 export function Match({ match }) {
   const matchCompleted = match.status === 4
-  const showEditScoreButton = match.status === 2
+  const matchReady = match.status === 2
 
   const [openMatchDialog, setopenMatchDialog] = useState({
     status: false,
@@ -172,7 +172,7 @@ export function Match({ match }) {
             )
           return opponent
         })}
-        {showEditScoreButton && (
+        {matchReady && (
           <Box sx={styles.editScore}>
             <IconButton
               onClick={() =>
@@ -214,6 +214,7 @@ export function Match({ match }) {
         }
         match={match}
         tab={openMatchDialog.tab}
+        hideScoreEdit={!matchReady}
       />
     </Box>
   )
