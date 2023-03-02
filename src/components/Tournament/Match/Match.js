@@ -1,9 +1,12 @@
 import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { Box, Divider, IconButton, Typography } from "@mui/material"
-import BorderColorIcon from "@mui/icons-material/BorderColor"
 import InfoIcon from "@mui/icons-material/Info"
-import { MatchEditDialog } from "./MatchScoreEditDialog"
+import SportsScoreIcon from "@mui/icons-material/SportsScore"
+import {
+  MatchEditDialog,
+  tabs as matchEditDialogTabs,
+} from "./MatchScoreEditDialog"
 
 const styleConstants = {
   borderRadius: "5px",
@@ -129,7 +132,10 @@ export function Match({ match }) {
   const matchCompleted = match.status === 4
   const showEditScoreButton = match.status === 2
 
-  const [openMatchEditDialog, setOpenMatchEditDialog] = useState(false)
+  const [openMatchEditDialog, setOpenMatchEditDialog] = useState({
+    status: false,
+    tab: matchEditDialogTabs.reportScore,
+  })
 
   return (
     <Box sx={styles.root}>
@@ -168,23 +174,46 @@ export function Match({ match }) {
         })}
         {showEditScoreButton && (
           <Box sx={styles.editScore}>
-            <IconButton onClick={() => setOpenMatchEditDialog((prev) => !prev)}>
-              <BorderColorIcon sx={styles.editIcon} />
+            <IconButton
+              onClick={() =>
+                setOpenMatchEditDialog((prev) => ({
+                  status: !prev.status,
+                  tab: matchEditDialogTabs.reportScore,
+                }))
+              }
+            >
+              <SportsScoreIcon sx={styles.editIcon} />
             </IconButton>
           </Box>
         )}
       </Box>
       <Box className="match_tool_tip" sx={styles.matchToolTipWrapper}>
         <Box sx={styles.matchToolTip}>
-          <IconButton size="small">
-            <InfoIcon sx={{ fill: "lightgrey" }} fontSize="small" />
+          <IconButton
+            onClick={() =>
+              setOpenMatchEditDialog((prev) => ({
+                status: !prev.status,
+                tab: matchEditDialogTabs.matchDetail,
+              }))
+            }
+          >
+            <InfoIcon
+              sx={{
+                fill: "lightgrey",
+                ":hover": { fill: (theme) => theme.palette.primary.light },
+              }}
+              fontSize="small"
+            />
           </IconButton>
         </Box>
       </Box>
       <MatchEditDialog
-        open={openMatchEditDialog}
-        onClose={() => setOpenMatchEditDialog(false)}
+        open={openMatchEditDialog.status}
+        onClose={() =>
+          setOpenMatchEditDialog((prev) => ({ ...prev, status: false }))
+        }
         match={match}
+        tab={openMatchEditDialog.tab}
       />
     </Box>
   )
