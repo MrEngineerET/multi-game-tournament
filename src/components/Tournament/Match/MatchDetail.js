@@ -59,7 +59,21 @@ export function MatchDetail({ match, onClose }) {
               </CardContent>
             </Card>
           ) : (
-            <div>fadf</div>
+            <Card
+              sx={{
+                width: 200,
+                height: 150,
+                p: 5,
+                bgcolor: "background.default",
+              }}
+            >
+              <Typography variant="h5" align="center" mb={5}>
+                Game
+              </Typography>
+              <Typography variant="h6" align="center">
+                TBD
+              </Typography>
+            </Card>
           )}
         </Box>
       </Stack>
