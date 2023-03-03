@@ -41,7 +41,7 @@ export const MatchScoreAndDetailDialog = ({
       </Box>
       <DialogContent>
         <TabPanel index={0} value={tabValue}>
-          <MatchDetail match={match} />
+          <MatchDetail match={match} onClose={onClose} />
         </TabPanel>
         <TabPanel index={1} value={tabValue}>
           <ReportScore match={match} onClose={onClose} />
