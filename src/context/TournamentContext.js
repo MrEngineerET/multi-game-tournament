@@ -12,16 +12,19 @@ const tournamentContext = createContext(null)
 export const useTournamentContext = () => useContext(tournamentContext)
 
 export const TournamentProvider = ({ children }) => {
-  const { data } = useLoaderData()
+  const { data, rawData } = useLoaderData()
   const [tournamentData, setTournamentData] = useState(data)
 
   const handleUpdateTournament = async (match) => {
     const newTournamentData = await updateMatch(match, tournamentData._id)
     setTournamentData(formatToUIModel(newTournamentData))
   }
-
+  const getMatch = (matchId) => {
+    return rawData.match.find((m) => m.id == matchId)
+  }
   const value = {
     handleUpdateTournament,
+    getMatch,
     tournamentData,
   }
   return (
@@ -40,6 +43,7 @@ export async function loader({ params }) {
   const tournament = await getTournament(tournamentId)
   return {
     data: formatToUIModel(tournament),
+    rawData: tournament,
   }
 }
 
