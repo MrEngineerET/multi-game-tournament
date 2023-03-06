@@ -26,6 +26,7 @@ import {
   action as editGameAction,
 } from "../pages/EditGame"
 
+import { action as reportScoreAction } from "../components/Tournament/Match/ReportScore"
 /**
  *  /login
  *  /signup
@@ -55,6 +56,7 @@ export const routes = (
           }
           loader={tournamentDetailLoader}
           errorElement={<ErrorPage />}
+          action={reportScoreAction}
         />
         <Route
           path="new"

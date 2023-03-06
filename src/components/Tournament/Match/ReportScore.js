@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useEffect } from "react"
 import {
   TableContainer,
   TableHead,
@@ -10,8 +10,9 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { TextField, Button, Box } from "@mui/material"
-import { useTournamentContext } from "../../../context/TournamentContext"
 import PropTypes from "prop-types"
+import { Form, useActionData, useNavigation } from "react-router-dom"
+import { updateMatch } from "../../../api/tournament"
 
 const styles = {
   scoreInputField: {
@@ -29,36 +30,23 @@ const styles = {
 
 export function ReportScore({ match, onClose }) {
   const theme = useTheme()
+  const actionData = useActionData()
+  const navigation = useNavigation()
+
+  useEffect(() => {
+    // dialog closing code
+    if (actionData) {
+      if (actionData.closeDialog) {
+        onClose()
+        actionData.closeDialog = false
+      }
+    }
+  }, [actionData])
+
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
-  const { handleUpdateTournament } = useTournamentContext()
-
-  const [scoreOne, setScoreOne] = useState(match.participants[0].score)
-  const [scoreTwo, setScoreTwo] = useState(match.participants[0].score)
-
-  const handleScoreChange = ({ target }) => {
-    if (target.name === "participantOne") setScoreOne(Number(target.value))
-    if (target.name === "participantTwo") setScoreTwo(Number(target.value))
-  }
-  const handleSave = async () => {
-    if (!scoreOne || !scoreTwo) return
-    const payload = { ...match }
-    payload.opponent1 = { ...match.payload1 }
-    payload.opponent2 = { ...match.payload2 }
-
-    payload.opponent1.score = scoreOne
-    payload.opponent2.score = scoreTwo
-
-    if (scoreOne > scoreTwo) payload.opponent1.result = "win"
-    else payload.opponent2.result = "win"
-
-    delete payload.participants
-
-    await handleUpdateTournament(payload)
-    onClose()
-  }
   return (
-    <>
+    <Form method="post">
       <TableContainer>
         <Table>
           <TableHead>
@@ -71,12 +59,18 @@ export function ReportScore({ match, onClose }) {
             <TableRow>
               <TableCell>{match.participants[0].name}</TableCell>
               <TableCell>
+                <input
+                  name="match_id"
+                  type="number"
+                  value={match.id}
+                  readOnly
+                  style={{ display: "none" }}
+                />
                 <TextField
-                  name="participantOne"
+                  name="participant_one_score"
                   type="number"
                   sx={styles.scoreInputField}
-                  value={match.participants[0].score}
-                  onChange={handleScoreChange}
+                  required
                 />
               </TableCell>
             </TableRow>
@@ -84,11 +78,10 @@ export function ReportScore({ match, onClose }) {
               <TableCell>{match.participants[1].name}</TableCell>
               <TableCell>
                 <TextField
-                  name="participantTwo"
+                  name="participant_two_score"
                   type="number"
                   sx={styles.scoreInputField}
-                  value={match.participants[1].score}
-                  onChange={handleScoreChange}
+                  required
                 />
               </TableCell>
             </TableRow>
@@ -106,18 +99,44 @@ export function ReportScore({ match, onClose }) {
           cancel
         </Button>
         <Button
-          onClick={handleSave}
-          disabled={!scoreOne || !scoreTwo}
+          type="submit"
           size={isSmallScreen ? "small" : "medium"}
+          disabled={navigation.state === "submitting"}
         >
           Save
         </Button>
       </Box>
-    </>
+    </Form>
   )
 }
 
 ReportScore.propTypes = {
   match: PropTypes.object,
   onClose: PropTypes.func,
+}
+
+export async function action({ request, params }) {
+  const { id } = params
+  const formData = await request.formData()
+  const participantOneScore = Number(formData.get("participant_one_score"))
+  const participantTwoScore = Number(formData.get("participant_two_score"))
+  const matchId = Number(formData.get("match_id"))
+
+  const playerOneResult =
+    participantOneScore > participantOneScore ? "win" : "loss"
+
+  await updateMatch(
+    {
+      id: Number(matchId),
+      opponent1: {
+        score: participantOneScore,
+        result: playerOneResult,
+      },
+      opponent2: {
+        score: participantTwoScore,
+      },
+    },
+    id,
+  )
+  return { closeDialog: true }
 }

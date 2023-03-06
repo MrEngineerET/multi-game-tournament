@@ -1,7 +1,7 @@
-import React, { createContext, useContext, useState } from "react"
+import React, { createContext, useContext } from "react"
 import PropTypes from "prop-types"
 import { useLoaderData } from "react-router-dom"
-import { getTournament, updateMatch } from "../api/tournament"
+import { getTournament } from "../api/tournament"
 import {
   catagorizeData,
   addParticipantNameInMatch,
@@ -13,19 +13,13 @@ export const useTournamentContext = () => useContext(tournamentContext)
 
 export const TournamentProvider = ({ children }) => {
   const { data, rawData } = useLoaderData()
-  const [tournamentData, setTournamentData] = useState(data)
 
-  const handleUpdateTournament = async (match) => {
-    const newTournamentData = await updateMatch(match, tournamentData._id)
-    setTournamentData(formatToUIModel(newTournamentData))
-  }
   const getMatch = (matchId) => {
     return rawData.match.find((m) => m.id == matchId)
   }
   const value = {
-    handleUpdateTournament,
     getMatch,
-    tournamentData,
+    tournamentData: data,
   }
   return (
     <tournamentContext.Provider value={value}>

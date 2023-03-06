@@ -13,7 +13,6 @@ import { Avatar, Card } from "@mui/material"
 import { getGame } from "../../../api/game"
 export function MatchDetail({ match, onClose }) {
   const [game, setGame] = useState(null)
-  console.log("game", game)
   useEffect(() => {
     if (match.gameId) getGame(match.gameId).then((game) => setGame(game))
   }, [match.gameId])

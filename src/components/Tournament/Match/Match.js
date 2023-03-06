@@ -129,7 +129,7 @@ const styles = {
 }
 
 export function Match({ match }) {
-  const matchCompleted = match.status === 4
+  const matchCompleted = match.status === 4 || match.status === 5
   const matchReady = match.status === 2
 
   const [openMatchDialog, setopenMatchDialog] = useState({
