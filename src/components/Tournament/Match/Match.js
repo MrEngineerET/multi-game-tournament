@@ -1,12 +1,10 @@
-import React, { useState } from "react"
+import React from "react"
 import PropTypes from "prop-types"
 import { Box, Divider, IconButton, Typography } from "@mui/material"
 import InfoIcon from "@mui/icons-material/Info"
 import SportsScoreIcon from "@mui/icons-material/SportsScore"
-import {
-  MatchScoreAndDetailDialog,
-  tabs as matchEditDialogTabs,
-} from "./MatchScoreAndDetailDialog"
+import { tabs as matchEditDialogTabs } from "./MatchScoreAndDetailDialog"
+import { useTournamentContext } from "../../../context/TournamentContext"
 
 const styleConstants = {
   borderRadius: "5px",
@@ -132,10 +130,7 @@ export function Match({ match }) {
   const matchCompleted = match.status === 4 || match.status === 5
   const matchReady = match.status === 2
 
-  const [openMatchDialog, setopenMatchDialog] = useState({
-    status: false,
-    tab: matchEditDialogTabs.reportScore,
-  })
+  const { openMatchScoreEditDialog } = useTournamentContext()
 
   return (
     <Box sx={styles.root}>
@@ -176,10 +171,7 @@ export function Match({ match }) {
           <Box sx={styles.editScore}>
             <IconButton
               onClick={() =>
-                setopenMatchDialog((prev) => ({
-                  status: !prev.status,
-                  tab: matchEditDialogTabs.reportScore,
-                }))
+                openMatchScoreEditDialog(match, matchEditDialogTabs.reportScore)
               }
             >
               <SportsScoreIcon sx={styles.editIcon} />
@@ -191,10 +183,7 @@ export function Match({ match }) {
         <Box sx={styles.matchToolTip}>
           <IconButton
             onClick={() =>
-              setopenMatchDialog((prev) => ({
-                status: !prev.status,
-                tab: matchEditDialogTabs.matchDetail,
-              }))
+              openMatchScoreEditDialog(match, matchEditDialogTabs.matchDetail)
             }
           >
             <InfoIcon
@@ -207,15 +196,6 @@ export function Match({ match }) {
           </IconButton>
         </Box>
       </Box>
-      <MatchScoreAndDetailDialog
-        open={openMatchDialog.status}
-        onClose={() =>
-          setopenMatchDialog((prev) => ({ ...prev, status: false }))
-        }
-        match={match}
-        tab={openMatchDialog.tab}
-        hideScoreEdit={!matchReady}
-      />
     </Box>
   )
 }
