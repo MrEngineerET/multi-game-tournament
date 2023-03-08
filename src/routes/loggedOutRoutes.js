@@ -3,7 +3,6 @@ import { Outlet, Route } from "react-router-dom"
 import { LandingPage } from "../pages/LandingPage"
 import { LogIn } from "../pages/LogIn"
 import { SignUp } from "../pages/SignUp"
-import { TournamentDetail } from "../components/Tournament/TournamentDetail"
 import { Tournament, loader as tournamentsLoader } from "../pages/Tournament"
 import {
   CreateTournament,
@@ -49,11 +48,7 @@ export const routes = (
         <Route index element={<Tournament />} loader={tournamentsLoader} />
         <Route
           path=":id"
-          element={
-            <TournamentProvider>
-              <TournamentDetail />
-            </TournamentProvider>
-          }
+          element={<TournamentProvider />}
           loader={tournamentDetailLoader}
           errorElement={<ErrorPage />}
           action={reportScoreAction}

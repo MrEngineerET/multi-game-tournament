@@ -10,12 +10,13 @@ import {
   MatchScoreAndDetailDialog,
   tabs as matchEditDialogTabs,
 } from "../components/Tournament/Match/MatchScoreAndDetailDialog"
+import { TournamentDetail } from "../components/Tournament/TournamentDetail"
 
 const tournamentContext = createContext(null)
 
 export const useTournamentContext = () => useContext(tournamentContext)
 
-export const TournamentProvider = ({ children }) => {
+export const TournamentProvider = () => {
   const { data, rawData } = useLoaderData()
   const [openMatchDialog, setOpenMatchDialog] = useState({
     status: false,
@@ -42,7 +43,7 @@ export const TournamentProvider = ({ children }) => {
   }
   return (
     <tournamentContext.Provider value={value}>
-      {children}
+      <TournamentDetail />
       <MatchScoreAndDetailDialog
         open={openMatchDialog.status}
         onClose={() =>
