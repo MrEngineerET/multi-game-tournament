@@ -8,9 +8,10 @@ import {
   ListItemButton,
 } from "@mui/material"
 import { Container } from "@mui/system"
-import { useLoaderData } from "react-router-dom"
+import { useLoaderData, defer, Await } from "react-router-dom"
 import { getTournaments } from "../api/tournament"
 import { Link } from "react-router-dom"
+import { TournamentSkeleton } from "../components/Tournament/TournamentSkeleton"
 
 const styles = {
   bannerWrapper: {
@@ -34,7 +35,7 @@ const styles = {
 }
 
 export function Tournament() {
-  let tournaments = useLoaderData()
+  const { tournaments } = useLoaderData()
   return (
     <Box>
       <Box sx={styles.bannerWrapper}>
@@ -55,21 +56,37 @@ export function Tournament() {
       </Box>
       <Box sx={styles.content}>
         <Container>
-          {!tournaments && <Typography>No result were found</Typography>}
-          {tournaments && (
-            <List>
-              {tournaments.map((tournament, i) => {
-                return (
-                  <Box key={i}>
-                    <ListItemButton to={`${tournament._id}`} component={Link}>
-                      {tournament.name}
-                    </ListItemButton>
-                    <Divider />
-                  </Box>
-                )
-              })}
-            </List>
-          )}
+          <React.Suspense fallback={<TournamentSkeleton />}>
+            <Await
+              resolve={tournaments}
+              errorElement={<div>Error while loading the tournaments</div>}
+            >
+              {(tournaments) => (
+                <>
+                  {!tournaments && (
+                    <Typography>No result were found</Typography>
+                  )}
+                  {tournaments && (
+                    <List>
+                      {tournaments.map((tournament, i) => {
+                        return (
+                          <Box key={i}>
+                            <ListItemButton
+                              to={`${tournament._id}`}
+                              component={Link}
+                            >
+                              {tournament.name}
+                            </ListItemButton>
+                            <Divider />
+                          </Box>
+                        )
+                      })}
+                    </List>
+                  )}
+                </>
+              )}
+            </Await>
+          </React.Suspense>
         </Container>
       </Box>
     </Box>
@@ -77,5 +94,8 @@ export function Tournament() {
 }
 
 export async function loader() {
-  return getTournaments()
+  const tournamentDataPromise = getTournaments()
+  return defer({
+    tournaments: tournamentDataPromise,
+  })
 }
