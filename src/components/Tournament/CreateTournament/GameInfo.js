@@ -8,11 +8,28 @@ import {
   useMediaQuery,
 } from "@mui/material"
 import { FormControl, InputLabel, Select, OutlinedInput } from "@mui/material"
-import { Card, CardContent, CardHeader } from "@mui/material"
+import { Card, CardContent, CardHeader, Skeleton } from "@mui/material"
 import { Table, TableHead, TableRow, TableCell, TableBody } from "@mui/material"
 import { Delete as DeleteIcon } from "@mui/icons-material"
 import { useTheme } from "@mui/material/styles"
 import PropTypes from "prop-types"
+import { useLoaderData, Await } from "react-router-dom"
+
+export function GameInfo() {
+  const { games } = useLoaderData()
+  return (
+    <Card elevation={3}>
+      <CardHeader title="Game Info" sx={{ bgcolor: "background.default" }} />
+      <CardContent>
+        <React.Suspense fallback={<Skeleton animation="wave" height="5rem" />}>
+          <Await resolve={games}>
+            {(games) => <GameInfoContent games={games} />}
+          </Await>
+        </React.Suspense>
+      </CardContent>
+    </Card>
+  )
+}
 
 const ITEM_HEIGHT = 48
 const ITEM_PADDING_TOP = 8
@@ -33,8 +50,7 @@ function getStyles(game, selectedGames, theme) {
         : theme.typography.fontWeightMedium,
   }
 }
-
-export function GameInfo({ games }) {
+function GameInfoContent({ games }) {
   const theme = useTheme()
   const [selectedGames, setSelectedGames] = useState([])
   const [availableGames, setAvailableGames] = useState(games)
@@ -78,71 +94,67 @@ export function GameInfo({ games }) {
       }),
     )
   }
-
   return (
-    <Card elevation={3}>
-      <CardHeader title="Game Info" sx={{ bgcolor: "background.default" }} />
-      <CardContent>
-        <FormControl sx={{ width: "100%", mb: { xs: 5, md: 10 } }}>
-          <InputLabel>Game</InputLabel>
-          <Select
-            name="selected_games"
-            multiple
-            value={[JSON.stringify(selectedGames)]}
-            onChange={handleSelectGame}
-            renderValue={(s) => {
-              const selected = JSON.parse(s)
-              return (
-                <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                  {selected.map((value) => (
-                    <Chip
-                      onMouseDown={(event) => {
-                        event.stopPropagation()
-                        event.preventDefault()
-                      }}
-                      onDelete={() => {
-                        handleGameDelete(value)
-                      }}
-                      key={value._id}
-                      label={value.name}
-                    />
-                  ))}
-                </Box>
-              )
-            }}
-            input={<OutlinedInput id="select-multiple-chip" label="Games" />}
-            MenuProps={MenuProps}
-          >
-            {availableGames.length === 0 ? (
-              <MenuItem key="dfad" sx={{ color: theme.palette.warning.dark }}>
-                No available Game
+    <>
+      <FormControl sx={{ width: "100%", mb: { xs: 5, md: 10 } }}>
+        <InputLabel>Game</InputLabel>
+        <Select
+          name="selected_games"
+          multiple
+          value={[JSON.stringify(selectedGames)]}
+          onChange={handleSelectGame}
+          renderValue={(s) => {
+            const selected = JSON.parse(s)
+            return (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip
+                    onMouseDown={(event) => {
+                      event.stopPropagation()
+                      event.preventDefault()
+                    }}
+                    onDelete={() => {
+                      handleGameDelete(value)
+                    }}
+                    key={value._id}
+                    label={value.name}
+                  />
+                ))}
+              </Box>
+            )
+          }}
+          input={<OutlinedInput id="select-multiple-chip" label="Games" />}
+          MenuProps={MenuProps}
+        >
+          {availableGames.length === 0 ? (
+            <MenuItem key="dfad" sx={{ color: theme.palette.warning.dark }}>
+              No available Game
+            </MenuItem>
+          ) : (
+            availableGames.map((game) => (
+              <MenuItem
+                key={game._id}
+                value={JSON.stringify({ ...game, count: 1 })}
+                style={getStyles(game, selectedGames, theme)}
+              >
+                {game.name}
               </MenuItem>
-            ) : (
-              availableGames.map((game) => (
-                <MenuItem
-                  key={game._id}
-                  value={JSON.stringify({ ...game, count: 1 })}
-                  style={getStyles(game, selectedGames, theme)}
-                >
-                  {game.name}
-                </MenuItem>
-              ))
-            )}
-          </Select>
-        </FormControl>
-        <Box>
-          <GameListTable
-            onDelete={handleGameDelete}
-            selectedGames={selectedGames}
-            onGameCountUpdate={handleGameCountUpdate}
-          />
-        </Box>
-      </CardContent>
-    </Card>
+            ))
+          )}
+        </Select>
+      </FormControl>
+      <Box>
+        <GameListTable
+          onDelete={handleGameDelete}
+          selectedGames={selectedGames}
+          onGameCountUpdate={handleGameCountUpdate}
+        />
+      </Box>
+    </>
   )
 }
 
-GameInfo.propTypes = {
+GameInfoContent.propTypes = {
   games: PropTypes.array.isRequired,
 }
 

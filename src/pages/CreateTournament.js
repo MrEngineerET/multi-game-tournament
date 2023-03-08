@@ -1,5 +1,5 @@
 import React from "react"
-import { Form, redirect, useLoaderData } from "react-router-dom"
+import { Form, redirect, defer } from "react-router-dom"
 import { Box, Container, Stack, Typography, Button } from "@mui/material"
 import { BasicInfo } from "../components/Tournament/CreateTournament/BasicInfo"
 import { GameInfo } from "../components/Tournament/CreateTournament/GameInfo"
@@ -21,7 +21,6 @@ const styles = {
 }
 
 export function CreateTournament() {
-  const { games } = useLoaderData()
   return (
     <Box>
       <Box sx={styles.bannerWrapper}>
@@ -36,7 +35,7 @@ export function CreateTournament() {
           <Form method="post">
             <Stack gap={10} sx={{ width: { xs: "100%", md: "80%" } }}>
               <BasicInfo />
-              <GameInfo games={games} />
+              <GameInfo />
               <Box align="right">
                 <Button type="submit">Save and continue</Button>
               </Box>
@@ -72,6 +71,6 @@ export async function action({ request }) {
 }
 
 export async function loader() {
-  const games = await getAllGames()
-  return { games }
+  const gamesPromise = getAllGames()
+  return defer({ games: gamesPromise })
 }
