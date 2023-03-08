@@ -11,7 +11,7 @@ const getAllTournaments = async (
   next: NextFunction,
 ) => {
   try {
-    const allTournaments = await Tournament.find()
+    const allTournaments = await Tournament.find().sort({ _id: -1 })
     res.status(200).send({ status: "success", data: allTournaments })
   } catch (error) {
     next(error)

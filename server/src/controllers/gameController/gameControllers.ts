@@ -7,7 +7,7 @@ export const getAllGames = async (
   next: NextFunction,
 ) => {
   try {
-    const allGames = await Game.find()
+    const allGames = await Game.find().sort({ _id: -1 })
     res.status(200).send({ status: "success", data: allGames })
   } catch (error) {
     next(error)
