@@ -123,6 +123,7 @@ const styles = {
     opacity: 0.9,
     display: "flex",
     justifyContent: "center",
+    zIndex: 5,
   }),
 }
 
