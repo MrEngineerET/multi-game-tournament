@@ -34,6 +34,7 @@ export function GameCard({ game }) {
           component={"img"}
           image={game.images[0]}
           onError={handleImageOnError}
+          loading="lazy"
         />
         <CardContent>
           <Typography gutterBottom variant="h6" component="div">
