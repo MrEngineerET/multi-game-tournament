@@ -47,7 +47,7 @@ export function Tournament() {
         </Container>
       </Box>
 
-      <Container sx={{ p: { xs: 4, sm: 8 } }}>
+      <Container sx={{ p: { xs: 4 } }}>
         <Box
           sx={{
             display: "flex",
@@ -55,8 +55,12 @@ export function Tournament() {
             flexDirection: { xs: "column-reverse", md: "row" },
           }}
         >
-          <TournamentList />
-          <TournamentFilter sx={{ width: 400 }} />
+          <Box sx={{ flex: 10 }}>
+            <TournamentList />
+          </Box>
+          <Box sx={{ flex: 3, maxWidth: 300 }}>
+            <TournamentFilter />
+          </Box>
         </Box>
       </Container>
     </Box>
