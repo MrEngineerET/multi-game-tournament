@@ -1,17 +1,13 @@
 import React from "react"
-import {
-  Button,
-  Box,
-  Typography,
-  List,
-  Divider,
-  ListItemButton,
-} from "@mui/material"
+import { Button, Box, Typography } from "@mui/material"
 import { Container } from "@mui/system"
-import { useLoaderData, defer, Await } from "react-router-dom"
+import { defer } from "react-router-dom"
 import { getTournaments } from "../api/tournament"
-import { Link } from "react-router-dom"
-import { TournamentSkeleton } from "../components/Tournament/TournamentSkeleton"
+
+import {
+  TournamentList,
+  TournamentFilter,
+} from "../components/Tournament/TournamentList"
 
 const styles = {
   bannerWrapper: {
@@ -29,13 +25,9 @@ const styles = {
   yourTournament: {
     textAlign: { xs: "center", sm: "start" },
   },
-  content: {
-    pt: 5,
-  },
 }
 
 export function Tournament() {
-  const { tournaments } = useLoaderData()
   return (
     <Box>
       <Box sx={styles.bannerWrapper}>
@@ -54,41 +46,19 @@ export function Tournament() {
           </Box>
         </Container>
       </Box>
-      <Box sx={styles.content}>
-        <Container>
-          <React.Suspense fallback={<TournamentSkeleton />}>
-            <Await
-              resolve={tournaments}
-              errorElement={<div>Error while loading the tournaments</div>}
-            >
-              {(tournaments) => (
-                <>
-                  {!tournaments && (
-                    <Typography>No result were found</Typography>
-                  )}
-                  {tournaments && (
-                    <List>
-                      {tournaments.map((tournament, i) => {
-                        return (
-                          <Box key={i}>
-                            <ListItemButton
-                              to={`${tournament._id}`}
-                              component={Link}
-                            >
-                              {tournament.name}
-                            </ListItemButton>
-                            <Divider />
-                          </Box>
-                        )
-                      })}
-                    </List>
-                  )}
-                </>
-              )}
-            </Await>
-          </React.Suspense>
-        </Container>
-      </Box>
+
+      <Container sx={{ p: { xs: 4, sm: 8 } }}>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 8,
+            flexDirection: { xs: "column-reverse", md: "row" },
+          }}
+        >
+          <TournamentList />
+          <TournamentFilter sx={{ width: 400 }} />
+        </Box>
+      </Container>
     </Box>
   )
 }
