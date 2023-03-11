@@ -24,6 +24,7 @@ import {
   laoder as editGameLoader,
   action as editGameAction,
 } from "../pages/EditGame"
+import TestingComponent from "../components/TestingComponent"
 
 import { action as reportScoreAction } from "../components/Tournament/Match/ReportScore"
 /**
@@ -80,6 +81,7 @@ export const routes = (
       path="forgot-password"
       element={<div>This is the forgot password page</div>}
     />
+    <Route path="/testing" element={<TestingComponent />} />
   </Route>
 )
 

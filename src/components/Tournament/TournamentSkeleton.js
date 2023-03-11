@@ -10,6 +10,8 @@ export function TournamentSkeleton() {
       <Skeleton height="5rem" animation="wave" />
       <Skeleton height="5rem" animation="wave" />
       <Skeleton height="5rem" animation="wave" />
+      <Skeleton height="5rem" animation="wave" />
+      <Skeleton height="5rem" animation="wave" />
     </>
   )
 }
