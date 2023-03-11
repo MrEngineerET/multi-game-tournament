@@ -31,8 +31,8 @@ const lightModeTheme = {
     background: {
       default: "#f5f5f6",
       paper: "#ffffff",
-      lighter: "#A0AAB4",
-      lightest: "#C8D2DC",
+      lighter: "#C8D2DC",
+      lightest: "#EAEEF0",
       darkBanner: "#282a33",
     },
     primary: {
@@ -40,6 +40,7 @@ const lightModeTheme = {
     },
     secondary: {
       main: "#288CBE",
+      lightest: "#EFF8FD",
     },
     text: {
       primary: "#28323C",
@@ -62,6 +63,18 @@ const lightModeTheme = {
         root: ({ theme }) => ({
           backgroundColor: theme.palette.background.paper,
           color: theme.palette.text.primary,
+        }),
+      },
+    },
+    MuiTableRow: {
+      styleOverrides: {
+        root: ({ theme }) => ({
+          "&.MuiTableRow-hover:hover": {
+            background: theme.palette.secondary.lightest,
+          },
+          "&.Mui-selected": {
+            background: theme.palette.secondary.lightest,
+          },
         }),
       },
     },
@@ -167,6 +180,20 @@ export function getTheme(themeMode) {
 }
 
 function createTheme(themeMode = "light") {
+  // const tt = muiCreateTheme({
+  //   components: {
+  //     MuiTableRow: {
+  //       styleOverrides: {
+  //         hover: {
+  //           background: "#EFF8FD",
+  //         },
+  //         selected: {
+  //           background: "#EFF8FD",
+  //         },
+  //       },
+  //     },
+  //   },
+  // })
   const theme = muiCreateTheme(
     deepmerge(
       commonTheme,
