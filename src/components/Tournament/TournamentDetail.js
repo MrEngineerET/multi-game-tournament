@@ -1,14 +1,13 @@
-import React, { useMemo } from "react"
-import { Typography, Box, Divider, Stack } from "@mui/material"
-import { SingleEliminationStage } from "./SingleEliminationStage"
-import { DoubleEliminationStage } from "./DoubleEliminationStage"
-import { RoundRobinStage } from "./RoundRobinStage"
+import React, { useMemo, useState } from "react"
+import { Outlet, Link } from "react-router-dom"
+import { Typography, Box, Stack } from "@mui/material"
 import { useTournamentContext } from "../../context/TournamentContext"
 import { Container } from "@mui/system"
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt"
 import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports"
 import { tournamentType } from "../../utils/constants"
+import { Tabs, Tab } from "@mui/material"
 
 const sxStyles = {
   gameImageList: {
@@ -30,16 +29,26 @@ const sxStyles = {
     fontSize: { xs: 14, md: 16 },
   },
 }
+
+const tabs = { bracket: 0, participants: 1, settings: 2 }
+
 export function TournamentDetail() {
   const { tournamentData } = useTournamentContext()
+  const [tabValue, setTabValue] = useState(tabs.bracket)
   const gameList = useMemo(
     () =>
       tournamentData.games.map((game) => ({
         name: game.gameId.name,
         image: game.gameId.images[0],
+        count: game.count,
       })),
     [tournamentData.games],
   )
+
+  const handleTabChange = (event, newTabValue) => {
+    setTabValue(newTabValue)
+  }
+
   return (
     <Box>
       <Stack direction="row" sx={sxStyles.gameImageList} gap={1}>
@@ -57,9 +66,9 @@ export function TournamentDetail() {
         ))}
       </Stack>
       <Box sx={sxStyles.bannerWrapper}>
-        <Container sx={{ p: { xs: 4, sm: 8 }, pb: 2 }} disableGutters>
+        <Container sx={{ p: 8, pb: "1px" }} disableGutters>
           <Stack gap={{ xs: 2, sm: 5 }}>
-            <Stack direction="row">
+            <Stack direction="row" justifyContent="space-between">
               <Stack gap={1}>
                 <Typography variant="h4" component="h1">
                   {tournamentData.name}
@@ -80,7 +89,7 @@ export function TournamentDetail() {
                     <SportsEsportsIcon fontSize="inherit" />
                     {gameList.map((game) => (
                       <Typography key={game.name} sx={sxStyles.text}>
-                        {game.name}
+                        {game.name} ({game.count})
                       </Typography>
                     ))}
                   </Stack>
@@ -88,28 +97,42 @@ export function TournamentDetail() {
               </Stack>
               {/* <Box>additional information</Box> */}
             </Stack>
-            <Box>navigation</Box>
+            <Box>
+              <Tabs
+                value={tabValue}
+                textColor="inherit"
+                onChange={handleTabChange}
+                aria-label="basic tabs example"
+              >
+                <Tab
+                  label="Bracket"
+                  LinkComponent={Link}
+                  to={`/tournament/${tournamentData._id}`}
+                  replace
+                  value={tabs.bracket}
+                />
+                <Tab
+                  label="Participants"
+                  LinkComponent={Link}
+                  to="participants"
+                  replace
+                  value={tabs.participants}
+                />
+                <Tab
+                  label="Settings"
+                  LinkComponent={Link}
+                  to="settings"
+                  replace
+                  value={tabs.settings}
+                />
+              </Tabs>
+            </Box>
           </Stack>
         </Container>
       </Box>
-      <Box sx={{}}>
+      <Box>
         <Container sx={{ p: { xs: 4, sm: 8 } }} disableGutters>
-          {tournamentData.stages.map((stage, i) => {
-            return (
-              <Box key={stage.name && i}>
-                {stage.type === "single_elimination" && (
-                  <SingleEliminationStage stage={stage} />
-                )}
-                {stage.type === "double_elimination" && (
-                  <DoubleEliminationStage stage={stage} />
-                )}
-                {stage.type === "round_robin" && (
-                  <RoundRobinStage stage={stage} />
-                )}
-                <Divider />
-              </Box>
-            )
-          })}
+          <Outlet />
         </Container>
       </Box>
     </Box>

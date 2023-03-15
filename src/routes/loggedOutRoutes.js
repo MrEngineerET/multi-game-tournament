@@ -25,6 +25,9 @@ import {
   action as editGameAction,
 } from "../pages/EditGame"
 import TestingComponent from "../components/TestingComponent"
+import { TournamentBracket } from "../components/Tournament/TournamentBracket"
+import { TournamentParticipants } from "../components/Tournament/TournamentParticipants"
+import { TournamentSettings } from "../components/Tournament/TournamentSettings"
 
 import { action as reportScoreAction } from "../components/Tournament/Match/ReportScore"
 /**
@@ -53,7 +56,23 @@ export const routes = (
           loader={tournamentDetailLoader}
           errorElement={<ErrorPage />}
           action={reportScoreAction}
-        />
+        >
+          <Route
+            index
+            element={<TournamentBracket />}
+            errorElement={<div>Error happened</div>}
+          ></Route>
+          <Route
+            path="participants"
+            element={<TournamentParticipants />}
+            errorElement={<div>Error happened</div>}
+          ></Route>
+          <Route
+            path="settings"
+            element={<TournamentSettings />}
+            errorElement={<div>Error happened</div>}
+          ></Route>
+        </Route>
         <Route
           path="new"
           element={<CreateTournament />}
