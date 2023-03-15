@@ -2,6 +2,7 @@ import express from "express"
 import tournamentRouter from "./routes/tournamentRoutes.js"
 import { errorHandler } from "./controllers/errorController.js"
 import gameRouter from "./routes/gameRoutes.js"
+import errorRouter from "./routes/errorRoutes.js"
 import morgan from "morgan"
 import cors from "cors"
 
@@ -20,6 +21,7 @@ app.use(morgan("tiny"))
 const appRouter = express.Router()
 appRouter.use("/tournament", tournamentRouter)
 appRouter.use("/game", gameRouter)
+appRouter.use("/error", errorRouter)
 
 app.use("/api/v1", appRouter)
 
