@@ -12,7 +12,7 @@ import {
 const styles = {
   bannerWrapper: {
     bgcolor: "background.paper",
-    p: 20,
+    p: { xs: 10, sm: 20 },
     pl: 5,
     pr: 5,
   },
@@ -21,6 +21,7 @@ const styles = {
     flexDirection: { xs: "column", sm: "row" },
     gap: 10,
     justifyContent: "space-between",
+    alignItems: "center",
   },
   yourTournament: {
     textAlign: { xs: "center", sm: "start" },
@@ -47,18 +48,18 @@ export function Tournament() {
         </Container>
       </Box>
 
-      <Container sx={{ p: { xs: 4 } }}>
+      <Container sx={{ pt: { xs: 4, sm: 10 }, p: 4 }}>
         <Box
           sx={{
             display: "flex",
-            gap: 8,
+            gap: { xs: 4, md: 8 },
             flexDirection: { xs: "column-reverse", md: "row" },
           }}
         >
           <Box sx={{ flex: 10 }}>
             <TournamentList />
           </Box>
-          <Box sx={{ flex: 3, maxWidth: 300 }}>
+          <Box sx={{ flex: 3, maxWidth: { xs: "unset", md: 300 } }}>
             <TournamentFilter />
           </Box>
         </Box>
