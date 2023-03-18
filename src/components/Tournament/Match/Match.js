@@ -16,6 +16,7 @@ const styleConstants = {
 }
 const styles = {
   root: {
+    display: "inline-block",
     position: "relative",
     "&:hover .match_tool_tip": {
       visibility: "visible",
@@ -27,7 +28,7 @@ const styles = {
     boxShadow: 3,
     borderRadius: styleConstants.borderRadius,
     border: "1px solid",
-    borderColor: "bracket.background",
+    borderColor: "background.default",
     "&:hover": {
       border: "1px solid",
       borderColor: "primary.light",
