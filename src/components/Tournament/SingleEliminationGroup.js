@@ -1,6 +1,6 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Box, Typography } from "@mui/material"
+import { Box } from "@mui/material"
 import { Round } from "./Round/Round"
 
 const styleConstants = {
@@ -10,9 +10,6 @@ const styles = {
   root: {
     minWidth: "100%",
     overflow: "scroll",
-    border: 1,
-    pl: 5,
-    pb: 5,
   },
   group: {
     display: "flex",
@@ -22,7 +19,6 @@ const styles = {
 export function SingleEliminationGroup({ group }) {
   return (
     <Box sx={styles.root}>
-      <Typography>Group</Typography>
       <Box sx={styles.group}>
         {group.rounds.map((round, i, rounds) => {
           return (
