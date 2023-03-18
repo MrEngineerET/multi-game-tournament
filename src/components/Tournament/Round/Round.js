@@ -30,19 +30,46 @@ const styles = {
     display: "flex",
     flex: 1,
   },
+  roundName: {
+    mb: 4,
+    bgcolor: "background.lightest",
+    height: 40,
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+  },
 }
+
 export function Round({
   round,
   roundIndex,
-  isLastRound,
   gapBetweenRounds,
   isLoserGroup,
+  roundLength,
 }) {
+  const isLastRound = roundLength - 1 === roundIndex
+
+  function getRoundName(roundIndex, roundLength, isLastRound) {
+    const toString = ["One", "Two", "Three", "Four", "Five", "Six"]
+    if (isLastRound) return "Final"
+    if (roundIndex === 0) return "Round One"
+    if (roundLength > 2) {
+      if (roundIndex === roundLength - 2) return "Semi Final"
+      return `Round ${toString[roundIndex]}`
+    }
+  }
   return (
     <Box sx={styles.root}>
-      <Typography textAlign="center" mb={4}>
-        Round
-      </Typography>
+      <Box sx={styles.roundName}>
+        <Typography
+          sx={{
+            fontWeight: "500",
+            opacity: 0.6,
+          }}
+        >
+          {getRoundName(roundIndex, roundLength, isLastRound)}
+        </Typography>
+      </Box>
       <Box sx={styles.round}>
         {round.matches.map((match, matchIndex) => (
           <Box key={matchIndex} sx={styles.matchAndConnector}>
@@ -72,9 +99,9 @@ export function Round({
   )
 }
 Round.propTypes = {
-  round: PropTypes.object,
-  roundIndex: PropTypes.number,
-  isLastRound: PropTypes.bool,
-  gapBetweenRounds: PropTypes.object,
+  round: PropTypes.object.isRequired,
+  roundIndex: PropTypes.number.isRequired,
+  roundLength: PropTypes.number.isRequired,
   isLoserGroup: PropTypes.bool,
+  gapBetweenRounds: PropTypes.object,
 }

@@ -26,7 +26,7 @@ export function SingleEliminationGroup({ group }) {
               key={i}
               round={round}
               roundIndex={i}
-              isLastRound={i === rounds.length - 1}
+              roundLength={rounds.length}
               gapBetweenRounds={styleConstants.gapBetweenRounds}
             />
           )

@@ -30,7 +30,7 @@ export function DoubleEliminationGroup({ group, isLoserGroup = false }) {
               key={i}
               round={round}
               roundIndex={i}
-              isLastRound={i === rounds.length - 1}
+              roundLength={rounds.length}
               gapBetweenRounds={styleConstants.gapBetweenRounds}
               isLoserGroup={isLoserGroup}
             />
