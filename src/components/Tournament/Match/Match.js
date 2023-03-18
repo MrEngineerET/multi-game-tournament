@@ -25,7 +25,6 @@ const styles = {
   match: {
     position: "relative",
     width: "max-content",
-    boxShadow: 3,
     borderRadius: styleConstants.borderRadius,
     border: "1px solid",
     borderColor: "background.default",
