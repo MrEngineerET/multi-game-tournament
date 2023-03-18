@@ -103,6 +103,8 @@ const TournamentSchema = new Schema<ITournament, TournamentModelType>({
         seedOrdering: [String],
         matchesChildCount: Number,
         size: Number,
+        grandFinal: String,
+        balanceByes: Boolean,
       },
     },
   ],
