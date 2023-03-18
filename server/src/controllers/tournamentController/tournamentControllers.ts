@@ -74,7 +74,9 @@ const createTournament = async (
       stageType,
       description,
       participants,
-      consolationFinal = false,
+      consolationFinal = true,
+      grandFinal = "double",
+      seedOrdering = ["natural"],
       games = [],
     } = req.body
 
@@ -97,7 +99,8 @@ const createTournament = async (
       seeding: participants,
       settings: {
         consolationFinal,
-        seedOrdering: ["natural"],
+        seedOrdering,
+        grandFinal,
       },
     })
     const tournamentData = await Tournament.findById(tournament._id)
