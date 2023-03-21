@@ -38,6 +38,19 @@ export function TournamentList() {
         sx={{ bgcolor: "background.lightest", p: 3, pt: 8, pb: 10 }}
         elevation={0}
       >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+          }}
+        >
+          <Typography variant="h6">Tournaments</Typography>
+          <Box>
+            <Button variant="outlined" color="secondary" sx={{ ml: 5 }}>
+              + Tournament
+            </Button>
+          </Box>
+        </Box>
         <React.Suspense fallback={<TournamentSkeleton />}>
           <Await
             resolve={tournaments}
@@ -47,28 +60,7 @@ export function TournamentList() {
               <>
                 {!tournaments && <Typography>No result were found</Typography>}
                 {tournaments && (
-                  <Box>
-                    <Box
-                      sx={{
-                        display: "flex",
-                        justifyContent: "space-between",
-                      }}
-                    >
-                      <Typography variant="h6">Tournaments</Typography>
-                      <Box>
-                        <Button
-                          variant="outlined"
-                          color="secondary"
-                          sx={{ ml: 5 }}
-                        >
-                          + Tournament
-                        </Button>
-                      </Box>
-                    </Box>
-                    <Box>
-                      <TournamentListTable tournaments={tournaments} />
-                    </Box>
-                  </Box>
+                  <TournamentListTable tournaments={tournaments} />
                 )}
               </>
             )}
@@ -332,6 +324,7 @@ TournamentListTable.propTypes = {
 
 function TableToolBar({ selected }) {
   const numSelected = selected.length
+  function handleTournamentDelete() {}
   return (
     <Box
       sx={{
@@ -365,6 +358,7 @@ function TableToolBar({ selected }) {
         color="secondary"
         disabled={numSelected === 0}
         size="small"
+        onClick={handleTournamentDelete}
       >
         Delete
       </Button>
