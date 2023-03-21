@@ -1,6 +1,7 @@
-import React from "react"
+import React, { useEffect } from "react"
 import PropTypes from "prop-types"
-import { Box, Typography, Button, ButtonBase } from "@mui/material"
+import { useNavigation, useLocation } from "react-router-dom"
+import { Box, Typography, ButtonBase } from "@mui/material"
 import {
   Paper,
   Table,
@@ -13,14 +14,24 @@ import {
 } from "@mui/material"
 
 import { Avatar, AvatarGroup } from "@mui/material"
-
-import DeleteIcon from "@mui/icons-material/Delete"
-import ArchiveIcon from "@mui/icons-material/Archive"
+import { TableToolBar } from "./TableToolBar"
 
 export function TournamentListTable({ tournaments }) {
+  const location = useLocation()
   const [selected, setSelected] = React.useState([])
 
-  const handleCheck = (event, _id) => {
+  useEffect(() => {
+    function filterSelectedTournament() {
+      const filtered = selected.filter((id) => {
+        const index = tournaments.findIndex((el) => el._id === id)
+        if (index !== -1) return id
+      })
+      setSelected(filtered)
+    }
+    filterSelectedTournament()
+  }, [location.key])
+
+  const handleTournamentSelect = (event, _id) => {
     const selectedIndex = selected.indexOf(_id)
     let newSelected = []
 
@@ -40,10 +51,13 @@ export function TournamentListTable({ tournaments }) {
     setSelected(newSelected)
   }
   const isSelected = (_id) => selected.indexOf(_id) !== -1
+  const navigation = useNavigation()
+  const addOpacity =
+    navigation.state === "submitting" || navigation.state === "loading"
 
   return (
-    <Box>
-      <TableToolBar selected={selected} />
+    <Box sx={[addOpacity && { opacity: 0.6 }]}>
+      <TableToolBar tournamentIds={selected} />
       <TableContainer component={Paper} sx={{ maxHeight: 600 }} elevation={0}>
         <Table stickyHeader>
           <TableHead>
@@ -79,7 +93,7 @@ export function TournamentListTable({ tournaments }) {
                 onClick={(e) => {
                   if (selected.length !== 0) {
                     e.preventDefault()
-                    handleCheck(e, tournament._id)
+                    handleTournamentSelect(e, tournament._id)
                   }
                 }}
                 hover
@@ -90,7 +104,7 @@ export function TournamentListTable({ tournaments }) {
                     color="secondary"
                     checked={isSelected(tournament._id)}
                     onClick={(e) => {
-                      handleCheck(e, tournament._id)
+                      handleTournamentSelect(e, tournament._id)
                       e.stopPropagation()
                     }}
                   />
@@ -138,51 +152,4 @@ export function TournamentListTable({ tournaments }) {
 
 TournamentListTable.propTypes = {
   tournaments: PropTypes.array,
-}
-
-function TableToolBar({ selected }) {
-  const numSelected = selected.length
-  function handleTournamentDelete() {}
-  return (
-    <Box
-      sx={{
-        display: "flex",
-        justifyContent: "flex-end",
-        alignItems: "center",
-        gap: 8,
-        p: 2,
-      }}
-    >
-      {numSelected > 0 ? (
-        <Typography sx={{ flex: "1 1 100%" }} variant="subtitle1">
-          {numSelected} selected
-        </Typography>
-      ) : (
-        <Box sx={{ flex: "1 1 100%" }}></Box>
-      )}
-
-      <Button
-        startIcon={<ArchiveIcon />}
-        variant="text"
-        color="secondary"
-        disabled={numSelected === 0}
-        size="small"
-      >
-        Archive
-      </Button>
-      <Button
-        startIcon={<DeleteIcon />}
-        variant="text"
-        color="secondary"
-        disabled={numSelected === 0}
-        size="small"
-        onClick={handleTournamentDelete}
-      >
-        Delete
-      </Button>
-    </Box>
-  )
-}
-TableToolBar.propTypes = {
-  selected: PropTypes.array.isRequired,
 }

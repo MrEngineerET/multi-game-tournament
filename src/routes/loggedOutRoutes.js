@@ -28,6 +28,10 @@ import TestingComponent from "../components/TestingComponent"
 import { TournamentBracket } from "../components/Tournament/TournamentBracket"
 import { TournamentParticipants } from "../components/Tournament/TournamentParticipants"
 import { TournamentSettings } from "../components/Tournament/TournamentSettings"
+import {
+  archiveTemplateAction,
+  deleteTemplateAction,
+} from "../components/TournamentPage/TableToolBar"
 
 import { action as reportScoreAction } from "../components/Tournament/Match/ReportScore"
 /**
@@ -79,6 +83,8 @@ export const routes = (
           action={createTournamentAction}
           loader={createTournamentLoader}
         />
+        <Route path="destroy" action={deleteTemplateAction} />
+        <Route path="archive" action={archiveTemplateAction} />
       </Route>
       <Route path="game" element={<Game />} loader={gameLoader} />
       <Route

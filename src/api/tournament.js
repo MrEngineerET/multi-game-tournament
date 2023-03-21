@@ -41,3 +41,7 @@ export async function updateMatch(match, tournamentId) {
   ).data
   return tournament
 }
+
+export async function deleteTournament(tournamentId) {
+  await axios.delete(`/tournament/${tournamentId}`)
+}
