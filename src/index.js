@@ -5,15 +5,16 @@ import "./index.css"
 import reportWebVitals from "./reportWebVitals"
 import { AuthProvider } from "./context/AuthContext"
 import { ThemeProvider } from "@mui/material/styles"
-import { useMediaQuery } from "@mui/material"
+// import { useMediaQuery } from "@mui/material"
 import { getTheme } from "./styles/theme"
 
 export const themeModeContext = createContext({ mode: "light" })
 
 function Root() {
-  const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
+  // const prefersDarkMode = useMediaQuery("(prefers-color-scheme: dark)")
   const [themeMode, setThemeMode] = useState(() => {
-    return prefersDarkMode ? "dark" : "light"
+    // return prefersDarkMode ? "dark" : "light"
+    return "light"
   })
   const theme = useMemo(() => getTheme(themeMode), [themeMode])
 

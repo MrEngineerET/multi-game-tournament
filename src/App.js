@@ -1,4 +1,4 @@
-import React, { useContext } from "react"
+import React from "react"
 import {
   RouterProvider,
   createBrowserRouter,
@@ -10,15 +10,15 @@ import { routes as loggedOutRoutes } from "./routes/loggedOutRoutes"
 import { routes as commonRoutes } from "./routes/commonRoutes"
 import { useAuth } from "./context/AuthContext"
 import { CssBaseline } from "@mui/material"
-import { Button } from "@mui/material"
-import { themeModeContext } from "./index"
+// import { Button } from "@mui/material"
+// import { themeModeContext } from "./index"
 import { ErrorPage } from "./pages/ErrorPage"
 
 import "./App.css"
 
 function App() {
   const { user } = useAuth()
-  const themeMode = useContext(themeModeContext)
+  // const themeMode = useContext(themeModeContext)
 
   let routes
   if (user) routes = loggedInRoutes
@@ -36,7 +36,7 @@ function App() {
     <>
       <CssBaseline />
       <RouterProvider router={router} />
-      <Button
+      {/* <Button
         sx={{
           position: "fixed",
           bottom: 0,
@@ -45,7 +45,7 @@ function App() {
         onClick={themeMode.changeThemeMode}
       >
         Change to Dark Mode
-      </Button>
+      </Button> */}
     </>
   )
 }
