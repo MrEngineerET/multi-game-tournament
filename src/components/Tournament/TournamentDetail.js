@@ -130,8 +130,11 @@ export function TournamentDetail() {
           </Stack>
         </Container>
       </Box>
-      <Box>
-        <Container sx={{ p: { xs: 4, sm: 8 } }} disableGutters>
+      <Box sx={{ bgcolor: "background.lightest" }}>
+        <Container
+          sx={{ p: { xs: 4, sm: 8 }, bgcolor: "background.paper" }}
+          disableGutters
+        >
           <Outlet />
         </Container>
       </Box>
