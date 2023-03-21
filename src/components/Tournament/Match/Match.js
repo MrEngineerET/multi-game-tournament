@@ -1,6 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { Box, Divider, IconButton, Typography } from "@mui/material"
+import { ClickToolTip } from "../../Common/ClickTooltip"
 import InfoIcon from "@mui/icons-material/Info"
 import SportsScoreIcon from "@mui/icons-material/SportsScore"
 import { tabs as matchEditDialogTabs } from "./MatchScoreAndDetailDialog"
@@ -131,7 +132,8 @@ export function Match({ match }) {
   const matchCompleted = match.status === 4 || match.status === 5
   const matchReady = match.status === 2
 
-  const { openMatchScoreEditDialog } = useTournamentContext()
+  const { openMatchScoreEditDialog, tournamentData } = useTournamentContext()
+  const tournamentStatus = tournamentData.status
 
   return (
     <Box sx={styles.root}>
@@ -170,13 +172,21 @@ export function Match({ match }) {
         })}
         {matchReady && (
           <Box sx={styles.editScore}>
-            <IconButton
-              onClick={() =>
-                openMatchScoreEditDialog(match, matchEditDialogTabs.reportScore)
-              }
-            >
-              <SportsScoreIcon sx={styles.editIcon} />
-            </IconButton>
+            <ClickToolTip title="Please Start the Tournament">
+              <span>
+                <IconButton
+                  onClick={() =>
+                    openMatchScoreEditDialog(
+                      match,
+                      matchEditDialogTabs.reportScore,
+                    )
+                  }
+                  disabled={tournamentStatus !== "progress"}
+                >
+                  <SportsScoreIcon sx={styles.editIcon} />
+                </IconButton>
+              </span>
+            </ClickToolTip>
           </Box>
         )}
       </Box>

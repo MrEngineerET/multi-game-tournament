@@ -50,6 +50,7 @@ export const routes = (
           <Outlet />
         </Box>
       }
+      errorElement={<ErrorPage />}
     >
       <Route index element={<LandingPage />} />
       <Route path="tournament">
