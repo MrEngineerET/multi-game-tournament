@@ -1,20 +1,39 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { DoubleEliminationGroup } from "./DoubleEliminationGroup"
-import { Box } from "@mui/material"
+import { Box, useMediaQuery, useTheme } from "@mui/material"
 
 export function DoubleEliminationStage({ stage }) {
+  const [winnerGroup, loserGroup, grandFinalRound] = stage.groups
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
+  console.log(isSmallScreen)
+
   return (
     <Box>
-      {stage.groups.map((group, i) => {
-        return (
-          <DoubleEliminationGroup
-            key={i}
-            group={group}
-            isLoserGroup={i === 1}
-          />
-        )
-      })}
+      <Box
+        sx={{
+          display: "flex",
+          gap: 20,
+          mb: 10,
+          minWidth: "100%",
+          overflow: "scroll",
+        }}
+      >
+        <DoubleEliminationGroup group={winnerGroup} />
+
+        {grandFinalRound && !isSmallScreen && (
+          <DoubleEliminationGroup group={grandFinalRound} isGrandFinalGroup />
+        )}
+      </Box>
+      <Box sx={{ minWidth: "100%", overflow: "scroll" }}>
+        <DoubleEliminationGroup group={loserGroup} isLoserGroup />
+      </Box>
+      {isSmallScreen && grandFinalRound && (
+        <Box sx={{ minWidth: "100%", overflow: "scroll" }}>
+          <DoubleEliminationGroup group={grandFinalRound} isGrandFinalGroup />
+        </Box>
+      )}
     </Box>
   )
 }

@@ -31,7 +31,7 @@ const styles = {
     flex: 1,
   },
   roundName: {
-    mb: 4,
+    mb: 5,
     bgcolor: "background.lightest",
     height: 40,
     display: "flex",
@@ -44,20 +44,37 @@ export function Round({
   round,
   roundIndex,
   gapBetweenRounds,
-  isLoserGroup,
+  isLoserGroup = false,
   roundLength,
+  isGrandFinalGroup = false,
 }) {
   const isLastRound = roundLength - 1 === roundIndex
 
   function getRoundName(roundIndex, roundLength, isLastRound) {
-    const toString = ["One", "Two", "Three", "Four", "Five", "Six"]
-    if (isLastRound) return "Final"
-    if (roundIndex === 0) return "Round One"
+    if (!(isLoserGroup || isGrandFinalGroup)) {
+      return getMainRoundName(roundIndex, roundLength, isLastRound)
+    }
+    if (isLoserGroup) return getLoserBracketRoundName(roundIndex, isLastRound)
+    if (isGrandFinalGroup) return getGrandFinalRoundName(isLastRound)
+  }
+
+  function getMainRoundName(roundIndex, roundLength, isLastRound) {
+    if (isLastRound) return "Final Round"
+    if (roundIndex === 0) return "Round 1"
     if (roundLength > 2) {
       if (roundIndex === roundLength - 2) return "Semi Final"
-      return `Round ${toString[roundIndex]}`
+      return `Round ${roundIndex + 1}`
     }
   }
+  function getLoserBracketRoundName(roundIndex, isLastRound) {
+    if (isLastRound) return "LB Final Round"
+    return `LB Round ${roundIndex + 1}`
+  }
+  function getGrandFinalRoundName(isLastRound) {
+    if (isLastRound) return "GF Round 2"
+    return `GF Round 1`
+  }
+
   return (
     <Box sx={styles.root}>
       <Box sx={styles.roundName}>
@@ -77,7 +94,7 @@ export function Round({
               <BackConnector
                 roundIndex={roundIndex}
                 gapBetweenRounds={gapBetweenRounds}
-                isLoserGroup={isLoserGroup}
+                isLoserGroup={isLoserGroup || isGrandFinalGroup}
               />
             </Box>
             <Box sx={styles.matchWrapper}>
@@ -88,7 +105,7 @@ export function Round({
                 matchIndex={matchIndex}
                 gapBetweenRounds={gapBetweenRounds}
                 isLastRound={isLastRound}
-                isLoserGroup={isLoserGroup}
+                isLoserGroup={isLoserGroup || isGrandFinalGroup}
                 roundIndex={roundIndex}
               />
             </Box>
@@ -103,5 +120,6 @@ Round.propTypes = {
   roundIndex: PropTypes.number.isRequired,
   roundLength: PropTypes.number.isRequired,
   isLoserGroup: PropTypes.bool,
+  isGrandFinalGroup: PropTypes.bool,
   gapBetweenRounds: PropTypes.object,
 }

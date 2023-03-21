@@ -7,22 +7,31 @@ const styleConstants = {
   gapBetweenRounds: { xs: 10, sm: 15 },
 }
 const styles = {
-  root: {
-    minWidth: "100%",
-    overflow: "scroll",
-    border: 1,
-    pl: 5,
-    pb: 5,
-  },
   group: {
     display: "flex",
     gap: styleConstants.gapBetweenRounds,
   },
 }
-export function DoubleEliminationGroup({ group, isLoserGroup = false }) {
+export function DoubleEliminationGroup({
+  group,
+  isLoserGroup = false,
+  isGrandFinalGroup = false,
+}) {
   return (
-    <Box sx={styles.root}>
-      <Typography>Group</Typography>
+    <Box>
+      {isLoserGroup ? (
+        <Typography variant="h6" sx={{ opacity: 0.7, pb: 5 }}>
+          Lower Bracket
+        </Typography>
+      ) : isGrandFinalGroup ? (
+        <Typography variant="h6" sx={{ opacity: 0.7, pb: 5 }}>
+          Grand Final
+        </Typography>
+      ) : (
+        <Typography variant="h6" sx={{ opacity: 0.7, pb: 5 }}>
+          Upper Bracket
+        </Typography>
+      )}
       <Box sx={styles.group}>
         {group.rounds.map((round, i, rounds) => {
           return (
@@ -33,6 +42,7 @@ export function DoubleEliminationGroup({ group, isLoserGroup = false }) {
               roundLength={rounds.length}
               gapBetweenRounds={styleConstants.gapBetweenRounds}
               isLoserGroup={isLoserGroup}
+              isGrandFinalGroup={isGrandFinalGroup}
             />
           )
         })}
@@ -44,4 +54,5 @@ export function DoubleEliminationGroup({ group, isLoserGroup = false }) {
 DoubleEliminationGroup.propTypes = {
   group: PropTypes.object,
   isLoserGroup: PropTypes.bool,
+  isGrandFinalGroup: PropTypes.bool,
 }
