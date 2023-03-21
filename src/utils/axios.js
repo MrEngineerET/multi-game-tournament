@@ -1,5 +1,6 @@
 import pureAxios from "axios"
 import localStorage from "./localStorage"
+import { sleep } from "."
 
 const token = localStorage.getItem("token")
 
@@ -12,14 +13,6 @@ const axioss = pureAxios.create({
     },
   },
 })
-
-function sleep(ms) {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve()
-    }, ms)
-  })
-}
 
 export const getAxios = () => {
   const sleepTime = 2000
