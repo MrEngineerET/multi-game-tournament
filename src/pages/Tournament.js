@@ -7,7 +7,7 @@ import { getTournaments } from "../api/tournament"
 import {
   TournamentList,
   TournamentFilter,
-} from "../components/Tournament/TournamentList"
+} from "../components/TournamentPage/TournamentList"
 
 const styles = {
   bannerWrapper: {

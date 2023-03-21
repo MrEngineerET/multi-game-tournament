@@ -2,7 +2,7 @@ import React, { useState } from "react"
 import PropTypes from "prop-types"
 import { Box, Typography, Card, Button, ButtonBase } from "@mui/material"
 import { Await, useLoaderData } from "react-router-dom"
-import { TournamentSkeleton } from "./TournamentSkeleton"
+import { TournamentListSkeleton } from "./TournamentListSkeleton"
 import {
   Paper,
   Table,
@@ -51,7 +51,7 @@ export function TournamentList() {
             </Button>
           </Box>
         </Box>
-        <React.Suspense fallback={<TournamentSkeleton />}>
+        <React.Suspense fallback={<TournamentListSkeleton length={8} />}>
           <Await
             resolve={tournaments}
             errorElement={<div>Error while loading the tournaments</div>}
