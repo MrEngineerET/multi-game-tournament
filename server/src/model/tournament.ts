@@ -34,6 +34,12 @@ export interface Game {
   gameId: Types.ObjectId
   count: number
 }
+export enum TournamentStatus {
+  pending = "pending",
+  progress = "progress",
+  completed = "completed",
+  archived = "archived",
+}
 
 export interface ITournament {
   _id: number
@@ -47,6 +53,7 @@ export interface ITournament {
   match_game: MatchGame[]
   game: Game[]
   participantGameMatrix: { participantId: number; games: Game[] }[]
+  status: TournamentStatus
 }
 
 type TournamentDocumentOverrides = {
@@ -173,6 +180,7 @@ const TournamentSchema = new Schema<ITournament, TournamentModelType>({
       ],
     },
   ],
+  status: { type: String, default: TournamentStatus.pending },
 })
 
 export const Tournament = model<ITournament, TournamentModelType>(

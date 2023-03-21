@@ -7,7 +7,6 @@ export function DoubleEliminationStage({ stage }) {
   const [winnerGroup, loserGroup, grandFinalRound] = stage.groups
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
-  console.log(isSmallScreen)
 
   return (
     <Box>
