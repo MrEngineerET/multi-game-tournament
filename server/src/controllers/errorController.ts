@@ -14,7 +14,7 @@ export const errorHandler = (
   if (error.statusCode)
     res
       .status(error.statusCode)
-      .send({ status: "failed", data: { message: error.message } })
+      .send({ status: "failed", message: error.message })
   else
     res.status(500).send({
       error: error ? error.message : null,

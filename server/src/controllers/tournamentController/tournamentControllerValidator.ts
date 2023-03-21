@@ -1,4 +1,5 @@
 import mongoose from "mongoose"
+import { Tournament, TournamentStatus } from "../../model/tournament.js"
 
 export const tournamentControllerValidator = {
   createTournament(req, res, next) {
@@ -36,10 +37,25 @@ export const tournamentControllerValidator = {
     if (!id) throw { statusCode: 422, message: "tournament id is required" }
     next()
   },
-  updateTournamentMatch(req, res, next) {
-    const match = req.body
-    if (!match) throw { statusCode: 422, message: "no match object found" }
-    next()
+  async updateTournamentMatch(req, res, next) {
+    try {
+      const match = req.body
+      const tournamentId = Number(req.params.id)
+      const { status } = await Tournament.findById(tournamentId, {
+        status: 1,
+      })
+      if (status === TournamentStatus.pending) {
+        throw {
+          statusCode: 404,
+          message:
+            "can not update a tournament while it is in a pending, arhived, and completed state",
+        }
+      }
+      if (!match) throw { statusCode: 422, message: "no match object found" }
+      next()
+    } catch (error) {
+      next(error)
+    }
   },
   updateTournamentGame(req, res, next) {
     const count = req.body.count
