@@ -31,8 +31,7 @@ export function TableToolBar({ tournamentIds }) {
         action="archive"
         method="post"
         onSubmit={() => {
-          console.log("idid", "hey submitting a form")
-          //   event.preventDefault()
+          //TODO: show a confirmation dialog
         }}
       >
         <Button
@@ -46,7 +45,13 @@ export function TableToolBar({ tournamentIds }) {
           Archive
         </Button>
       </Form>
-      <Form action="destroy" method="delete">
+      <Form
+        action="destroy"
+        method="delete"
+        onSubmit={() => {
+          //TODO: show a confirmation dialog
+        }}
+      >
         <input hidden name="tournament_ids" value={tournamentIds} />
         <Button
           startIcon={<DeleteIcon />}
@@ -69,11 +74,12 @@ TableToolBar.propTypes = {
 export async function deleteTemplateAction({ request }) {
   const formData = await request.formData()
   const tournamentIds = formData.get("tournament_ids").split(",")
-  await deleteTournament(tournamentIds[tournamentIds.length - 1])
+  await Promise.all(tournamentIds.map((id) => deleteTournament(id)))
   return redirect("/tournament")
 }
 
 export async function archiveTemplateAction() {
   await sleep(2000)
+  //TODO: implement the archive code
   return redirect("/tournament")
 }
