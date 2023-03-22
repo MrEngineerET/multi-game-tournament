@@ -172,7 +172,13 @@ export function Match({ match }) {
         })}
         {matchReady && (
           <Box sx={styles.editScore}>
-            <ClickToolTip title="Please Start the Tournament">
+            <ClickToolTip
+              title={
+                tournamentStatus !== "progress"
+                  ? "Please first start the Tournament"
+                  : ""
+              }
+            >
               <span>
                 <IconButton
                   onClick={() =>
