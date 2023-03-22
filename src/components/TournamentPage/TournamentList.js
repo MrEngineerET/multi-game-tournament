@@ -28,7 +28,12 @@ export function TournamentList() {
         >
           <Typography variant="h6">Tournaments</Typography>
           <Box>
-            <Button variant="outlined" color="secondary" sx={{ ml: 5 }}>
+            <Button
+              variant="outlined"
+              color="secondary"
+              sx={{ ml: 5 }}
+              href="new"
+            >
               + Tournament
             </Button>
           </Box>
