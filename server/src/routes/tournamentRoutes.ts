@@ -26,12 +26,6 @@ tournamentRouter.delete(
   tournamentController.deleteTournament,
 )
 
-tournamentRouter.patch(
-  "/:id/update-match",
-  validator.updateTournamentMatch,
-  tournamentController.updateTournamenMatch,
-)
-
 tournamentRouter.post(
   "/:tournamentId/game",
   validator.addTournamentGame,

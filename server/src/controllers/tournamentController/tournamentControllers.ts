@@ -23,13 +23,25 @@ const updateTournament = async (
   next: NextFunction,
 ) => {
   try {
-    const { name, description } = req.body
-    const data = { name, description }
-    const id = req.params.id
-    const updatedTournament = await Tournament.findByIdAndUpdate(id, data, {
-      new: true,
-      runValidators: true,
-    })
+    const { name, description, status } = req.body
+
+    const tournamentId = req.params.id
+    let updatedTournament
+    const { match } = req.body
+    if (req.body.match) {
+      updatedTournament = await updateTournamentMatch(tournamentId, match)
+    }
+    if (name || description || status) {
+      const updateData = { name, description, status }
+      updatedTournament = await Tournament.findByIdAndUpdate(
+        tournamentId,
+        updateData,
+        {
+          new: true,
+          runValidators: true,
+        },
+      )
+    }
     res.status(200).send({
       status: "success",
       data: updatedTournament,
@@ -38,29 +50,14 @@ const updateTournament = async (
     next(error)
   }
 }
-
-const updateTournamenMatch = async (
-  req: Request,
-  res: Response,
-  next: NextFunction,
-) => {
-  try {
-    const match = req.body
-    const tournamentId = Number(req.params.id)
-
-    const myDB = await MyDB.build(tournamentId)
-
-    const manager = new BracketsManager(myDB)
-
-    await manager.update.match(match)
-    const updatedTournament = await Tournament.findById(tournamentId)
-    const gameManagement = new GameManagement(updatedTournament)
-    await gameManagement.addGameToMatches()
-
-    res.status(200).send({ status: "success", data: updatedTournament })
-  } catch (error) {
-    next(error)
-  }
+async function updateTournamentMatch(tournamentId, match) {
+  const myDB = await MyDB.build(tournamentId)
+  const manager = new BracketsManager(myDB)
+  await manager.update.match(match)
+  const updatedTournament = await Tournament.findById(tournamentId)
+  const gameManagement = new GameManagement(updatedTournament)
+  await gameManagement.addGameToMatches()
+  return updatedTournament
 }
 
 const createTournament = async (
@@ -230,7 +227,6 @@ export default {
   getAllTournaments,
   getTournament,
   createTournament,
-  updateTournamenMatch,
   deleteTournament,
   updateTournament,
   updateTournamentGame,

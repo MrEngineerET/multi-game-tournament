@@ -27,35 +27,35 @@ export const tournamentControllerValidator = {
     if (!id) throw { statusCode: 422, message: "tournament id is required" }
     next()
   },
-  updateTournament(req, res, next) {
-    const id = req.params.id
-    if (!id) throw { statusCode: 422, message: "tournament id is required" }
-    next()
+  async updateTournament(req, res, next) {
+    try {
+      const tournamentId = Number(req.params.id)
+      if (!tournamentId) {
+        throw { statusCode: 422, message: "tournament id is required" }
+      }
+      if (req.body.match) {
+        const match = req.body
+        const { status } = await Tournament.findById(tournamentId, {
+          status: 1,
+        })
+        if (status === TournamentStatus.pending) {
+          throw {
+            statusCode: 404,
+            message:
+              "can not update a tournament while it is in a pending, arhived, and completed state",
+          }
+        }
+        if (!match) throw { statusCode: 422, message: "no match object found" }
+      }
+      next()
+    } catch (error) {
+      next(error)
+    }
   },
   deleteTournament(req, res, next) {
     const id = req.params.id
     if (!id) throw { statusCode: 422, message: "tournament id is required" }
     next()
-  },
-  async updateTournamentMatch(req, res, next) {
-    try {
-      const match = req.body
-      const tournamentId = Number(req.params.id)
-      const { status } = await Tournament.findById(tournamentId, {
-        status: 1,
-      })
-      if (status === TournamentStatus.pending) {
-        throw {
-          statusCode: 404,
-          message:
-            "can not update a tournament while it is in a pending, arhived, and completed state",
-        }
-      }
-      if (!match) throw { statusCode: 422, message: "no match object found" }
-      next()
-    } catch (error) {
-      next(error)
-    }
   },
   updateTournamentGame(req, res, next) {
     const count = req.body.count
