@@ -35,9 +35,14 @@ export async function getTournament(id) {
   return tournament
 }
 
-export async function updateMatch(match, tournamentId) {
+/**
+ *
+ * @param {string} tournamentId
+ * @param {object} data - {match?, participant?, name?, description?, status?}
+ */
+export async function updateTournament(tournamentId, updateData) {
   const { data: tournament } = (
-    await axios.patch(`/tournament/${tournamentId}/update-match`, match)
+    await axios.patch(`/tournament/${tournamentId}`, updateData)
   ).data
   return tournament
 }

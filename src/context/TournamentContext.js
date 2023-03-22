@@ -11,6 +11,8 @@ import {
   tabs as matchEditDialogTabs,
 } from "../components/Tournament/Match/MatchScoreAndDetailDialog"
 import { TournamentDetail } from "../components/Tournament/TournamentDetail"
+import { updateMatchAction } from "../components/Tournament/Match/ReportScore"
+import { updateTournament } from "../api/tournament"
 
 const tournamentContext = createContext(null)
 
@@ -65,11 +67,27 @@ TournamentProvider.propTypes = {
 }
 
 export async function loader({ params }) {
+  // load a tournament data
   const tournamentId = params.id
   const tournament = await getTournament(tournamentId)
   return {
     data: formatToUIModel(tournament),
     rawData: tournament,
+  }
+}
+
+export async function action({ request, params }) {
+  // update a tournament
+  const url = new URL(request.url)
+  const matchId = url.searchParams.get("match_id")
+  if (matchId) {
+    return updateMatchAction(request, params)
+  } else {
+    const formData = await request.formData()
+    const status = formData.get("status")
+    const { id } = params
+    await updateTournament(id, { status })
+    return null
   }
 }
 

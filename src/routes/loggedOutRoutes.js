@@ -14,6 +14,7 @@ import { Box } from "@mui/material"
 import {
   TournamentProvider,
   loader as tournamentDetailLoader,
+  action as tournamentAction,
 } from "../context/TournamentContext"
 import { ErrorPage } from "../pages/ErrorPage"
 import { Game, loader as gameLoader } from "../pages/Game"
@@ -33,7 +34,6 @@ import {
   deleteTemplateAction,
 } from "../components/TournamentPage/TableToolBar"
 
-import { action as reportScoreAction } from "../components/Tournament/Match/ReportScore"
 /**
  *  /login
  *  /signup
@@ -60,7 +60,7 @@ export const routes = (
           element={<TournamentProvider />}
           loader={tournamentDetailLoader}
           errorElement={<ErrorPage />}
-          action={reportScoreAction}
+          action={tournamentAction}
         >
           <Route
             index

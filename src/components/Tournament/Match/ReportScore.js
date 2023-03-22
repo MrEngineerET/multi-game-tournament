@@ -11,8 +11,8 @@ import {
 } from "@mui/material"
 import { TextField, Button, Box } from "@mui/material"
 import PropTypes from "prop-types"
-import { Form, useActionData, useNavigation } from "react-router-dom"
-import { updateMatch } from "../../../api/tournament"
+import { useActionData, useNavigation, Form } from "react-router-dom"
+import { updateTournament } from "../../../api/tournament"
 
 const styles = {
   scoreInputField: {
@@ -46,7 +46,7 @@ export function ReportScore({ match, onClose }) {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
   return (
-    <Form method="post">
+    <Form method="post" action={`?match_id=${match.id}`}>
       <TableContainer>
         <Table>
           <TableHead>
@@ -64,7 +64,7 @@ export function ReportScore({ match, onClose }) {
                   type="number"
                   value={match.id}
                   readOnly
-                  style={{ display: "none" }}
+                  hidden
                 />
                 <TextField
                   name="participant_one_score"
@@ -115,18 +115,19 @@ ReportScore.propTypes = {
   onClose: PropTypes.func,
 }
 
-export async function action({ request, params }) {
+export async function updateMatchAction(request, params) {
+  const url = new URL(request.url)
+  const matchId = url.searchParams.get("match_id")
   const { id } = params
   const formData = await request.formData()
   const participantOneScore = Number(formData.get("participant_one_score"))
   const participantTwoScore = Number(formData.get("participant_two_score"))
-  const matchId = Number(formData.get("match_id"))
 
   const playerOneResult =
     participantOneScore > participantOneScore ? "win" : "loss"
 
-  await updateMatch(
-    {
+  await updateTournament(id, {
+    match: {
       id: Number(matchId),
       opponent1: {
         score: participantOneScore,
@@ -136,7 +137,6 @@ export async function action({ request, params }) {
         score: participantTwoScore,
       },
     },
-    id,
-  )
+  })
   return { closeDialog: true }
 }
