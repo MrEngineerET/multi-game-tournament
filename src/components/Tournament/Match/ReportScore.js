@@ -52,13 +52,6 @@ export function ReportScore({ match, onClose }) {
             <TableRow>
               <TableCell>{match.participants[0].name}</TableCell>
               <TableCell>
-                <input
-                  name="match_id"
-                  type="number"
-                  value={match.id}
-                  readOnly
-                  hidden
-                />
                 <TextField
                   name="participant_one_score"
                   type="number"

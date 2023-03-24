@@ -26,12 +26,11 @@ export const TournamentProvider = () => {
     match: null,
   })
 
-  const openMatchScoreEditDialog = (match, tab, hideScoreEdit = false) => {
+  const openMatchScoreEditDialog = (match, tab) => {
     setOpenMatchDialog({
       status: true,
       match: match,
       tab,
-      hideScoreEdit,
     })
   }
 
@@ -56,7 +55,6 @@ export const TournamentProvider = () => {
         }
         match={openMatchDialog.match}
         tab={openMatchDialog.tab}
-        hideScoreEdit={openMatchDialog.hideScoreEdit}
       />
     </tournamentContext.Provider>
   )

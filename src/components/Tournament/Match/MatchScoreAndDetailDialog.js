@@ -6,6 +6,7 @@ import PropTypes from "prop-types"
 import { TabPanel } from "../../Common/TabPanel"
 import { MatchDetail } from "./MatchDetail"
 import { ReportScore } from "./ReportScore"
+import { useTournamentContext } from "../../../context/TournamentContext"
 
 export const tabs = {
   matchDetail: 0,
@@ -17,9 +18,12 @@ export const MatchScoreAndDetailDialog = ({
   onClose,
   match,
   tab = 0,
-  hideScoreEdit = false,
 }) => {
   const [tabValue, setTabValue] = useState(tab)
+  const { tournamentData } = useTournamentContext()
+  const hideScoreEdit = // if match is not ready and tounament in not in progress
+    match?.status !== 2 || tournamentData.status !== "progress"
+
   useEffect(() => {
     if (hideScoreEdit) setTabValue(0)
     else setTabValue(tab)
@@ -56,5 +60,4 @@ MatchScoreAndDetailDialog.propTypes = {
   onClose: PropTypes.func,
   match: PropTypes.object,
   tab: PropTypes.number,
-  hideScoreEdit: PropTypes.bool,
 }
