@@ -66,11 +66,20 @@ export function TournamentDetail() {
         ))}
       </Stack>
       <Box sx={sxStyles.bannerWrapper}>
-        <Container sx={{ p: 8, pb: "1px" }} disableGutters>
+        <Container
+          sx={(theme) => ({
+            p: 8,
+            pb: "1px",
+            [theme.breakpoints.down("sm")]: {
+              p: 4,
+            },
+          })}
+          disableGutters
+        >
           <Stack gap={{ xs: 2, sm: 5 }}>
             <Stack direction="row" justifyContent="space-between">
               <Stack gap={1}>
-                <Typography variant="h4" component="h1">
+                <Typography variant="h3" component="h1">
                   {tournamentData.name}
                 </Typography>
                 <Stack sx={sxStyles.tournamentInfos}>
