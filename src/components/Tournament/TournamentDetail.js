@@ -141,7 +141,11 @@ export function TournamentDetail() {
       </Box>
       <Box sx={{ bgcolor: "background.lightest" }}>
         <Container
-          sx={{ p: { xs: 4, sm: 8 }, bgcolor: "background.paper" }}
+          sx={{
+            p: { xs: 4, sm: 8 },
+            bgcolor: "background.paper",
+            minHeight: "70vh",
+          }}
           disableGutters
         >
           <Outlet />

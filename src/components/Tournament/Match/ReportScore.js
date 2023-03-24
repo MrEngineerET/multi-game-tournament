@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React from "react"
 import {
   TableContainer,
   TableHead,
@@ -11,7 +11,7 @@ import {
 } from "@mui/material"
 import { TextField, Button, Box } from "@mui/material"
 import PropTypes from "prop-types"
-import { useActionData, useNavigation, Form } from "react-router-dom"
+import { useFetcher } from "react-router-dom"
 import { updateTournament } from "../../../api/tournament"
 
 const styles = {
@@ -30,23 +30,16 @@ const styles = {
 
 export function ReportScore({ match, onClose }) {
   const theme = useTheme()
-  const actionData = useActionData()
-  const navigation = useNavigation()
+  const fetcher = useFetcher()
 
-  useEffect(() => {
-    // dialog closing code
-    if (actionData) {
-      if (actionData.closeDialog) {
-        onClose()
-        actionData.closeDialog = false
-      }
-    }
-  }, [actionData])
+  React.useEffect(() => {
+    if (fetcher.data?.closeDialog && fetcher.state === "idle") onClose()
+  }, [fetcher.data, fetcher.state])
 
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
   return (
-    <Form method="post" action={`?match_id=${match.id}`}>
+    <fetcher.Form method="post" action={`?match_id=${match.id}`}>
       <TableContainer>
         <Table>
           <TableHead>
@@ -101,12 +94,12 @@ export function ReportScore({ match, onClose }) {
         <Button
           type="submit"
           size={isSmallScreen ? "small" : "medium"}
-          disabled={navigation.state === "submitting"}
+          disabled={fetcher.state === "submitting"}
         >
           Save
         </Button>
       </Box>
-    </Form>
+    </fetcher.Form>
   )
 }
 
