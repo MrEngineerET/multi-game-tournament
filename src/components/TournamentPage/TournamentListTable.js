@@ -147,7 +147,7 @@ export function TournamentListTable({ tournaments }) {
           ) : (
             <TableRow>
               <TableCell colSpan={6}>
-                <Typography>No result were found</Typography>
+                <Typography>No tournament were found</Typography>
               </TableCell>
             </TableRow>
           )}

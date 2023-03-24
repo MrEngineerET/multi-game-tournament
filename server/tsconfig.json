@@ -2,11 +2,10 @@
   "compilerOptions": {
     "outDir": "./dist",
     "allowJs": true,
-    "target": "es6",
+    "target": "ES6",
     "sourceMap": true,
-    "module": "ES2020",
-    "moduleResolution": "node",
-    "allowSyntheticDefaultImports": true
+    "module": "CommonJS",
+    "esModuleInterop": true
   },
   "include": ["./src/**/*"]
 }

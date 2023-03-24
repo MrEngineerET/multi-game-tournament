@@ -7,7 +7,7 @@ import {
   MatchGame,
   Stage,
 } from "brackets-model"
-import { Game } from "./game.js"
+import { Game } from "./game"
 
 export interface Match extends M {
   gameId: Types.ObjectId | null

@@ -1,7 +1,7 @@
 import { config } from "dotenv"
-import { openMongooseConnection, PORT } from "./db.js"
+import { openMongooseConnection, PORT } from "./db"
 config()
-import { app } from "./app.js"
+import { app } from "./app"
 
 openMongooseConnection()
   .then(() => {

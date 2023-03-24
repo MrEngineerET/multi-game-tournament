@@ -1,6 +1,6 @@
 import express from "express"
-import gameController from "../controllers/gameController/gameControllers.js"
-import { gameControllerValidator as validator } from "../controllers/gameController/gameControllerValidator.js"
+import gameController from "../controllers/gameController/gameControllers"
+import { gameControllerValidator as validator } from "../controllers/gameController/gameControllerValidator"
 
 const gameRouter = express.Router()
 

@@ -7,8 +7,8 @@ import {
   MatchGame,
   Participant,
 } from "brackets-model"
-import { Tournament, TournamentType } from "../model/tournament.js"
-import { deepMerge, filterArrayOfObjects } from "./utils.js"
+import { Tournament, TournamentType } from "../model/tournament"
+import { deepMerge, filterArrayOfObjects } from "./utils"
 
 interface DataTypes {
   stage: Stage

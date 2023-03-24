@@ -1,4 +1,4 @@
-import { Game } from "../../model/game.js"
+import { Game } from "../../model/game"
 import { Request, Response, NextFunction } from "express"
 
 export const getAllGames = async (

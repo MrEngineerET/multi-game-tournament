@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express"
-import { saveError } from "../model/Errors.js"
-import { AppError } from "../utils/AppError.js"
-import { Error } from "../model/Errors.js"
+import { saveError } from "../model/Errors"
+import { AppError } from "../utils/AppError"
+import { Error } from "../model/Errors"
 
 export const errorHandler = (
   error: AppError,

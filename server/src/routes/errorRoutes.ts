@@ -1,5 +1,5 @@
 import express from "express"
-import { getAllErrors } from "../controllers/errorController.js"
+import { getAllErrors } from "../controllers/errorController"
 
 const router = express.Router()
 

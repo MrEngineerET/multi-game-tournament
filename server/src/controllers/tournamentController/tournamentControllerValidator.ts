@@ -1,5 +1,5 @@
 import mongoose from "mongoose"
-import { Tournament, TournamentStatus } from "../../model/tournament.js"
+import { Tournament, TournamentStatus } from "../../model/tournament"
 
 export const tournamentControllerValidator = {
   createTournament(req, res, next) {

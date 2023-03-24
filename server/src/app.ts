@@ -1,8 +1,8 @@
 import express from "express"
-import tournamentRouter from "./routes/tournamentRoutes.js"
-import { errorHandler } from "./controllers/errorController.js"
-import gameRouter from "./routes/gameRoutes.js"
-import errorRouter from "./routes/errorRoutes.js"
+import tournamentRouter from "./routes/tournamentRoutes"
+import { errorHandler } from "./controllers/errorController"
+import gameRouter from "./routes/gameRoutes"
+import errorRouter from "./routes/errorRoutes"
 import morgan from "morgan"
 import cors from "cors"
 

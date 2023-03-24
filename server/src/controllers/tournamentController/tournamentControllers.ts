@@ -1,9 +1,9 @@
 import { BracketsManager } from "brackets-manager"
 import { Request, Response, NextFunction } from "express"
-import { Tournament } from "../../model/tournament.js"
-import { Game } from "../../model/game.js"
-import { MyDB } from "../../utils/MyDB.js"
-import { GameManagement } from "../../utils/GameManagement.js"
+import { Tournament } from "../../model/tournament"
+import { Game } from "../../model/game"
+import { MyDB } from "../../utils/MyDB"
+import { GameManagement } from "../../utils/GameManagement"
 
 const getAllTournaments = async (
   req: Request,

@@ -2,10 +2,9 @@
   "name": "server",
   "version": "1.0.0",
   "description": "",
-  "type": "module",
   "scripts": {
     "start": " node dist/server.js",
-    "dev": " npm run build && node dist/server.js",
+    "dev": "ts-node src/server.ts",
     "prettier": "prettier --ignore-path ./.gitignore .",
     "format_check": "npm run prettier -- --check",
     "format": "npm run prettier -- --write",

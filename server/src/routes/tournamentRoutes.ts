@@ -1,6 +1,6 @@
 import express from "express"
-import tournamentController from "../controllers/tournamentController/tournamentControllers.js"
-import { tournamentControllerValidator as validator } from "../controllers/tournamentController/tournamentControllerValidator.js"
+import tournamentController from "../controllers/tournamentController/tournamentControllers"
+import { tournamentControllerValidator as validator } from "../controllers/tournamentController/tournamentControllerValidator"
 
 const tournamentRouter = express.Router()
 
