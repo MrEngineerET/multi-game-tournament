@@ -83,67 +83,74 @@ export function TournamentListTable({ tournaments }) {
               </TableCell>
             </TableRow>
           </TableHead>
-
-          <TableBody>
-            {tournaments.map((tournament) => (
-              <TableRow
-                key={tournament._id}
-                component={ButtonBase}
-                href={`${tournament._id}`}
-                onClick={(e) => {
-                  if (selected.length !== 0) {
-                    e.preventDefault()
-                    handleTournamentSelect(e, tournament._id)
-                  }
-                }}
-                hover
-                selected={isSelected(tournament._id)}
-              >
-                <TableCell padding="checkbox" sx={{ zIndex: 0 }}>
-                  <Checkbox
-                    color="secondary"
-                    checked={isSelected(tournament._id)}
-                    onClick={(e) => {
+          {tournaments.length !== 0 ? (
+            <TableBody>
+              {tournaments.map((tournament) => (
+                <TableRow
+                  key={tournament._id}
+                  component={ButtonBase}
+                  href={`${tournament._id}`}
+                  onClick={(e) => {
+                    if (selected.length !== 0) {
+                      e.preventDefault()
                       handleTournamentSelect(e, tournament._id)
-                      e.stopPropagation()
-                    }}
-                  />
-                </TableCell>
-                <TableCell>
-                  <Typography>{tournament.name}</Typography>
-                </TableCell>
-                <TableCell align="right">Created </TableCell>
-                <TableCell align="right">Progress </TableCell>
-                <TableCell align="right">
-                  <AvatarGroup
-                    max={3}
-                    total={tournament.participant.length}
-                    sx={{
-                      "& .MuiAvatar-root": {
-                        width: 30,
-                        height: 30,
-                        fontSize: 13,
-                      },
-                    }}
-                  >
-                    {tournament.participant.map((participant, i) => {
-                      if (i > 4) return ""
-                      return (
-                        <Avatar
-                          key={i}
-                          alt={participant.name.toUpperCase()}
-                          src="/broken-image.jpg"
-                        />
-                      )
-                    })}
-                  </AvatarGroup>
-                </TableCell>
-                <TableCell align="right" sx={{ pr: { sx: 4, sm: 6 } }}>
-                  {tournament.game.length}{" "}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
+                    }
+                  }}
+                  hover
+                  selected={isSelected(tournament._id)}
+                >
+                  <TableCell padding="checkbox" sx={{ zIndex: 0 }}>
+                    <Checkbox
+                      color="secondary"
+                      checked={isSelected(tournament._id)}
+                      onClick={(e) => {
+                        handleTournamentSelect(e, tournament._id)
+                        e.stopPropagation()
+                      }}
+                    />
+                  </TableCell>
+                  <TableCell>
+                    <Typography>{tournament.name}</Typography>
+                  </TableCell>
+                  <TableCell align="right">Created </TableCell>
+                  <TableCell align="right">Progress </TableCell>
+                  <TableCell align="right">
+                    <AvatarGroup
+                      max={3}
+                      total={tournament.participant.length}
+                      sx={{
+                        "& .MuiAvatar-root": {
+                          width: 30,
+                          height: 30,
+                          fontSize: 13,
+                        },
+                      }}
+                    >
+                      {tournament.participant.map((participant, i) => {
+                        if (i > 4) return ""
+                        return (
+                          <Avatar
+                            key={i}
+                            alt={participant.name.toUpperCase()}
+                            src="/broken-image.jpg"
+                          />
+                        )
+                      })}
+                    </AvatarGroup>
+                  </TableCell>
+                  <TableCell align="right" sx={{ pr: { sx: 4, sm: 6 } }}>
+                    {tournament.game.length}{" "}
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          ) : (
+            <TableRow>
+              <TableCell colSpan={6}>
+                <Typography>No result were found</Typography>
+              </TableCell>
+            </TableRow>
+          )}
         </Table>
       </TableContainer>
     </Box>

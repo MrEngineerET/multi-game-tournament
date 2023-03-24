@@ -45,10 +45,7 @@ export function TournamentList() {
           >
             {(tournaments) => (
               <>
-                {!tournaments && <Typography>No result were found</Typography>}
-                {tournaments && (
-                  <TournamentListTable tournaments={tournaments} />
-                )}
+                <TournamentListTable tournaments={tournaments} />
               </>
             )}
           </Await>
