@@ -124,7 +124,7 @@ export async function updateMatchAction(request, params) {
   const participantTwoScore = Number(formData.get("participant_two_score"))
 
   const playerOneResult =
-    participantOneScore > participantOneScore ? "win" : "loss"
+    participantOneScore > participantTwoScore ? "win" : "loss"
 
   await updateTournament(id, {
     match: {
