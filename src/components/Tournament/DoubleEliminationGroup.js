@@ -17,6 +17,12 @@ export function DoubleEliminationGroup({
   isLoserGroup = false,
   isGrandFinalGroup = false,
 }) {
+  let rounds = group.rounds
+  if (isGrandFinalGroup) {
+    const roundOneWinner = rounds[0].matches[0].opponent1
+    const displayCount = roundOneWinner?.result === "win" ? 1 : 2
+    rounds = rounds.slice(0, displayCount)
+  }
   return (
     <Box>
       {isLoserGroup ? (
@@ -33,7 +39,7 @@ export function DoubleEliminationGroup({
         </Typography>
       )}
       <Box sx={styles.group}>
-        {group.rounds.map((round, i, rounds) => {
+        {rounds.map((round, i, rounds) => {
           return (
             <Round
               key={i}
