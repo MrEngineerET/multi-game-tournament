@@ -142,17 +142,17 @@ export function Match({ match }) {
           const opponent = [
             <Box sx={styles.opponent} key={i}>
               <Typography component="span" sx={styles.name}>
-                {participant.name}
+                {participant?.name}
               </Typography>
               <Typography
                 sx={[
                   styles.score,
                   !matchCompleted && styles.invisible,
-                  participant.result === "win" && styles.winner,
+                  participant?.result === "win" && styles.winner,
                 ]}
                 component="span"
               >
-                {participant.score || "-"}
+                {participant?.score || "-"}
               </Typography>
             </Box>,
           ]

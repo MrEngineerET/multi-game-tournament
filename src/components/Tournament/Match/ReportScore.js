@@ -50,7 +50,7 @@ export function ReportScore({ match, onClose }) {
           </TableHead>
           <TableBody>
             <TableRow>
-              <TableCell>{match.participants[0].name}</TableCell>
+              <TableCell>{match.participants[0]?.name}</TableCell>
               <TableCell>
                 <TextField
                   name="participant_one_score"
@@ -61,7 +61,7 @@ export function ReportScore({ match, onClose }) {
               </TableCell>
             </TableRow>
             <TableRow>
-              <TableCell>{match.participants[1].name}</TableCell>
+              <TableCell>{match.participants[1]?.name}</TableCell>
               <TableCell>
                 <TextField
                   name="participant_two_score"

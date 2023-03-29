@@ -116,7 +116,7 @@ function ImageAndScoreCard({ participant, imgSrc }) {
         }}
       >
         <Avatar
-          alt={participant.name}
+          alt={participant?.name}
           src={imgSrc ? imgSrc : "/no-image.jpg"}
           sx={{ width: 70, height: 70, fontSize: 30 }}
         />
@@ -131,7 +131,9 @@ function ImageAndScoreCard({ participant, imgSrc }) {
             // bgcolor: "success.light", // or failure color
           }}
         >
-          <Typography>{participant.score ? participant.score : "-"}</Typography>
+          <Typography>
+            {participant?.score ? participant?.score : "-"}
+          </Typography>
         </Box>
       </Box>
     </Card>
