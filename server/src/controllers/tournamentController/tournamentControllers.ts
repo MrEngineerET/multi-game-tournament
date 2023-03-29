@@ -1,9 +1,10 @@
-import { BracketsManager } from "brackets-manager"
+import { BracketsManager, helpers } from "brackets-manager"
 import { Request, Response, NextFunction } from "express"
 import { Tournament } from "../../model/tournament"
 import { Game } from "../../model/game"
 import { MyDB } from "../../utils/MyDB"
 import { GameManagement } from "../../utils/GameManagement"
+import tournamentParticipantController from "./tournamentParticipantController"
 
 const getAllTournaments = async (
   req: Request,
@@ -93,7 +94,7 @@ const createTournament = async (
       tournamentId: tournament._id,
       name,
       type: stageType,
-      seeding: participants,
+      seeding: helpers.balanceByes(participants),
       settings: {
         consolationFinal,
         seedOrdering,
@@ -232,4 +233,5 @@ export default {
   updateTournamentGame,
   addTournamentGame,
   deleteTournamentGame,
+  ...tournamentParticipantController,
 }

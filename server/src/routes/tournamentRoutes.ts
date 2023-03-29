@@ -42,4 +42,17 @@ tournamentRouter.delete(
   "/:tournamentId/game/:gameId",
   tournamentController.deleteTournamentGame,
 )
+
+tournamentRouter.post(
+  "/:tournamentId/participant",
+  tournamentController.addParticipant,
+)
+tournamentRouter.patch(
+  "/:tournamentId/participant/:participantId",
+  tournamentController.updateParticipant,
+)
+tournamentRouter.delete(
+  "/:tournamentId/participant/:participantId",
+  tournamentController.deleteParticipant,
+)
 export default tournamentRouter
