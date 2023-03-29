@@ -65,7 +65,8 @@ export class GameManagement {
 
   getEligibleMatches(): Match[] {
     const eligibleMatches = this.tournament.match.filter(
-      (m) => m.status === Status.Ready && !m.gameId,
+      (m) =>
+        m.status === Status.Ready && !m.gameId && m.opponent1 && m.opponent2,
     )
     return eligibleMatches
   }
