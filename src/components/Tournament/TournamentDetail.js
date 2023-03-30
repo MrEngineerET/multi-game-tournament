@@ -45,6 +45,9 @@ export function TournamentDetail() {
       })),
     [tournamentData.games],
   )
+
+  const ifNoGameimages = ["/images/dart_small.jpg", "/images/pool_small.jpg"]
+
   const handleTabChange = (event, newTabValue) => {
     setTabValue(newTabValue)
   }
@@ -52,18 +55,33 @@ export function TournamentDetail() {
   return (
     <Box>
       <Stack direction="row" sx={sxStyles.gameImageList} gap={1}>
-        {gameList.map(({ image }) => (
-          <Box key={image} flex={1}>
-            <Box
-              component={"img"}
-              src={image}
-              sx={sxStyles.gameImage}
-              onError={(e) => {
-                e.target.src = "/images/image-loading-error.jpg"
-              }}
-            />
-          </Box>
-        ))}
+        {gameList.length !== 0
+          ? gameList.map(({ image }) => (
+              <Box key={image} flex={1}>
+                <Box
+                  component={"img"}
+                  src={image}
+                  sx={sxStyles.gameImage}
+                  onError={(e) => {
+                    e.target.src = "/images/image-loading-error.jpg"
+                  }}
+                />
+              </Box>
+            ))
+          : ifNoGameimages.map((image) => {
+              return (
+                <Box flex={1} key={image}>
+                  <Box
+                    component={"img"}
+                    src={image}
+                    sx={sxStyles.gameImage}
+                    onError={(e) => {
+                      e.target.src = "/images/image-loading-error.jpg"
+                    }}
+                  />
+                </Box>
+              )
+            })}
       </Stack>
       <Box sx={sxStyles.bannerWrapper}>
         <Container
