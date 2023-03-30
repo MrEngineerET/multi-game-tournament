@@ -1,5 +1,5 @@
 import React from "react"
-import { Form, redirect, defer } from "react-router-dom"
+import { Form, defer, useActionData, useNavigate } from "react-router-dom"
 import { Box, Container, Stack, Typography, Button } from "@mui/material"
 import { BasicInfo } from "../components/Tournament/CreateTournament/BasicInfo"
 import { GameInfo } from "../components/Tournament/CreateTournament/GameInfo"
@@ -21,6 +21,15 @@ const styles = {
 }
 
 export function CreateTournament() {
+  const navigate = useNavigate()
+  const actionData = useActionData()
+
+  React.useEffect(() => {
+    if (actionData?.redirectURL) {
+      navigate(actionData.redirectURL, { replace: true })
+    }
+  }, [actionData])
+
   return (
     <Box>
       <Box sx={styles.bannerWrapper}>
@@ -67,7 +76,8 @@ export async function action({ request }) {
     stageType,
     games: selectedGames.map((g) => ({ gameId: g._id, count: g.count })),
   })
-  return redirect(`/tournament/${tournament._id}`)
+
+  return { redirectURL: `/tournament/${tournament._id}` }
 }
 
 export async function loader() {
