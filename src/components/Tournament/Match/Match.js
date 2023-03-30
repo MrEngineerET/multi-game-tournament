@@ -19,7 +19,7 @@ const styles = {
   root: {
     display: "inline-block",
     position: "relative",
-    "&:hover .match_tool_tip": {
+    "&:hover #match_tool_tip": {
       visibility: "visible",
     },
   },
@@ -196,7 +196,7 @@ export function Match({ match }) {
           </Box>
         )}
       </Box>
-      <Box className="match_tool_tip" sx={styles.matchToolTipWrapper}>
+      <Box id="match_tool_tip" sx={styles.matchToolTipWrapper}>
         <Box sx={styles.matchToolTip}>
           <IconButton
             onClick={() =>

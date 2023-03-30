@@ -2,6 +2,7 @@ export function catagorizeData(tournamentData) {
   const organizedData = {
     _id: tournamentData._id,
     name: tournamentData.name,
+    description: tournamentData.description,
     participants: tournamentData.participant,
     stages: tournamentData.stage,
     groups: tournamentData.group,

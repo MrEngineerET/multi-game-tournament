@@ -15,6 +15,7 @@ export function TournamentBracket() {
 
   return (
     <Box sx={{}}>
+      {}
       {tournamentStatus !== "progress" && (
         <>
           <Alert severity="info" sx={{ mb: 5 }}>
@@ -38,7 +39,7 @@ export function TournamentBracket() {
               </Button>
             </fetcher.Form>
           </Alert>
-          <Alert severity="warning" sx={{ mb: 5 }}>
+          <Alert severity="info" sx={{ mb: 5 }}>
             This bracket is a preview and subject to change until the tournament
             is started.
           </Alert>

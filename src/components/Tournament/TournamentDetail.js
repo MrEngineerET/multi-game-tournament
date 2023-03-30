@@ -34,6 +34,7 @@ const tabs = { bracket: 0, participants: 1, settings: 2 }
 
 export function TournamentDetail() {
   const { tournamentData } = useTournamentContext()
+  console.log("idid", "tournamentData", tournamentData)
   const [tabValue, setTabValue] = useState(tabs.bracket)
   const gameList = useMemo(
     () =>
@@ -44,7 +45,6 @@ export function TournamentDetail() {
       })),
     [tournamentData.games],
   )
-
   const handleTabChange = (event, newTabValue) => {
     setTabValue(newTabValue)
   }
@@ -86,21 +86,29 @@ export function TournamentDetail() {
                   <Stack direction="row" gap={2} alignItems="center">
                     <PeopleAltIcon fontSize="inherit" />
                     <Typography sx={sxStyles.text}>players</Typography>
-                    <Typography sx={sxStyles.text}>4</Typography>
+                    <Typography sx={sxStyles.text}>
+                      {tournamentData.participants.length}
+                    </Typography>
                   </Stack>
                   <Stack direction="row" gap={2} alignItems="center">
                     <EmojiEventsIcon fontSize="inherit" />
                     <Typography sx={sxStyles.text}>
-                      {tournamentType[tournamentData.stages[0].type]}
+                      {tournamentData.stages[0]
+                        ? tournamentType[tournamentData.stages[0].type]
+                        : "TBD"}
                     </Typography>
                   </Stack>
                   <Stack direction="row" gap={2} alignItems="center">
                     <SportsEsportsIcon fontSize="inherit" />
-                    {gameList.map((game) => (
-                      <Typography key={game.name} sx={sxStyles.text}>
-                        {game.name} ({game.count})
-                      </Typography>
-                    ))}
+                    {gameList.length === 0 ? (
+                      <Typography>TBD </Typography>
+                    ) : (
+                      gameList.map((game) => (
+                        <Typography key={game.name} sx={sxStyles.text}>
+                          {game.name} ({game.count})
+                        </Typography>
+                      ))
+                    )}
                   </Stack>
                 </Stack>
               </Stack>
