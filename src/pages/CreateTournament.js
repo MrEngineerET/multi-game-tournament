@@ -1,5 +1,11 @@
 import React from "react"
-import { Form, defer, useActionData, useNavigate } from "react-router-dom"
+import {
+  Form,
+  defer,
+  useActionData,
+  useNavigate,
+  useNavigation,
+} from "react-router-dom"
 import { Box, Container, Stack, Typography, Button } from "@mui/material"
 import { BasicInfo } from "../components/Tournament/CreateTournament/BasicInfo"
 import { GameInfo } from "../components/Tournament/CreateTournament/GameInfo"
@@ -22,6 +28,7 @@ const styles = {
 
 export function CreateTournament() {
   const navigate = useNavigate()
+  const navigation = useNavigation()
   const actionData = useActionData()
 
   React.useEffect(() => {
@@ -46,7 +53,12 @@ export function CreateTournament() {
               <BasicInfo />
               <GameInfo />
               <Box align="right">
-                <Button type="submit">Save and continue</Button>
+                <Button
+                  type="submit"
+                  disabled={navigation.state === "submitting"}
+                >
+                  Save and continue
+                </Button>
               </Box>
             </Stack>
           </Form>
