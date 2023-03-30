@@ -1,5 +1,5 @@
-import React, { useMemo, useState } from "react"
-import { Outlet, Link } from "react-router-dom"
+import React, { useMemo, useState, useEffect } from "react"
+import { Outlet, Link, useLocation } from "react-router-dom"
 import { Typography, Box, Stack } from "@mui/material"
 import { useTournamentContext } from "../../context/TournamentContext"
 import { Container } from "@mui/system"
@@ -8,6 +8,7 @@ import EmojiEventsIcon from "@mui/icons-material/EmojiEvents"
 import SportsEsportsIcon from "@mui/icons-material/SportsEsports"
 import { tournamentType } from "../../utils/constants"
 import { Tabs, Tab } from "@mui/material"
+import { TournamentStatus } from "./TournamentStatus"
 
 const sxStyles = {
   gameImageList: {
@@ -34,8 +35,21 @@ const sxStyles = {
 const tabs = { bracket: 0, participants: 1, settings: 2 }
 
 export function TournamentDetail() {
+  const location = useLocation()
   const { tournamentData } = useTournamentContext()
-  const [tabValue, setTabValue] = useState(tabs.bracket)
+  const [tabValue, setTabValue] = useState(() => {
+    if (location.pathname.includes("participants")) return tabs.participants
+    else if (location.pathname.includes("settings")) return tabs.settings
+    else return tabs.bracket
+  })
+
+  useEffect(() => {
+    let tab = tabs.bracket
+    if (location.pathname.includes("participants")) tab = tabs.participants
+    else if (location.pathname.includes("settings")) tab = tabs.settings
+    setTabValue(tab)
+  }, [location.pathname])
+
   const gameList = useMemo(
     () =>
       tournamentData.games.map((game) => ({
@@ -179,6 +193,7 @@ export function TournamentDetail() {
           }}
           disableGutters
         >
+          <TournamentStatus />
           <Outlet />
         </Container>
       </Box>
