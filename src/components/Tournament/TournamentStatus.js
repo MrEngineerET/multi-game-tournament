@@ -13,7 +13,7 @@ export function TournamentStatus() {
   return (
     <Box>
       {tournamentStatus !== "progress" &&
-        tournamentData.participants.length !== 0 &&
+        tournamentData.participants.length >= 2 &&
         stage && (
           <>
             <Alert severity="info" sx={{ mb: 5 }}>
@@ -57,7 +57,7 @@ export function TournamentStatus() {
         )}
 
       {!location.pathname.includes("participants") &&
-        tournamentData.participants.length === 0 && (
+        tournamentData.participants.length < 2 && (
           <Box sx={{ mt: 5 }}>
             <Alert severity="info">
               <Typography sx={{ pb: 3 }}>
