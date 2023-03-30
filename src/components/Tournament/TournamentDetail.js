@@ -17,7 +17,8 @@ const sxStyles = {
     width: 1,
     height: 1,
     objectFit: "cover",
-    bgcolor: "background.light",
+    bgcolor: "background.lightest",
+    opacity: 0.7,
   },
   bannerWrapper: { bgcolor: "background.darkBanner", color: "text.lighter" },
   tournamentInfos: {
@@ -45,7 +46,11 @@ export function TournamentDetail() {
     [tournamentData.games],
   )
 
-  const ifNoGameimages = ["/images/dart_small.jpg", "/images/pool_small.jpg"]
+  const ifNoGameimages = [
+    "/images/trophy_small.jpg",
+    "/images/net_small.jpg",
+    "/images/ball_small.jpg",
+  ]
 
   const handleTabChange = (event, newTabValue) => {
     setTabValue(newTabValue)
@@ -89,6 +94,7 @@ export function TournamentDetail() {
             pb: "1px",
             [theme.breakpoints.down("sm")]: {
               p: 4,
+              pb: 0,
             },
           })}
           disableGutters
@@ -118,7 +124,7 @@ export function TournamentDetail() {
                   <Stack direction="row" gap={2} alignItems="center">
                     <SportsEsportsIcon fontSize="inherit" />
                     {gameList.length === 0 ? (
-                      <Typography>TBD </Typography>
+                      <Typography sx={sxStyles.text}>TBD </Typography>
                     ) : (
                       gameList.map((game) => (
                         <Typography key={game.name} sx={sxStyles.text}>
