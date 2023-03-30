@@ -34,7 +34,6 @@ const tabs = { bracket: 0, participants: 1, settings: 2 }
 
 export function TournamentDetail() {
   const { tournamentData } = useTournamentContext()
-  console.log("idid", "tournamentData", tournamentData)
   const [tabValue, setTabValue] = useState(tabs.bracket)
   const gameList = useMemo(
     () =>

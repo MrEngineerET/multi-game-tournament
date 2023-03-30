@@ -52,7 +52,7 @@ export function TableToolBar({ tournamentIds }) {
           //TODO: show a confirmation dialog
         }}
       >
-        <input hidden name="tournament_ids" value={tournamentIds} />
+        <input hidden name="tournament_ids" value={tournamentIds} readOnly />
         <Button
           startIcon={<DeleteIcon />}
           variant="text"

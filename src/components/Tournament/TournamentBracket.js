@@ -4,18 +4,16 @@ import { DoubleEliminationStage } from "./DoubleEliminationStage"
 import { RoundRobinStage } from "./RoundRobinStage"
 import { useTournamentContext } from "../../context/TournamentContext"
 import { Box, Alert, AlertTitle, Button } from "@mui/material"
-import { useNavigation, useFetcher } from "react-router-dom"
+import { useFetcher } from "react-router-dom"
 
 export function TournamentBracket() {
   const { tournamentData } = useTournamentContext()
   const tournamentStatus = tournamentData.status
   const stage = tournamentData.stages[0]
-  const navigation = useNavigation()
   const fetcher = useFetcher()
 
   return (
-    <Box sx={{}}>
-      {}
+    <Box>
       {tournamentStatus !== "progress" && (
         <>
           <Alert severity="info" sx={{ mb: 5 }}>
@@ -26,13 +24,12 @@ export function TournamentBracket() {
               method="post"
               action={`/tournament/${tournamentData._id}?type=updateStatus`}
             >
-              <input hidden value="progress" name="status" />
+              <input hidden value="progress" name="status" readOnly />
               <Button
                 type="submit"
                 sx={{ mt: 5 }}
                 disabled={
-                  navigation.state === "submitting" ||
-                  navigation.state === "loading"
+                  fetcher.state === "submitting" || fetcher.state === "loading"
                 }
               >
                 Start the tournament
@@ -46,13 +43,17 @@ export function TournamentBracket() {
         </>
       )}
       <Box>
-        {stage.type === "single_elimination" && (
-          <SingleEliminationStage stage={stage} />
+        {stage && (
+          <>
+            {stage.type === "single_elimination" && (
+              <SingleEliminationStage stage={stage} />
+            )}
+            {stage.type === "double_elimination" && (
+              <DoubleEliminationStage stage={stage} />
+            )}
+            {stage.type === "round_robin" && <RoundRobinStage stage={stage} />}
+          </>
         )}
-        {stage.type === "double_elimination" && (
-          <DoubleEliminationStage stage={stage} />
-        )}
-        {stage.type === "round_robin" && <RoundRobinStage stage={stage} />}
       </Box>
     </Box>
   )
