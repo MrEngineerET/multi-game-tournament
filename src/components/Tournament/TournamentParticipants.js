@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useState } from "react"
 import { Box, IconButton, TextField, Typography, Button } from "@mui/material"
+import { Snackbar, Alert } from "@mui/material"
 import { CircularProgress } from "@mui/material"
 import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material"
 import { useTournamentContext } from "../../context/TournamentContext"
@@ -11,6 +12,13 @@ export function TournamentParticipants() {
   const fetcher = useFetcher()
   const { tournamentData } = useTournamentContext()
   const isPending = tournamentData.status === "pending"
+  const [openSnackbar, setOpenSnackbar] = useState(false)
+
+  React.useEffect(() => {
+    if (fetcher.data?.error) {
+      setOpenSnackbar(true)
+    }
+  }, [fetcher.data])
 
   if (!tournamentData.stages[0]) return ""
   return (
@@ -19,6 +27,15 @@ export function TournamentParticipants() {
         maxWidth: "600px",
       }}
     >
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => {
+          setOpenSnackbar(false)
+        }}
+      >
+        <Alert severity="error">{fetcher?.data?.error}</Alert>
+      </Snackbar>
       <Box>
         {tournamentData.participants.map((participant, index) => (
           <Box
@@ -102,6 +119,12 @@ export async function action({ request, params }) {
   const formData = await request.formData()
   const name = formData.get("name")
   const tournamentId = params.id
-  await addParticipant(tournamentId, [name])
-  return null
+  try {
+    await addParticipant(tournamentId, [name])
+    return null
+  } catch (error) {
+    if (error.response?.data?.message)
+      return { error: error.response.data.message }
+    else throw error
+  }
 }
