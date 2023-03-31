@@ -15,6 +15,10 @@ async function addParticipant(req: Request, res: Response, next: NextFunction) {
     // get current participants list
     const tournamentData = await manager.export()
     const currentParticipants = tournamentData.participant.map((p) => p.name)
+    // add the new participants
+    let updatedParticipants = [...currentParticipants, ...newParticipants]
+    updatedParticipants = helpers.balanceByes(updatedParticipants)
+    helpers.ensureNoDuplicates(updatedParticipants)
     // delete the stage
     await Tournament.updateOne(
       { _id: tournamentId },
@@ -30,9 +34,6 @@ async function addParticipant(req: Request, res: Response, next: NextFunction) {
         },
       },
     )
-    // add the new participants
-    const updatedParticipants = [...currentParticipants, ...newParticipants]
-
     // create a new stage
     const stage = tournamentData.stage[0]
     delete stage.settings.size
@@ -40,7 +41,7 @@ async function addParticipant(req: Request, res: Response, next: NextFunction) {
       tournamentId: Number(tournamentId),
       name: stage.name,
       type: stage.type,
-      seeding: helpers.balanceByes(updatedParticipants),
+      seeding: updatedParticipants,
       settings: stage.settings,
     }
     // create a new Storage interface and Bracket manager since I used the Tournament model directly to update the tournament

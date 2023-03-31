@@ -71,4 +71,14 @@ export const tournamentControllerValidator = {
       throw { statusCode: 422, message: "invalid gameId" }
     next()
   },
+
+  addParticipant(req, res, next) {
+    const tournamentId = req.params.tournamentId
+    if (!tournamentId) throw { statusCode: 422, message: "insufficient data" }
+    const participants = req.body.participants
+    if (!participants) throw { statusCode: 422, message: "no participant data" }
+    if (!Array.isArray(participants))
+      throw { statusCode: 422, message: "participants should be of type array" }
+    next()
+  },
 }

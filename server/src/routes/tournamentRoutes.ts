@@ -45,6 +45,7 @@ tournamentRouter.delete(
 
 tournamentRouter.post(
   "/:tournamentId/participant",
+  validator.addParticipant,
   tournamentController.addParticipant,
 )
 tournamentRouter.patch(
