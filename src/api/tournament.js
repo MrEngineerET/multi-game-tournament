@@ -50,3 +50,17 @@ export async function updateTournament(tournamentId, updateData) {
 export async function deleteTournament(tournamentId) {
   await axios.delete(`/tournament/${tournamentId}`)
 }
+
+/**
+ *
+ * @param {string} tournamentId
+ * @param {string | string[]} participants
+ */
+export async function addParticipant(tournamentId, participants) {
+  if (!Array.isArray(participants)) participants = [participants]
+  const tournament = await axios.post(
+    `/tournament/${tournamentId}/participant`,
+    { participants },
+  )
+  return tournament
+}

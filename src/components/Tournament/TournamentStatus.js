@@ -16,7 +16,8 @@ export function TournamentStatus() {
 
   const showAddParticipantInfo =
     !location.pathname.includes("participants") &&
-    tournamentData.participants.length < 2
+    tournamentData.participants.length < 2 &&
+    stage
 
   return (
     <Box>

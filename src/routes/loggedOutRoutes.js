@@ -27,7 +27,10 @@ import {
 } from "../pages/EditGame"
 import TestingComponent from "../components/TestingComponent"
 import { TournamentBracket } from "../components/Tournament/TournamentBracket"
-import { TournamentParticipants } from "../components/Tournament/TournamentParticipants"
+import {
+  TournamentParticipants,
+  action as addParticipantAction,
+} from "../components/Tournament/TournamentParticipants"
 import { TournamentSettings } from "../components/Tournament/TournamentSettings"
 import {
   archiveTemplateAction,
@@ -65,17 +68,18 @@ export const routes = (
           <Route
             index
             element={<TournamentBracket />}
-            errorElement={<div>Error happened</div>}
+            errorElement={<ErrorPage />}
           ></Route>
           <Route
             path="participants"
             element={<TournamentParticipants />}
-            errorElement={<div>Error happened</div>}
+            errorElement={<ErrorPage />}
+            action={addParticipantAction}
           ></Route>
           <Route
             path="settings"
             element={<TournamentSettings />}
-            errorElement={<div>Error happened</div>}
+            errorElement={<ErrorPage />}
           ></Route>
         </Route>
         <Route
