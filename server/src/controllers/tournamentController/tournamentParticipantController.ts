@@ -82,7 +82,7 @@ async function updateParticipant(
     }
     await Tournament.findByIdAndUpdate(tournamentId, {
       $set: {
-        [`participant.${participantId}.name`]: name,
+        [`participant.${participantId}.name`]: newName,
       },
     })
     res.status(200).send()

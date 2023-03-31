@@ -30,7 +30,7 @@ import { TournamentBracket } from "../components/Tournament/TournamentBracket"
 import {
   TournamentParticipants,
   action as addParticipantAction,
-} from "../components/Tournament/TournamentParticipants"
+} from "../components/Tournament/Participants/TournamentParticipants"
 import { TournamentSettings } from "../components/Tournament/TournamentSettings"
 import {
   archiveTemplateAction,

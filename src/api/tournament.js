@@ -64,3 +64,15 @@ export async function addParticipant(tournamentId, participants) {
   )
   return tournament
 }
+
+/**
+ *
+ * @param {string} tournamentId
+ * @param {string} participantId
+ * @param {string} newName
+ */
+export async function updateParticipant(tournamentId, participantId, newName) {
+  await axios.patch(`tournament/${tournamentId}/participant/${participantId}`, {
+    name: newName,
+  })
+}

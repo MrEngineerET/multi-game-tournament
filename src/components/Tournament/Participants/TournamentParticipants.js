@@ -1,12 +1,13 @@
-import React, { useState } from "react"
-import { Box, IconButton, TextField, Typography, Button } from "@mui/material"
+/* eslint-disable no-unused-vars */
+import React, { useState, useEffect } from "react"
+import { ParticipantListItem } from "./ParticipantListItem"
+import { Box, TextField, Button } from "@mui/material"
 import { Snackbar, Alert } from "@mui/material"
 import { CircularProgress } from "@mui/material"
-import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material"
-import { useTournamentContext } from "../../context/TournamentContext"
+import { useTournamentContext } from "../../../context/TournamentContext"
 import DragIndicatorIcon from "@mui/icons-material/DragIndicator"
 import { useFetcher } from "react-router-dom"
-import { addParticipant } from "../../api/tournament"
+import { addParticipant, updateParticipant } from "../../../api/tournament"
 
 export function TournamentParticipants() {
   const fetcher = useFetcher()
@@ -14,7 +15,7 @@ export function TournamentParticipants() {
   const isPending = tournamentData.status === "pending"
   const [openSnackbar, setOpenSnackbar] = useState(false)
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (fetcher.data?.error) {
       setOpenSnackbar(true)
     }
@@ -38,41 +39,12 @@ export function TournamentParticipants() {
       </Snackbar>
       <Box>
         {tournamentData.participants.map((participant, index) => (
-          <Box
+          <ParticipantListItem
             key={participant.id}
-            sx={{
-              display: "flex",
-              justifyContent: "space-between",
-              boxShadow: 2,
-              borderRadius: 1,
-              mb: 1,
-              p: 2,
-            }}
-          >
-            <Box sx={{ display: "flex", gap: 4 }}>
-              <Box>{index + 1}</Box>
-              <Box>
-                <DragIndicatorIcon />
-              </Box>
-              <Typography>{participant.name}</Typography>
-            </Box>
-            <Box sx={{ display: "flex", fontSize: 12, gap: 2 }}>
-              <IconButton
-                size="small"
-                sx={{ padding: 0 }}
-                disabled={!isPending}
-              >
-                <EditIcon fontSize="inherit" />
-              </IconButton>
-              <IconButton
-                size="small"
-                sx={{ padding: 0 }}
-                disabled={!isPending}
-              >
-                <DeleteIcon fontSize="inherit" />
-              </IconButton>
-            </Box>
-          </Box>
+            participant={participant}
+            index={index}
+            isPending={isPending}
+          />
         ))}
       </Box>
       {isPending && (
@@ -104,6 +76,8 @@ export function TournamentParticipants() {
                 sx={{ width: 100 }}
                 type="submit"
                 disabled={fetcher.state === "submitting"}
+                name="intent"
+                value="add"
               >
                 Add
               </Button>
@@ -117,14 +91,30 @@ export function TournamentParticipants() {
 
 export async function action({ request, params }) {
   const formData = await request.formData()
-  const name = formData.get("name")
+  const intent = formData.get("intent")
   const tournamentId = params.id
-  try {
-    await addParticipant(tournamentId, [name])
+  if (intent === "add") {
+    const name = formData.get("name")
+    try {
+      await addParticipant(tournamentId, [name])
+      return null
+    } catch (error) {
+      if (error.response?.data?.message)
+        return { error: error.response.data.message }
+      else throw error
+    }
+  } else if (intent === "edit") {
+    try {
+      const participantId = formData.get("participant_id")
+      const updatedName = formData.get("updated_name")
+      await updateParticipant(tournamentId, participantId, updatedName)
+      return null
+    } catch (error) {
+      if (error.response?.data?.message)
+        return { error: error.response.data.message }
+      else throw error
+    }
+  } else if (intent === "delete") {
     return null
-  } catch (error) {
-    if (error.response?.data?.message)
-      return { error: error.response.data.message }
-    else throw error
   }
 }
