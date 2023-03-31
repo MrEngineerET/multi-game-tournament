@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import {
   Form,
   defer,
@@ -6,7 +6,15 @@ import {
   useNavigate,
   useNavigation,
 } from "react-router-dom"
-import { Box, Container, Stack, Typography, Button } from "@mui/material"
+import {
+  Box,
+  Container,
+  Stack,
+  Typography,
+  Button,
+  Snackbar,
+  Alert,
+} from "@mui/material"
 import { BasicInfo } from "../components/Tournament/CreateTournament/BasicInfo"
 import { GameInfo } from "../components/Tournament/CreateTournament/GameInfo"
 import { createTournament } from "../api/tournament"
@@ -30,15 +38,29 @@ export function CreateTournament() {
   const navigate = useNavigate()
   const navigation = useNavigation()
   const actionData = useActionData()
+  const [openSnackbar, setOpenSnackbar] = useState(false)
 
   React.useEffect(() => {
     if (actionData?.redirectURL) {
       navigate(actionData.redirectURL, { replace: true })
     }
+    if (actionData?.error) {
+      setOpenSnackbar(true)
+    }
   }, [actionData])
 
   return (
     <Box>
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => {
+          setOpenSnackbar(false)
+        }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="error">{actionData?.error}</Alert>
+      </Snackbar>
       <Box sx={styles.bannerWrapper}>
         <Container sx={styles.banner}>
           <Typography variant="h3" component="h1">
@@ -81,15 +103,21 @@ export async function action({ request }) {
   })
   participants = participants.filter((p) => p)
   let selectedGames = JSON.parse(formData.get("selected_games"))
-  const tournament = await createTournament({
-    name,
-    description,
-    participants,
-    stageType,
-    games: selectedGames.map((g) => ({ gameId: g._id, count: g.count })),
-  })
 
-  return { redirectURL: `/tournament/${tournament._id}` }
+  try {
+    const tournament = await createTournament({
+      name,
+      description,
+      participants,
+      stageType,
+      games: selectedGames.map((g) => ({ gameId: g._id, count: g.count })),
+    })
+    return { redirectURL: `/tournament/${tournament._id}` }
+  } catch (error) {
+    if (error.response?.data?.message)
+      return { error: error.response.data.message }
+    else throw error
+  }
 }
 
 export async function loader() {

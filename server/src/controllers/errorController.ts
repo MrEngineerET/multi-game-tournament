@@ -19,7 +19,7 @@ export const errorHandler = (
     res.status(500).send({
       error: error ? error.message : null,
       request: req ? req.url : null,
-      message: "Something went wrong",
+      message: error.message || "Something went wrong",
     })
 }
 

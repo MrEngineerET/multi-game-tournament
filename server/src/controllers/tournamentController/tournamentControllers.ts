@@ -71,12 +71,18 @@ const createTournament = async (
       name,
       stageType,
       description,
-      participants,
       consolationFinal = true,
       grandFinal = "double",
       seedOrdering = ["natural"],
       games = [],
     } = req.body
+    let participants = req.body.participants
+    participants = helpers.balanceByes(participants)
+    try {
+      helpers.ensureNoDuplicates(participants)
+    } catch (error) {
+      throw { statusCode: 400, message: error.message }
+    }
 
     const tournament = new Tournament({
       _id: Date.now(),
@@ -94,7 +100,7 @@ const createTournament = async (
       tournamentId: tournament._id,
       name,
       type: stageType,
-      seeding: helpers.balanceByes(participants),
+      seeding: participants,
       settings: {
         consolationFinal,
         seedOrdering,
