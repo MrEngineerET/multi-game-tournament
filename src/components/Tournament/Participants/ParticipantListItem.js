@@ -86,7 +86,7 @@ export function ParticipantListItem({ participant, index, isPending }) {
               sx={{
                 display: "flex",
                 gap: 5,
-                width: 0.6,
+                width: { xs: 1, sm: 0.8 },
                 mt: 4,
                 pb: 3,
                 pl: 10,
@@ -113,6 +113,7 @@ export function ParticipantListItem({ participant, index, isPending }) {
                 disabled={fetcher.state === "submitting" || !isPending}
                 name="intent"
                 value="edit"
+                size="small"
               >
                 Save
               </Button>
