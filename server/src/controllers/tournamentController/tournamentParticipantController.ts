@@ -60,7 +60,32 @@ async function updateParticipant(
   next: NextFunction,
 ) {
   try {
-    res.send("update participant")
+    const newName = req.body.name
+    const { tournamentId, participantId } = req.params
+    const tournament = await Tournament.findById(tournamentId)
+    const participants = tournament.participant
+    const participant = participants.find((p) => p.id == Number(participantId))
+    if (!participant) {
+      throw {
+        statusCode: 400,
+        message: "Participant not found",
+      }
+    }
+    const otherParticipant = participants.find(
+      (p) => p.id !== Number(participantId) && p.name === newName,
+    )
+    if (otherParticipant) {
+      throw {
+        statusCode: 400,
+        message: "Participant name already exists",
+      }
+    }
+    await Tournament.findByIdAndUpdate(tournamentId, {
+      $set: {
+        [`participant.${participantId}.name`]: name,
+      },
+    })
+    res.status(200).send()
   } catch (error) {
     next(error)
   }
