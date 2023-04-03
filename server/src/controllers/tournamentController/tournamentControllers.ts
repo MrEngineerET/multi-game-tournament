@@ -1,7 +1,7 @@
 import { BracketsManager, helpers } from "brackets-manager"
 import { InputStage } from "brackets-model"
 import { Request, Response, NextFunction } from "express"
-import { Tournament } from "../../model/tournament"
+import { Tournament, TournamentType } from "../../model/tournament"
 import { Game } from "../../model/game"
 import { MyDB } from "../../utils/MyDB"
 import { GameManagement } from "../../utils/GameManagement"
@@ -33,6 +33,13 @@ const updateTournament = async (
     if (req.body.match) {
       updatedTournament = await updateTournamentMatch(tournamentId, match)
     }
+    const { stageType } = req.body
+    if (req.body.stageType) {
+      updatedTournament = await updateTournamentStageType(
+        tournamentId,
+        stageType,
+      )
+    }
     if (name || description || status) {
       const updateData = { name, description, status }
       updatedTournament = await Tournament.findByIdAndUpdate(
@@ -52,13 +59,62 @@ const updateTournament = async (
     next(error)
   }
 }
-async function updateTournamentMatch(tournamentId, match) {
+async function updateTournamentMatch(
+  tournamentId,
+  match,
+): Promise<TournamentType> {
   const myDB = await MyDB.build(tournamentId)
   const manager = new BracketsManager(myDB)
   await manager.update.match(match)
   const updatedTournament = await Tournament.findById(tournamentId)
   const gameManagement = new GameManagement(updatedTournament)
   await gameManagement.addGameToMatches()
+  return updatedTournament
+}
+
+async function updateTournamentStageType(
+  tournamentId,
+  stageType,
+): Promise<TournamentType> {
+  // get the tournamnent and check if the new StageType is different from the current one
+  const tournament = await Tournament.findById(tournamentId)
+  if (!tournament) throw new Error("Invalid tournament id")
+
+  if (tournament.stage[0].type === stageType) return tournament
+  // get all the participant
+  const participants = tournament.participant.map((p) => p.name)
+  // get the current stage Setting and update the stage type with the new one
+  const inputStage: InputStage = {
+    tournamentId: Number(tournamentId),
+    name: tournament.name,
+    type: stageType,
+    settings: tournament.stage[0].settings,
+    seeding: participants,
+  }
+  // delete match, stage, round, ground, match-game, participantGameMatrix,
+  await Tournament.updateOne(
+    { _id: tournamentId },
+    {
+      $unset: {
+        stage: "",
+        round: "",
+        group: "",
+        match: "",
+        match_game: " ",
+        participant: "",
+        participantGameMatrix: "",
+      },
+    },
+  )
+  // create a new stage with the new stage type
+  const myDB = await MyDB.build(tournamentId)
+  const manager = await new BracketsManager(myDB)
+  await manager.create(inputStage)
+  let updatedTournament = await Tournament.findById(tournamentId)
+  // run the game management to add the game to the match
+  const gameManagement = new GameManagement(updatedTournament)
+  await gameManagement.addGameToMatches()
+  updatedTournament = await Tournament.findById(tournamentId)
   return updatedTournament
 }
 
@@ -98,7 +154,7 @@ const createTournament = async (
     const manager = new BracketsManager(myDB)
 
     const inputStage: InputStage = {
-      tournamentId: tournament._id,
+      tournamentId: Number(tournament._id),
       name,
       type: stageType,
       seeding: participants,
