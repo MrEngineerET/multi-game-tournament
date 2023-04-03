@@ -152,7 +152,23 @@ const darkModeTheme = {
 
 const commonTheme = {
   spacing: 4,
-  typography: {},
+  typography: {
+    body1: {
+      "@media (max-width:600px)": {
+        fontSize: "0.94rem",
+      },
+    },
+    htmlFontSize: 16,
+    fontFamily: [
+      "Poppins",
+      "-apple-system",
+      "system-ui",
+      "BlinkMacSystemFont",
+      "Segoe UI",
+      "Helvetica Neue",
+      "Arial",
+    ].join(","),
+  },
   components: {
     MuiButton: {
       defaultProps: {
@@ -180,19 +196,10 @@ export function getTheme(themeMode) {
 }
 
 function createTheme(themeMode = "light") {
-  // const tt = muiCreateTheme({
-  //   components: {
-  //     MuiTableRow: {
-  //       styleOverrides: {
-  //         hover: {
-  //           background: "#EFF8FD",
-  //         },
-  //         selected: {
-  //           background: "#EFF8FD",
-  //         },
-  //       },
-  //     },
-  //   },
+  // const falf = muiCreateTheme({
+  //   typography: {
+  //     fontFamily: ["Noto Sans KR", "sans-serif"].join(","),
+  //   }
   // })
   const theme = muiCreateTheme(
     deepmerge(
@@ -200,5 +207,22 @@ function createTheme(themeMode = "light") {
       themeMode === "dark" ? darkModeTheme : lightModeTheme,
     ),
   )
-  return responsiveFontSizes(theme, { factor: 2 })
+  return responsiveFontSizes(theme, {
+    factor: 2,
+    breakpoints: ["xs", "sm", "md", "lg", "xl"],
+    variants: [
+      "h1",
+      "h2",
+      "h3",
+      "h4",
+      "h5",
+      "h6",
+      "subtitle1",
+      "subtitle2",
+      "body1",
+      "body2",
+      "caption",
+      "button",
+    ],
+  })
 }
