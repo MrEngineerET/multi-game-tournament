@@ -19,9 +19,11 @@ export function TournamentStatus() {
     tournamentData.participants.length < 2 &&
     stage
 
+  const isBracketPage = location.pathname.trim().match(/tournament\/\d+$/)
+
   return (
     <Box>
-      {isReadyToStart && (
+      {isReadyToStart && isBracketPage && (
         <>
           <Alert severity="info" sx={{ mb: 5 }}>
             <AlertTitle>Info</AlertTitle>
@@ -68,18 +70,22 @@ export function TournamentStatus() {
           </Alert>
         </Box>
       )}
-      {isReadyToStart ? (
-        <Alert severity="info" sx={{ mb: 5 }}>
-          This bracket is a preview and subject to change until the tournament
-          is started.
-        </Alert>
-      ) : showAddParticipantInfo ? (
-        <Alert severity="warning" sx={{ mt: 5 }}>
-          A bracket preview will be displayed once 2 or more participants are
-          registered.
-        </Alert>
-      ) : (
-        ""
+      {isBracketPage && (
+        <>
+          {isReadyToStart ? (
+            <Alert severity="info" sx={{ mb: 5 }}>
+              This bracket is a preview and subject to change until the
+              tournament is started.
+            </Alert>
+          ) : showAddParticipantInfo ? (
+            <Alert severity="warning" sx={{ mt: 5 }}>
+              A bracket preview will be displayed once 2 or more participants
+              are registered.
+            </Alert>
+          ) : (
+            ""
+          )}
+        </>
       )}
     </Box>
   )

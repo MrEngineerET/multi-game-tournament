@@ -24,6 +24,7 @@ export function TournamentList() {
           sx={{
             display: "flex",
             justifyContent: "space-between",
+            mb: 3,
           }}
         >
           <Typography variant="h6">Tournaments</Typography>

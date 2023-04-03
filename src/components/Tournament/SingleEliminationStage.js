@@ -15,7 +15,7 @@ export function SingleEliminationStage({ stage }) {
     <>
       <SingleEliminationGroup group={mainGroup} />
       {consolationFinalMatch && (
-        <Box sx={{ display: "inline-block", mt: 20 }}>
+        <Box sx={{ display: "inline-block", mt: { xs: 10, md: 15 } }}>
           <Box
             sx={{
               display: "flex",
