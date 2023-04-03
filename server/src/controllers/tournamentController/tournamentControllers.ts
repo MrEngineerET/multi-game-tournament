@@ -192,8 +192,7 @@ const getTournament = async (
     const tournament = await Tournament.findById(tournamentId).populate({
       path: "game.gameId",
     })
-    if (!tournament)
-      return res.send({ status: "Failed", message: "Invalid tournament id" })
+    if (!tournament) throw { statusCode: 404, message: "Invalid tournament id" }
 
     res.status(200).send({ status: "success", data: tournament })
   } catch (error) {
