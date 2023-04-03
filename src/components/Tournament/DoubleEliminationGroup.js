@@ -17,6 +17,7 @@ export function DoubleEliminationGroup({
   isLoserGroup = false,
   isGrandFinalGroup = false,
 }) {
+  // console.log("idid", "group", group)
   let rounds = group.rounds
   if (isGrandFinalGroup) {
     const roundOneWinner = rounds[0].matches[0].opponent1

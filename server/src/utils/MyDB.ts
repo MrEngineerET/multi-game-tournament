@@ -25,7 +25,6 @@ export class MyDB implements CrudInterface {
     this.tournament = tournament
   }
   static async build(tournamentId: number) {
-    console.log("tournament id", tournamentId)
     const tournament = await Tournament.findById(Number(tournamentId))
     if (!tournament) {
       throw new Error("Invalid Tournament Id")
@@ -64,9 +63,9 @@ export class MyDB implements CrudInterface {
     table: T,
     arg: OmitId<DataTypes[T]> | OmitId<DataTypes[T]>[],
   ): Promise<number | boolean> {
-    console.log("running INSERT ====>")
-    console.log("table", table)
-    console.log("arg", arg)
+    // console.log("running INSERT ====>")
+    // console.log("table", table)
+    // console.log("arg", arg)
 
     let lastIndex = this.tournament[table].length - 1
     if (!Array.isArray(arg)) {
@@ -140,9 +139,9 @@ export class MyDB implements CrudInterface {
     table: T,
     arg?: number | Partial<DataTypes[T]>,
   ): Promise<DataTypes[T] | Array<DataTypes[T]> | null> {
-    console.log("running SELECT ====>")
-    console.log("table", table)
-    console.log("arg", arg)
+    // console.log("running SELECT ====>")
+    // console.log("table", table)
+    // console.log("arg", arg)
     try {
       if (arg === undefined) {
         const res = this.tournament[table]
@@ -204,10 +203,10 @@ export class MyDB implements CrudInterface {
     arg: number | Partial<DataTypes[T]>,
     value: DataTypes[T] | Partial<DataTypes[T]>,
   ): Promise<boolean> {
-    console.log("running UPDATE ====>")
-    console.log("table", table)
-    console.log("arg", arg)
-    console.log("value", value)
+    // console.log("running UPDATE ====>")
+    // console.log("table", table)
+    // console.log("arg", arg)
+    // console.log("value", value)
     if (typeof arg === "number") {
       try {
         // update the value and return true or false based on the succeess
@@ -271,9 +270,9 @@ export class MyDB implements CrudInterface {
     table: Table,
     filter?: Partial<DataTypes[T]>,
   ): Promise<boolean> {
-    console.log("running DELETE ====>")
-    console.log("table", table)
-    console.log("filter", filter)
+    // console.log("running DELETE ====>")
+    // console.log("table", table)
+    // console.log("filter", filter)
 
     if (!filter) {
       // delete all the data

@@ -1,4 +1,5 @@
 import { BracketsManager, helpers } from "brackets-manager"
+import { InputStage } from "brackets-model"
 import { Request, Response, NextFunction } from "express"
 import { Tournament } from "../../model/tournament"
 import { Game } from "../../model/game"
@@ -96,17 +97,23 @@ const createTournament = async (
 
     const manager = new BracketsManager(myDB)
 
-    await manager.create({
+    const inputStage: InputStage = {
       tournamentId: tournament._id,
       name,
       type: stageType,
       seeding: participants,
       settings: {
-        consolationFinal,
         seedOrdering,
-        grandFinal,
       },
-    })
+    }
+    if (stageType === "double_elimination") {
+      inputStage.settings.grandFinal = grandFinal
+    } else if (stageType === "single_elimination") {
+      if (participants.length > 2)
+        inputStage.settings.consolationFinal = consolationFinal
+    }
+
+    await manager.create(inputStage)
     const tournamentData = await Tournament.findById(tournament._id)
     const gameManagement = new GameManagement(tournamentData)
     await gameManagement.addGameToMatches()

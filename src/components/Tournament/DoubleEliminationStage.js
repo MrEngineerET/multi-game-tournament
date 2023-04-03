@@ -25,9 +25,11 @@ export function DoubleEliminationStage({ stage }) {
           <DoubleEliminationGroup group={grandFinalRound} isGrandFinalGroup />
         )}
       </Box>
-      <Box sx={{ minWidth: "100%", overflow: "scroll" }}>
-        <DoubleEliminationGroup group={loserGroup} isLoserGroup />
-      </Box>
+      {loserGroup && (
+        <Box sx={{ minWidth: "100%", overflow: "scroll" }}>
+          <DoubleEliminationGroup group={loserGroup} isLoserGroup />
+        </Box>
+      )}
       {isSmallScreen && grandFinalRound && (
         <Box sx={{ minWidth: "100%", overflow: "scroll" }}>
           <DoubleEliminationGroup group={grandFinalRound} isGrandFinalGroup />
