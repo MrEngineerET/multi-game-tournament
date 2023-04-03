@@ -6,6 +6,7 @@ import {
   MenuItem,
   TextField,
   useMediaQuery,
+  Button,
 } from "@mui/material"
 import { FormControl, InputLabel, Select, OutlinedInput } from "@mui/material"
 import { Card, CardContent, CardHeader, Skeleton } from "@mui/material"
@@ -15,7 +16,7 @@ import { useTheme } from "@mui/material/styles"
 import PropTypes from "prop-types"
 import { useLoaderData, Await } from "react-router-dom"
 
-export function GameInfo() {
+export function GameInfo({ showSaveButton = false }) {
   const { games } = useLoaderData()
   return (
     <Card elevation={3}>
@@ -23,12 +24,34 @@ export function GameInfo() {
       <CardContent>
         <React.Suspense fallback={<Skeleton animation="wave" height="5rem" />}>
           <Await resolve={games}>
-            {(games) => <GameInfoContent games={games} />}
+            {(games) => (
+              <>
+                <GameInfoContent games={games} />
+                {showSaveButton && (
+                  <Box
+                    sx={{ display: "flex", justifyContent: "flex-end", pt: 5 }}
+                  >
+                    <Button
+                      type="submit"
+                      name="intent"
+                      value="edit_game"
+                      sx={{ width: { xs: 100, md: 150 } }}
+                    >
+                      Save
+                    </Button>
+                  </Box>
+                )}
+              </>
+            )}
           </Await>
         </React.Suspense>
       </CardContent>
     </Card>
   )
+}
+
+GameInfo.propTypes = {
+  showSaveButton: PropTypes.bool,
 }
 
 const ITEM_HEIGHT = 48

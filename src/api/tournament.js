@@ -38,7 +38,7 @@ export async function getTournament(id) {
 /**
  *
  * @param {string} tournamentId
- * @param {object} data - {match?, participant?, name?, description?, status?}
+ * @param {object} data - {match?, participant?, name?, description?, status?, stageType?}
  */
 export async function updateTournament(tournamentId, updateData) {
   const { data: tournament } = (
