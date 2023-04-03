@@ -31,7 +31,10 @@ import {
   TournamentParticipants,
   action as addParticipantAction,
 } from "../components/Tournament/Participants/TournamentParticipants"
-import { TournamentSettings } from "../components/Tournament/TournamentSettings"
+import {
+  TournamentSettings,
+  action as updateTournamentAction,
+} from "../components/Tournament/TournamentSettings"
 import {
   archiveTemplateAction,
   deleteTemplateAction,
@@ -79,6 +82,8 @@ export const routes = (
           <Route
             path="settings"
             element={<TournamentSettings />}
+            loader={createTournamentLoader}
+            action={updateTournamentAction}
             errorElement={<ErrorPage />}
           ></Route>
         </Route>

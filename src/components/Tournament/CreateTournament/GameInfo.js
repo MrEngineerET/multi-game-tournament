@@ -28,15 +28,8 @@ export function GameInfo({ showSaveButton = false }) {
               <>
                 <GameInfoContent games={games} />
                 {showSaveButton && (
-                  <Box
-                    sx={{ display: "flex", justifyContent: "flex-end", pt: 5 }}
-                  >
-                    <Button
-                      type="submit"
-                      name="intent"
-                      value="edit_game"
-                      sx={{ width: { xs: 100, md: 150 } }}
-                    >
+                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+                    <Button type="submit" name="intent" value="edit_game">
                       Save
                     </Button>
                   </Box>
