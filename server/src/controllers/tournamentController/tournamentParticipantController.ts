@@ -3,6 +3,7 @@ import { BracketsManager, helpers } from "brackets-manager"
 import { InputStage, Seeding } from "brackets-model"
 import { MyDB } from "../../utils/MyDB"
 import { Tournament } from "../../model/tournament"
+import { GameManagement } from "../../utils/GameManagement"
 
 async function addParticipant(req: Request, res: Response, next: NextFunction) {
   try {
@@ -49,6 +50,9 @@ async function addParticipant(req: Request, res: Response, next: NextFunction) {
     manager = await new BracketsManager(myDB)
     await manager.create(inputStage)
     const updatedTournament = await Tournament.findById(tournamentId)
+    const gameManagement = new GameManagement(updatedTournament)
+    await gameManagement.addGameToMatches()
+
     res.status(200).send(updatedTournament)
   } catch (error) {
     next(error)
@@ -149,7 +153,10 @@ async function deleteParticipant(
     myDB = await MyDB.build(Number(tournamentId))
     manager = await new BracketsManager(myDB)
     await manager.create(inputStage)
+
     const updatedTournament = await Tournament.findById(tournamentId)
+    const gameManagement = new GameManagement(updatedTournament)
+    await gameManagement.addGameToMatches()
     res.status(200).send(updatedTournament)
   } catch (error) {
     next(error)
