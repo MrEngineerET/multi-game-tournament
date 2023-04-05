@@ -12,7 +12,12 @@ import { CircularProgress } from "@mui/material"
 import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material"
 import { useFetcher } from "react-router-dom"
 
-export function ParticipantListItem({ participant, index, isPending }) {
+export function ParticipantListItem({
+  participant,
+  index,
+  isPending,
+  openDeleteDialog,
+}) {
   const fetcher = useFetcher()
   const [openNameEditor, setOpenNameEditor] = useState(false)
   useEffect(() => {
@@ -35,7 +40,6 @@ export function ParticipantListItem({ participant, index, isPending }) {
         sx={{
           display: "flex",
           justifyContent: "space-between",
-
           pt: 2,
           pb: 2,
         }}
@@ -49,33 +53,24 @@ export function ParticipantListItem({ participant, index, isPending }) {
             {participant.name}
           </Typography>
         </Box>
-        <Box sx={{ display: "flex" }}>
+        <Box sx={{ display: "flex", pr: 3 }}>
           <IconButton
             size="small"
-            sx={{ padding: 0, width: 40 }}
             onClick={() => setOpenNameEditor((prev) => !prev)}
           >
             <EditIcon fontSize="inherit" />
           </IconButton>
 
-          <fetcher.Form method="post">
-            <input
-              name="participant_id"
-              value={participant.id}
-              hidden
-              readOnly
-            />
-            <IconButton
-              size="small"
-              sx={{ padding: 0, width: 40 }}
-              disabled={!isPending}
-              type="submit"
-              name="intent"
-              value="delete"
-            >
-              <DeleteIcon fontSize="inherit" />
-            </IconButton>
-          </fetcher.Form>
+          <IconButton
+            size="small"
+            disabled={!isPending}
+            type="submit"
+            name="intent"
+            value="delete"
+            onClick={() => openDeleteDialog(participant.id)}
+          >
+            <DeleteIcon fontSize="inherit" />
+          </IconButton>
         </Box>
       </Box>
       {openNameEditor && (
@@ -139,4 +134,5 @@ ParticipantListItem.propTypes = {
   participant: PropTypes.object.isRequired,
   index: PropTypes.number.isRequired,
   isPending: PropTypes.bool.isRequired,
+  openDeleteDialog: PropTypes.func.isRequired,
 }

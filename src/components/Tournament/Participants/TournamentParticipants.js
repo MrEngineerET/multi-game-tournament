@@ -1,19 +1,35 @@
-/* eslint-disable no-unused-vars */
 import React, { useState, useEffect } from "react"
 import { ParticipantListItem } from "./ParticipantListItem"
-import { Box, TextField, Button } from "@mui/material"
+import {
+  Box,
+  TextField,
+  Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Typography,
+} from "@mui/material"
 import { Snackbar, Alert } from "@mui/material"
 import { CircularProgress } from "@mui/material"
 import { useTournamentContext } from "../../../context/TournamentContext"
-import DragIndicatorIcon from "@mui/icons-material/DragIndicator"
+// import DragIndicatorIcon from "@mui/icons-material/DragIndicator"
 import { useFetcher } from "react-router-dom"
-import { addParticipant, updateParticipant } from "../../../api/tournament"
+import {
+  addParticipant,
+  updateParticipant,
+  removeParticipant,
+} from "../../../api/tournament"
 
 export function TournamentParticipants() {
   const fetcher = useFetcher()
   const { tournamentData } = useTournamentContext()
   const isPending = tournamentData.status === "pending"
   const [openSnackbar, setOpenSnackbar] = useState(false)
+  const [openDeleteDialog, setOpenDeleteDialog] = useState({
+    status: false,
+    participantId: null,
+  })
 
   useEffect(() => {
     if (fetcher.data?.error) {
@@ -21,6 +37,19 @@ export function TournamentParticipants() {
     }
   }, [fetcher.data])
 
+  useEffect(() => {
+    if (fetcher.state === "loading") {
+      // this means it has successfully submitted
+      setOpenDeleteDialog({ status: false, participantId: null })
+    }
+  }, [fetcher.state])
+
+  const handleCloseDialog = () => {
+    setOpenDeleteDialog({ status: false, participantId: null })
+  }
+  const openDialog = (id) => {
+    setOpenDeleteDialog({ status: true, participantId: id })
+  }
   if (!tournamentData.stages[0]) return ""
   return (
     <Box
@@ -44,6 +73,7 @@ export function TournamentParticipants() {
             participant={participant}
             index={index}
             isPending={isPending}
+            openDeleteDialog={openDialog}
           />
         ))}
       </Box>
@@ -85,6 +115,32 @@ export function TournamentParticipants() {
           </Box>
         </fetcher.Form>
       )}
+      <Dialog open={openDeleteDialog.status} onClose={handleCloseDialog}>
+        <DialogTitle>
+          Are you sure you want to remove the participant?
+        </DialogTitle>
+        <DialogContent sx={{ pb: 10 }}>
+          <Typography>
+            This action will remove the participant from the tournament
+          </Typography>
+        </DialogContent>
+        <DialogActions>
+          <Button color="secondary" onClick={handleCloseDialog} sx={{ mr: 3 }}>
+            Cancel
+          </Button>
+          <fetcher.Form method="post">
+            <input
+              readOnly
+              name="participant_id"
+              value={openDeleteDialog.participantId}
+              hidden
+            />
+            <Button type="submit" name="intent" value="delete">
+              Remove Participant
+            </Button>
+          </fetcher.Form>
+        </DialogActions>
+      </Dialog>
     </Box>
   )
 }
@@ -115,6 +171,8 @@ export async function action({ request, params }) {
       else throw error
     }
   } else if (intent === "delete") {
+    const participantId = formData.get("participant_id")
+    await removeParticipant(tournamentId, participantId)
     return null
   }
 }

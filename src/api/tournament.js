@@ -47,6 +47,10 @@ export async function updateTournament(tournamentId, updateData) {
   return tournament
 }
 
+/**
+ *
+ * @param {string} tournamentId
+ */
 export async function deleteTournament(tournamentId) {
   await axios.delete(`/tournament/${tournamentId}`)
 }
@@ -65,6 +69,10 @@ export async function addParticipant(tournamentId, participants) {
   return tournament
 }
 
+export async function removeParticipant(tournamentId, participantId) {
+  await axios.delete(`/tournament/${tournamentId}/participant/${participantId}`)
+}
+
 /**
  *
  * @param {string} tournamentId
@@ -77,14 +85,31 @@ export async function updateParticipant(tournamentId, participantId, newName) {
   })
 }
 
+/**
+ *
+ * @param {string} tournamentId
+ * @param {sting} gameId
+ * @param {string} count
+ */
 export async function addGameToTouranment(tournamentId, gameId, count) {
   await axios.post(`/tournament/${tournamentId}/game`, { gameId, count })
 }
 
+/**
+ *
+ * @param {string} tournamentId
+ * @param {string} gameId
+ */
 export async function removeGameFromTournament(tournamentId, gameId) {
   await axios.delete(`/tournament/${tournamentId}/game/${gameId}`)
 }
 
+/**
+ *
+ * @param {string} tournamentId
+ * @param {string} gameId
+ * @param {object} update
+ */
 export async function updateGameInTournament(tournamentId, gameId, update) {
   await axios.patch(`/tournament/${tournamentId}/game/${gameId}`, update)
 }
