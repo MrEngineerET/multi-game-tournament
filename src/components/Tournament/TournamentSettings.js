@@ -176,17 +176,23 @@ export async function action({ request, params }) {
       return !updatedGames.find((i) => i.gameId === g._id)
     })
 
-    await Promise.all(
-      deletedGames.map((g) => removeGameFromTournament(tournamentId, g._id)),
-    )
-    await Promise.all(
-      newGames.map((g) => addGameToTouranment(tournamentId, g.gameId, g.count)),
-    )
-    await Promise.all(
-      countUpdatedGames.map((g) =>
-        updateGameInTournament(tournamentId, g.gameId, { count: g.count }),
-      ),
-    )
+    for (let i = 0; i < deletedGames.length; i++) {
+      await removeGameFromTournament(tournamentId, deletedGames[i]._id)
+    }
+
+    for (let i = 0; i < newGames.length; i++) {
+      await addGameToTouranment(
+        tournamentId,
+        newGames[i].gameId,
+        newGames[i].count,
+      )
+    }
+
+    for (let i = 0; i < countUpdatedGames.length; i++) {
+      await updateGameInTournament(tournamentId, countUpdatedGames[i].gameId, {
+        count: countUpdatedGames[i].count,
+      })
+    }
     return { status: "success", intent: "edit_game" }
   }
   return { status: "success" }
