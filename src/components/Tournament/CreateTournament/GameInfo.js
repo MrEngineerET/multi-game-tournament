@@ -16,7 +16,11 @@ import { useTheme } from "@mui/material/styles"
 import PropTypes from "prop-types"
 import { useLoaderData, Await } from "react-router-dom"
 
-export function GameInfo({ showSaveButton = false }) {
+export function GameInfo({
+  showSaveButton = false,
+  selectedGames,
+  submitDisabled,
+}) {
   const { games } = useLoaderData()
   return (
     <Card elevation={3}>
@@ -26,14 +30,12 @@ export function GameInfo({ showSaveButton = false }) {
           <Await resolve={games}>
             {(games) => (
               <>
-                <GameInfoContent games={games} />
-                {showSaveButton && (
-                  <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
-                    <Button type="submit" name="intent" value="edit_game">
-                      Save
-                    </Button>
-                  </Box>
-                )}
+                <GameInfoContent
+                  games={games}
+                  selectedGames={selectedGames}
+                  showSaveButton={showSaveButton}
+                  submitDisabled={submitDisabled}
+                />
               </>
             )}
           </Await>
@@ -45,6 +47,8 @@ export function GameInfo({ showSaveButton = false }) {
 
 GameInfo.propTypes = {
   showSaveButton: PropTypes.bool,
+  selectedGames: PropTypes.arrayOf(PropTypes.object),
+  submitDisabled: PropTypes.bool,
 }
 
 const ITEM_HEIGHT = 48
@@ -66,16 +70,31 @@ function getStyles(game, selectedGames, theme) {
         : theme.typography.fontWeightMedium,
   }
 }
-function GameInfoContent({ games }) {
+function GameInfoContent({
+  games,
+  selectedGames: selectedGamesProp,
+  showSaveButton,
+  submitDisabled,
+}) {
   const theme = useTheme()
-  const [selectedGames, setSelectedGames] = useState([])
-  const [availableGames, setAvailableGames] = useState(games)
+  const [selectedGames, setSelectedGames] = useState(() =>
+    selectedGamesProp ? selectedGamesProp : [],
+  )
+  const [availableGames, setAvailableGames] = useState(() =>
+    getAvailable(games, selectedGamesProp),
+  )
 
-  useEffect(() => {
-    const updatedAvailableGames = availableGames.filter((ag) => {
-      const index = selectedGames.findIndex((v) => v._id === ag._id)
+  function getAvailable(all, selected) {
+    if (!selected || selected?.length === 0) return all
+    const filtered = all.filter((al) => {
+      const index = selected.findIndex((v) => v._id === al._id)
       return index === -1 ? true : false
     })
+    return filtered
+  }
+
+  useEffect(() => {
+    const updatedAvailableGames = getAvailable(availableGames, selectedGames)
     setAvailableGames(updatedAvailableGames)
   }, [games])
 
@@ -102,10 +121,10 @@ function GameInfoContent({ games }) {
     setAvailableGames([game, ...availableGames])
   }
 
-  const handleGameCountUpdate = (game) => {
+  const handleGameCountUpdate = (game, newValue) => {
     setSelectedGames((prev) =>
       prev.map((g) => {
-        if (g._id === game._id) return { ...g, count: g.count + 1 }
+        if (g._id === game._id) return { ...g, count: Number(newValue) }
         return g
       }),
     )
@@ -166,12 +185,33 @@ function GameInfoContent({ games }) {
           onGameCountUpdate={handleGameCountUpdate}
         />
       </Box>
+      {showSaveButton && (
+        <Box sx={{ display: "flex", justifyContent: "flex-end" }}>
+          <TextField
+            sx={{ display: "none" }}
+            name="initial_values"
+            value={JSON.stringify(selectedGamesProp)}
+            readOnly
+          />
+          <Button
+            type="submit"
+            name="intent"
+            value="edit_game"
+            disabled={submitDisabled}
+          >
+            Save
+          </Button>
+        </Box>
+      )}
     </>
   )
 }
 
 GameInfoContent.propTypes = {
   games: PropTypes.array.isRequired,
+  selectedGames: PropTypes.arrayOf(PropTypes.object),
+  showSaveButton: PropTypes.bool,
+  submitDisabled: PropTypes.bool,
 }
 
 function GameListTable({ selectedGames, onDelete, onGameCountUpdate }) {
@@ -206,8 +246,8 @@ function GameListTable({ selectedGames, onDelete, onGameCountUpdate }) {
                 sx={{ width: 80 }}
                 size="small"
                 variant="outlined"
-                onChange={() => {
-                  onGameCountUpdate(game)
+                onChange={(e) => {
+                  onGameCountUpdate(game, e.target.value)
                 }}
               />
             </TableCell>

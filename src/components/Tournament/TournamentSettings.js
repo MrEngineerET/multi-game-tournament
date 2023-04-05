@@ -10,11 +10,16 @@ import {
   Button,
 } from "@mui/material"
 import { useMediaQuery, useTheme } from "@mui/material"
-import { stageType, updateTournament } from "../../api/tournament"
+import {
+  stageType,
+  updateTournament,
+  removeGameFromTournament,
+  addGameToTouranment,
+  updateGameInTournament,
+} from "../../api/tournament"
 import { GameInfo } from "./CreateTournament/GameInfo"
 import { useTournamentContext } from "../../context/TournamentContext"
 import { useFetcher } from "react-router-dom"
-import { sleep } from "../../utils"
 
 export function TournamentSettings() {
   const fetcher = useFetcher()
@@ -114,7 +119,14 @@ export function TournamentSettings() {
         </CardContent>
       </Card>
       <fetcher.Form method="post">
-        <GameInfo showSaveButton />
+        <GameInfo
+          showSaveButton
+          selectedGames={tournamentData.games.map((g) => ({
+            ...g.gameId,
+            count: g.count,
+          }))}
+          submitDisabled={fetcher.state === "submitting"}
+        />
       </fetcher.Form>
       {/* invisible layout Element */}
       <Box
@@ -132,7 +144,6 @@ export async function action({ request, params }) {
   let formData = await request.formData()
   formData = Object.fromEntries(formData)
   if (formData.intent === "edit_basic") {
-    console.log("formData", formData)
     const updates = {}
     if (formData.tournament_name) {
       updates.name = formData.tournament_name
@@ -146,9 +157,36 @@ export async function action({ request, params }) {
     await updateTournament(tournamentId, updates)
     return { status: "success", intent: "edit_basic" }
   } else if (formData.intent === "edit_game") {
-    console.log("formData", JSON.parse(formData.selected_games))
-    console.log("idid", "editing games List")
-    await sleep(2000)
+    const initialSelectedValues = JSON.parse(formData.initial_values)
+    const updatedGames = JSON.parse(formData.selected_games).map((g) => ({
+      gameId: g._id,
+      count: g.count,
+    }))
+
+    const newGames = updatedGames.filter((g) => {
+      return !initialSelectedValues.find((i) => i._id === g.gameId)
+    })
+    const countUpdatedGames = updatedGames.filter((g) => {
+      return initialSelectedValues.find(
+        (i) => i._id === g.gameId && i.count !== g.count,
+      )
+    })
+
+    const deletedGames = initialSelectedValues.filter((g) => {
+      return !updatedGames.find((i) => i.gameId === g._id)
+    })
+
+    await Promise.all(
+      deletedGames.map((g) => removeGameFromTournament(tournamentId, g._id)),
+    )
+    await Promise.all(
+      newGames.map((g) => addGameToTouranment(tournamentId, g.gameId, g.count)),
+    )
+    await Promise.all(
+      countUpdatedGames.map((g) =>
+        updateGameInTournament(tournamentId, g.gameId, { count: g.count }),
+      ),
+    )
     return { status: "success", intent: "edit_game" }
   }
   return { status: "success" }

@@ -76,3 +76,15 @@ export async function updateParticipant(tournamentId, participantId, newName) {
     name: newName,
   })
 }
+
+export async function addGameToTouranment(tournamentId, gameId, count) {
+  await axios.post(`/tournament/${tournamentId}/game`, { gameId, count })
+}
+
+export async function removeGameFromTournament(tournamentId, gameId) {
+  await axios.delete(`/tournament/${tournamentId}/game/${gameId}`)
+}
+
+export async function updateGameInTournament(tournamentId, gameId, update) {
+  await axios.patch(`/tournament/${tournamentId}/game/${gameId}`, update)
+}

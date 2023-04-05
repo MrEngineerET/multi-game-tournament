@@ -222,7 +222,9 @@ const updateTournamentGame = async (
   try {
     const { tournamentId, gameId } = req.params
     const tournament = await Tournament.findById(tournamentId)
-    const game = tournament.game.find((game) => game._id.toString() === gameId)
+    const game = tournament.game.find(
+      (game) => game.gameId._id.toString() === gameId,
+    )
     if (!game) throw { statusCode: 404, message: "game not found" }
     game.count = req.body.count
     await tournament.save()
@@ -279,7 +281,7 @@ const deleteTournamentGame = async (
       throw { statusCode: 404, message: "Tournament not found" }
     }
     const gameIndex = tournament.game.findIndex(
-      (game) => game._id.toString() === gameId,
+      (game) => game.gameId._id.toString() === gameId,
     )
     if (gameIndex === -1) {
       throw { statusCode: 404, message: "Game not found" }
