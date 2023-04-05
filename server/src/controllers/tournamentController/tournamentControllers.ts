@@ -229,6 +229,10 @@ const updateTournamentGame = async (
     game.count = req.body.count
     await tournament.save()
 
+    const tournamentData = await Tournament.findById(tournament._id)
+    const gameManagement = new GameManagement(tournamentData)
+    await gameManagement.addGameToMatches()
+
     const updatedGames = (
       await Tournament.findById(tournamentId)
         .select("game")
@@ -262,10 +266,13 @@ const addTournamentGame = async (
       { new: true, runValidators: true },
     )
     const newGame = tournament.game.find((g) => g.gameId.toString() === gameId)
+    const tournamentData = await Tournament.findById(tournament._id)
+    const gameManagement = new GameManagement(tournamentData)
+    await gameManagement.addGameToMatches()
 
     res.status(201).send({ status: "success", data: newGame })
   } catch (error) {
-    next()
+    next(error)
   }
 }
 
@@ -288,6 +295,9 @@ const deleteTournamentGame = async (
     }
     tournament.game.splice(gameIndex, 1)
     await tournament.save()
+    const tournamentData = await Tournament.findById(tournament._id)
+    const gameManagement = new GameManagement(tournamentData)
+    await gameManagement.addGameToMatches()
     res.status(204).send()
   } catch (error) {
     next(error)

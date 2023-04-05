@@ -1,23 +1,31 @@
-import { TournamentType, Match, Game } from "../model/tournament"
+import {
+  TournamentType,
+  Match,
+  Game,
+  TournamentStatus,
+} from "../model/tournament"
 import { Types } from "mongoose"
-
 import { Status } from "brackets-model"
 
 export class GameManagement {
-  tournament: TournamentType
+  private tournament: TournamentType
 
   constructor(tournament: TournamentType) {
     this.tournament = tournament
   }
 
-  async addGameToMatches(): Promise<void> {
+  public async addGameToMatches(): Promise<void> {
+    if (this.tournament.status === TournamentStatus.pending) {
+      await this.clearGameInMatch()
+      await this.clearParticipantGameMatrix()
+    }
     if (this.tournament.participantGameMatrix.length === 0) {
       await this.generateParticipantGameMatrix()
     }
     await this.assignGames()
   }
 
-  async assignGames(): Promise<void> {
+  private async assignGames(): Promise<void> {
     const eligibleMatches = this.getEligibleMatches()
     const availableGames = this.getAvailableGames()
     const participantGameMatrix = this.tournament.participantGameMatrix
@@ -63,7 +71,7 @@ export class GameManagement {
     }
   }
 
-  getEligibleMatches(): Match[] {
+  private getEligibleMatches(): Match[] {
     const eligibleMatches = this.tournament.match.filter(
       (m) =>
         m.status === Status.Ready && !m.gameId && m.opponent1 && m.opponent2,
@@ -71,7 +79,7 @@ export class GameManagement {
     return eligibleMatches
   }
 
-  getAvailableGames(): Game[] {
+  private getAvailableGames(): Game[] {
     const matches = this.tournament.match
     const availableGames = this.tournament.game.toObject()
     for (let i = 0; i < matches.length; i++) {
@@ -89,7 +97,16 @@ export class GameManagement {
     return availableGames
   }
 
-  async generateParticipantGameMatrix() {
+  private async clearParticipantGameMatrix(): Promise<void> {
+    this.tournament.participantGameMatrix = [] as any
+    await this.tournament.save()
+  }
+  private async clearGameInMatch(): Promise<void> {
+    this.tournament.match.forEach((m) => (m.gameId = null))
+    await this.tournament.save()
+  }
+
+  private async generateParticipantGameMatrix() {
     const participantLength = this.tournament.participant.length
     const gameIds = this.tournament.game.map((g) => g.gameId)
 
