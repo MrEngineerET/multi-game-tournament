@@ -16,12 +16,16 @@ const styles = {
     pl: 5,
     pr: 5,
   },
-  banner: {
+  banner: (theme) => ({
     display: "flex",
     flexDirection: { xs: "column", sm: "row" },
+    [theme.breakpoints.down("sm")]: {
+      maxWidth: "250px",
+      margin: "0 auto",
+    },
     gap: { xs: 3, sm: 10 },
     justifyContent: "space-between",
-  },
+  }),
 }
 
 export function Game() {
@@ -55,6 +59,10 @@ export function Game() {
             <Box
               sx={{
                 width: 280,
+                transition: "box-shadow 0.3s ease-in-out",
+                ":hover": {
+                  boxShadow: 3,
+                },
               }}
               key={game._id}
             >

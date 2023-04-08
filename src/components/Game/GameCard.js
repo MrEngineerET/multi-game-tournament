@@ -24,7 +24,7 @@ export function GameCard({ game }) {
 
   return (
     <Box>
-      <Card elevation={2}>
+      <Card elevation={1}>
         <CardMedia
           sx={{
             height: { xs: 150, sm: 200 },
@@ -43,7 +43,7 @@ export function GameCard({ game }) {
           <Typography
             variant="body2"
             color="text.secondary"
-            sx={{ height: 70, overflow: "scroll" }}
+            sx={{ height: 100, overflow: "scroll" }}
           >
             {game.description}
           </Typography>

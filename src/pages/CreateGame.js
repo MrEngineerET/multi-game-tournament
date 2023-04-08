@@ -22,6 +22,7 @@ const sxStyles = {
     pr: 5,
   },
   content: {
+    p: 5,
     pt: 10,
   },
   fieldName: {
@@ -30,7 +31,6 @@ const sxStyles = {
   },
   fieldInput: {
     flex: 1,
-    maxWidth: 700,
   },
 }
 
@@ -49,46 +49,53 @@ export function CreateGame() {
       <Box sx={sxStyles.content}>
         <Container>
           <Form method="post">
-            <Stack gap={5}>
-              <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
-                <Typography sx={sxStyles.fieldName}>Name</Typography>
-                <TextField
-                  sx={sxStyles.fieldInput}
-                  name="name"
-                  required
-                  autoFocus
-                />
-              </Stack>
-              <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
-                <Typography sx={sxStyles.fieldName}>Description</Typography>
-                <TextField
-                  sx={sxStyles.fieldInput}
-                  name="description"
-                  required
-                  multiline
-                  minRows={3}
-                  maxRows={5}
-                />
-              </Stack>
-              <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
-                <Typography sx={sxStyles.fieldName}>Image</Typography>
-                <TextField sx={sxStyles.fieldInput} name="image" />
-              </Stack>
-              {actionData?.data?.message && (
-                <Alert severity="error">
-                  <AlertTitle>Error</AlertTitle>
-                  {actionData.data.message}
-                </Alert>
-              )}
-              <Box sx={{ mt: 5 }}>
-                <Button
-                  type="submit"
-                  disabled={navigation.state === "submitting"}
+            <Box sx={{ maxWidth: 700 }}>
+              <Stack gap={5}>
+                <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
+                  <TextField
+                    label="Name"
+                    sx={sxStyles.fieldInput}
+                    name="name"
+                    required
+                    autoFocus
+                  />
+                </Stack>
+                <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
+                  <TextField
+                    label="Description"
+                    sx={sxStyles.fieldInput}
+                    name="description"
+                    required
+                    multiline
+                    minRows={4}
+                    maxRows={6}
+                  />
+                </Stack>
+                <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
+                  <TextField
+                    label="Images"
+                    sx={sxStyles.fieldInput}
+                    name="image"
+                  />
+                </Stack>
+                {actionData?.data?.message && (
+                  <Alert severity="error">
+                    <AlertTitle>Error</AlertTitle>
+                    {actionData.data.message}
+                  </Alert>
+                )}
+                <Box
+                  sx={{ mt: 5, display: "flex", justifyContent: "flex-end" }}
                 >
-                  Save and Continue
-                </Button>
-              </Box>
-            </Stack>
+                  <Button
+                    type="submit"
+                    disabled={navigation.state === "submitting"}
+                  >
+                    Save and Continue
+                  </Button>
+                </Box>
+              </Stack>
+            </Box>
           </Form>
         </Container>
       </Box>
