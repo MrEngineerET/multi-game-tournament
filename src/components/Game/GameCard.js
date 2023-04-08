@@ -8,6 +8,7 @@ import {
   Typography,
   Button,
   Box,
+  Skeleton,
 } from "@mui/material"
 import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material"
 import { GameDeleteDialog } from "./GameDeleteDialog"
@@ -88,4 +89,19 @@ GameCard.propTypes = {
     images: PropTypes.arrayOf(PropTypes.string),
     _id: PropTypes.string,
   }),
+}
+
+export function GameCardSkeleton() {
+  return (
+    <Box>
+      <Skeleton variant="rounded" height={200} width={280} />
+      <Skeleton variant="text" sx={{ fontSize: "2rem" }} />
+      <Skeleton variant="text" sx={{ fontSize: "0.875rem" }} />
+      <Skeleton variant="text" sx={{ fontSize: "0.875rem" }} />
+      <Skeleton variant="text" sx={{ fontSize: "0.875rem" }} />
+      <Skeleton variant="text" sx={{ fontSize: "0.875rem" }} />
+      <Skeleton variant="text" sx={{ fontSize: "0.875rem", mb: 3 }} />
+      <Skeleton variant="rounded" height={45} width={280} />
+    </Box>
+  )
 }

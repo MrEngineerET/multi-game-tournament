@@ -1,7 +1,7 @@
 import React from "react"
 import { Container, Typography, Box, Button } from "@mui/material"
-import { GameCard } from "../components/Game/GameCard"
-import { useLoaderData } from "react-router-dom"
+import { GameCard, GameCardSkeleton } from "../components/Game/GameCard"
+import { useLoaderData, defer, Await } from "react-router-dom"
 import { getAllGames } from "../api/game"
 
 const styles = {
@@ -29,7 +29,7 @@ const styles = {
 }
 
 export function Game() {
-  const games = useLoaderData()
+  const { games } = useLoaderData()
   return (
     <Box sx={styles.root}>
       <Box sx={styles.bannerWrapper}>
@@ -54,29 +54,38 @@ export function Game() {
           justifyContent: "center",
         }}
       >
-        {games.map((game) => {
-          return (
-            <Box
-              sx={{
-                width: 280,
-                transition: "box-shadow 0.3s ease-in-out",
-                ":hover": {
-                  boxShadow: 3,
-                },
-              }}
-              key={game._id}
-            >
-              <GameCard game={game} />
-            </Box>
-          )
-        })}
+        <React.Suspense
+          fallback={new Array(3).fill(0).map((el, i) => (
+            <GameCardSkeleton key={i} />
+          ))}
+        >
+          <Await resolve={games}>
+            {(games) =>
+              games.map((game) => (
+                <Box
+                  sx={{
+                    width: 280,
+                    transition: "box-shadow 0.3s ease-in-out",
+                    ":hover": {
+                      boxShadow: 3,
+                    },
+                  }}
+                  key={game._id}
+                >
+                  <GameCard game={game} />
+                </Box>
+              ))
+            }
+          </Await>
+        </React.Suspense>
       </Container>
     </Box>
   )
 }
 
 export async function loader() {
-  return getAllGames()
+  const gamesPromise = getAllGames()
+  return defer({ games: gamesPromise })
 }
 
 //TODO: move all the styling to sxStyles
