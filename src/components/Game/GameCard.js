@@ -101,7 +101,18 @@ export function GameCardSkeleton() {
       <Skeleton variant="text" sx={{ fontSize: "0.875rem" }} />
       <Skeleton variant="text" sx={{ fontSize: "0.875rem" }} />
       <Skeleton variant="text" sx={{ fontSize: "0.875rem", mb: 3 }} />
-      <Skeleton variant="rounded" height={45} width={280} />
+      <Skeleton
+        variant="rounded"
+        height={40}
+        width={75}
+        sx={{ display: "inline-block", mr: 2 }}
+      />
+      <Skeleton
+        variant="rounded"
+        height={40}
+        width={75}
+        sx={{ display: "inline-block" }}
+      />
     </Box>
   )
 }

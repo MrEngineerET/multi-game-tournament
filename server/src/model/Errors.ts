@@ -1,29 +1,32 @@
 import mongoose from "mongoose"
 import { AppError } from "../utils/AppError"
 
-const ErrorSchema = new mongoose.Schema({
-  timeStamp: { type: Date, default: Date.now },
-  message: {
-    type: String,
-    required: true,
+const ErrorSchema = new mongoose.Schema(
+  {
+    timeStamp: { type: Date, default: Date.now },
+    message: {
+      type: String,
+      required: true,
+    },
+    stackTrace: {
+      type: String,
+      required: true,
+    },
+    requestURL: {
+      type: String,
+    },
+    requestMethod: {
+      type: String,
+    },
+    requestPayload: {
+      type: Object,
+    },
+    userID: {
+      type: String,
+    },
   },
-  stackTrace: {
-    type: String,
-    required: true,
-  },
-  requestURL: {
-    type: String,
-  },
-  requestMethod: {
-    type: String,
-  },
-  requestPayload: {
-    type: Object,
-  },
-  userID: {
-    type: String,
-  },
-})
+  { timestamps: true },
+)
 
 export const Error = mongoose.model("Error", ErrorSchema)
 

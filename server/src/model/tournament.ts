@@ -76,112 +76,115 @@ type TournamentModelType = Model<
   TournamentDocumentOverrides
 >
 
-const TournamentSchema = new Schema<ITournament, TournamentModelType>({
-  _id: Number,
-  name: { type: String, required: true },
-  description: String,
-  participant: [
-    {
-      id: Number,
-      tournament_id: Number,
-      name: { type: String, required: true },
-    },
-  ],
-  stage: [
-    {
-      id: { type: Number, default: 0 },
-      tournament_id: {
-        type: Number,
-        default: 0,
-      },
-      name: { type: String, required: true },
-      type: {
-        type: String,
-        enum: [
-          tournamentStageType.singleElimination,
-          tournamentStageType.doubleElimination,
-          tournamentStageType.roundRobin,
-        ],
-        required: true,
-      },
-      number: Number,
-      settings: {
-        consolationFinal: Boolean,
-        seedOrdering: [String],
-        matchesChildCount: Number,
-        size: Number,
-        grandFinal: String,
-        balanceByes: Boolean,
-      },
-    },
-  ],
-  group: [
-    {
-      id: { type: Number, required: true },
-      number: { type: Number, required: true },
-      stage_id: { type: Number, required: true },
-    },
-  ],
-  round: [
-    {
-      id: { type: Number, required: true },
-      number: { type: Number, required: true },
-      group_id: { type: Number, required: true },
-      stage_id: { type: Number, required: true },
-    },
-  ],
-  match: [
-    {
-      id: { type: Number, required: true },
-      number: { type: Number, required: true },
-      group_id: { type: Number, required: true },
-      stage_id: { type: Number, required: true },
-      round_id: { type: Number, required: true },
-      child_count: Number,
-      status: Number,
-      opponent1: {
+const TournamentSchema = new Schema<ITournament, TournamentModelType>(
+  {
+    _id: Number,
+    name: { type: String, required: true },
+    description: String,
+    participant: [
+      {
         id: Number,
-        position: Number,
-        score: Number,
-        result: { type: String, enum: ["win", "loss"] },
+        tournament_id: Number,
+        name: { type: String, required: true },
       },
-      opponent2: {
-        id: Number,
-        position: Number,
-        score: Number,
-        result: { type: String, enum: ["win", "loss"] },
-      },
-      gameId: {
-        type: Schema.Types.ObjectId,
-        ref: Game,
-        default: null,
-      },
-    },
-  ],
-  match_game: [],
-  game: [
-    {
-      gameId: {
-        type: Schema.Types.ObjectId,
-        ref: Game,
-        required: true,
-      },
-      count: { type: Number, default: 1 },
-    },
-  ],
-  participantGameMatrix: [
-    {
-      participantId: Number,
-      games: [
-        {
-          gameId: Schema.Types.ObjectId,
-          count: Number,
+    ],
+    stage: [
+      {
+        id: { type: Number, default: 0 },
+        tournament_id: {
+          type: Number,
+          default: 0,
         },
-      ],
-    },
-  ],
-  status: { type: String, default: TournamentStatus.pending },
-})
+        name: { type: String, required: true },
+        type: {
+          type: String,
+          enum: [
+            tournamentStageType.singleElimination,
+            tournamentStageType.doubleElimination,
+            tournamentStageType.roundRobin,
+          ],
+          required: true,
+        },
+        number: Number,
+        settings: {
+          consolationFinal: Boolean,
+          seedOrdering: [String],
+          matchesChildCount: Number,
+          size: Number,
+          grandFinal: String,
+          balanceByes: Boolean,
+        },
+      },
+    ],
+    group: [
+      {
+        id: { type: Number, required: true },
+        number: { type: Number, required: true },
+        stage_id: { type: Number, required: true },
+      },
+    ],
+    round: [
+      {
+        id: { type: Number, required: true },
+        number: { type: Number, required: true },
+        group_id: { type: Number, required: true },
+        stage_id: { type: Number, required: true },
+      },
+    ],
+    match: [
+      {
+        id: { type: Number, required: true },
+        number: { type: Number, required: true },
+        group_id: { type: Number, required: true },
+        stage_id: { type: Number, required: true },
+        round_id: { type: Number, required: true },
+        child_count: Number,
+        status: Number,
+        opponent1: {
+          id: Number,
+          position: Number,
+          score: Number,
+          result: { type: String, enum: ["win", "loss"] },
+        },
+        opponent2: {
+          id: Number,
+          position: Number,
+          score: Number,
+          result: { type: String, enum: ["win", "loss"] },
+        },
+        gameId: {
+          type: Schema.Types.ObjectId,
+          ref: Game,
+          default: null,
+        },
+      },
+    ],
+    match_game: [],
+    game: [
+      {
+        gameId: {
+          type: Schema.Types.ObjectId,
+          ref: Game,
+          required: true,
+        },
+        count: { type: Number, default: 1 },
+      },
+    ],
+    participantGameMatrix: [
+      {
+        participantId: Number,
+        games: [
+          {
+            gameId: Schema.Types.ObjectId,
+            count: Number,
+          },
+        ],
+      },
+    ],
+    status: { type: String, default: TournamentStatus.pending },
+  },
+  { timestamps: true },
+)
 
 export const Tournament = model<ITournament, TournamentModelType>(
   "tournament",
