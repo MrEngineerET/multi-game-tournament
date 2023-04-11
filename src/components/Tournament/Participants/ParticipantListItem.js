@@ -57,6 +57,7 @@ export function ParticipantListItem({
           <IconButton
             size="small"
             onClick={() => setOpenNameEditor((prev) => !prev)}
+            disabled={!isPending}
           >
             <EditIcon fontSize="inherit" />
           </IconButton>
