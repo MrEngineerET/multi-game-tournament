@@ -19,7 +19,7 @@ import { useLoaderData, Await } from "react-router-dom"
 export function GameInfo({
   showSaveButton = false,
   selectedGames,
-  submitDisabled,
+  disableForm,
 }) {
   const { games } = useLoaderData()
   return (
@@ -34,7 +34,7 @@ export function GameInfo({
                   games={games}
                   selectedGames={selectedGames}
                   showSaveButton={showSaveButton}
-                  submitDisabled={submitDisabled}
+                  disableForm={disableForm}
                 />
               </>
             )}
@@ -48,7 +48,7 @@ export function GameInfo({
 GameInfo.propTypes = {
   showSaveButton: PropTypes.bool,
   selectedGames: PropTypes.arrayOf(PropTypes.object),
-  submitDisabled: PropTypes.bool,
+  disableForm: PropTypes.bool,
 }
 
 const ITEM_HEIGHT = 48
@@ -74,7 +74,7 @@ function GameInfoContent({
   games,
   selectedGames: selectedGamesProp,
   showSaveButton,
-  submitDisabled,
+  disableForm,
 }) {
   const theme = useTheme()
   const [selectedGames, setSelectedGames] = useState(() =>
@@ -131,7 +131,10 @@ function GameInfoContent({
   }
   return (
     <>
-      <FormControl sx={{ width: "100%", mb: { xs: 5, md: 10 } }}>
+      <FormControl
+        sx={{ width: "100%", mb: { xs: 5, md: 10 } }}
+        disabled={disableForm}
+      >
         <InputLabel>Game</InputLabel>
         <Select
           name="selected_games"
@@ -151,6 +154,7 @@ function GameInfoContent({
                     onDelete={() => {
                       handleGameDelete(value)
                     }}
+                    disabled={disableForm}
                     key={value._id}
                     label={value.name}
                   />
@@ -183,6 +187,7 @@ function GameInfoContent({
           onDelete={handleGameDelete}
           selectedGames={selectedGames}
           onGameCountUpdate={handleGameCountUpdate}
+          disableActions={disableForm}
         />
       </Box>
       {showSaveButton && (
@@ -197,7 +202,7 @@ function GameInfoContent({
             type="submit"
             name="intent"
             value="edit_game"
-            disabled={submitDisabled}
+            disabled={disableForm}
           >
             Save
           </Button>
@@ -211,10 +216,15 @@ GameInfoContent.propTypes = {
   games: PropTypes.array.isRequired,
   selectedGames: PropTypes.arrayOf(PropTypes.object),
   showSaveButton: PropTypes.bool,
-  submitDisabled: PropTypes.bool,
+  disableForm: PropTypes.bool,
 }
 
-function GameListTable({ selectedGames, onDelete, onGameCountUpdate }) {
+function GameListTable({
+  selectedGames,
+  onDelete,
+  onGameCountUpdate,
+  disableActions,
+}) {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
@@ -246,13 +256,17 @@ function GameListTable({ selectedGames, onDelete, onGameCountUpdate }) {
                 sx={{ width: 80 }}
                 size="small"
                 variant="outlined"
+                disabled={disableActions}
                 onChange={(e) => {
                   onGameCountUpdate(game, e.target.value)
                 }}
               />
             </TableCell>
             <TableCell align="right">
-              <IconButton onClick={() => onDelete(game)}>
+              <IconButton
+                onClick={() => onDelete(game)}
+                disabled={disableActions}
+              >
                 <DeleteIcon />
               </IconButton>
             </TableCell>
@@ -267,4 +281,5 @@ GameListTable.propTypes = {
   onDelete: PropTypes.func.isRequired,
   selectedGames: PropTypes.array.isRequired,
   onGameCountUpdate: PropTypes.func.isRequired,
+  disableActions: PropTypes.bool,
 }

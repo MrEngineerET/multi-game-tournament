@@ -26,10 +26,10 @@ export function TournamentSettings() {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const { tournamentData } = useTournamentContext()
-  const name = tournamentData.name
-  const description = tournamentData.description
   const selectedStageType = tournamentData.stages[0].type
   const [changeDetected, setChangeDetected] = React.useState(false)
+  const isPending = tournamentData.status === "pending"
+
   React.useEffect(() => {
     if (
       fetcher.data?.status === "success" &&
@@ -61,7 +61,7 @@ export function TournamentSettings() {
                 name="tournament_name"
                 variant="outlined"
                 size={isSmallScreen ? "small" : "normal"}
-                defaultValue={name}
+                defaultValue={tournamentData.name}
                 disabled={fetcher.state === "submitting"}
                 onChange={() => {
                   setChangeDetected(true)
@@ -78,7 +78,7 @@ export function TournamentSettings() {
                 maxRows={5}
                 size={isSmallScreen ? "small" : "normal"}
                 required
-                defaultValue={description}
+                defaultValue={tournamentData.description}
                 disabled={fetcher.state === "submitting"}
                 onChange={() => {
                   setChangeDetected(true)
@@ -92,7 +92,7 @@ export function TournamentSettings() {
                 select
                 defaultValue={selectedStageType}
                 size={isSmallScreen ? "small" : "normal"}
-                disabled={fetcher.state === "submitting"}
+                disabled={fetcher.state === "submitting" || !isPending}
                 onChange={() => {
                   setChangeDetected(true)
                 }}
@@ -126,6 +126,7 @@ export function TournamentSettings() {
             count: g.count,
           }))}
           submitDisabled={fetcher.state === "submitting"}
+          disableForm={fetcher.state === "submitting" || !isPending}
         />
       </fetcher.Form>
       {/* invisible layout Element */}

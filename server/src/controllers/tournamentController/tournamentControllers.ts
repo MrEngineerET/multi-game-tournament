@@ -256,7 +256,11 @@ const addTournamentGame = async (
     const { count, gameId } = req.body
     const game = await Game.findById(gameId)
     if (!game) throw { statusCode: 400, message: "game not found" }
-    const tournament = await Tournament.findByIdAndUpdate(
+    let tournament = await Tournament.findById(tournamentId)
+    if (tournament.status !== "pending") {
+      throw { statusCode: 400, message: "Tournament is not pending status" }
+    }
+    tournament = await Tournament.findByIdAndUpdate(
       tournamentId,
       {
         $push: {
@@ -286,6 +290,9 @@ const deleteTournamentGame = async (
     const tournament = await Tournament.findById(tournamentId)
     if (!tournament) {
       throw { statusCode: 404, message: "Tournament not found" }
+    }
+    if (tournament.status !== "pending") {
+      throw { statusCode: 400, message: "Tournament is not pending status" }
     }
     const gameIndex = tournament.game.findIndex(
       (game) => game.gameId._id.toString() === gameId,
