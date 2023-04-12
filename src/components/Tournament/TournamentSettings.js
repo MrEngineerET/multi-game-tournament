@@ -71,7 +71,7 @@ export function TournamentSettings() {
               <TextField
                 label="Description"
                 fullWidth
-                name="tournament_desc"
+                name="tournament_description"
                 variant="outlined"
                 multiline
                 minRows={3}
@@ -148,7 +148,7 @@ export async function action({ request, params }) {
     if (formData.tournament_name) {
       updates.name = formData.tournament_name
     }
-    if (formData.tournament_desc) {
+    if (formData.tournament_description) {
       updates.description = formData.tournament_description
     }
     if (formData.stage_type) {
