@@ -55,6 +55,21 @@ export function TournamentListTable({ tournaments }) {
   const addOpacity =
     navigation.state === "submitting" || navigation.state === "loading"
 
+  const getTournamentStatus = (tournament) => {
+    console.log(tournament)
+    if (tournament.status === "completed") return "Completed"
+    if (tournament.status === "progress") return "Progress"
+    if (tournament.status === "pending") return "Pending"
+  }
+  const getDate = (rawDate) => {
+    if (!rawDate) return null
+    const date = new Date(rawDate)
+    const day = date.getDate()
+    const month = date.getMonth() + 1
+    const year = date.getFullYear()
+    return `${day}/${month}/${year}`
+  }
+
   return (
     <Box sx={[addOpacity && { opacity: 0.6 }]}>
       <TableToolBar tournamentIds={selected} />
@@ -112,8 +127,12 @@ export function TournamentListTable({ tournaments }) {
                   <TableCell>
                     <Typography>{tournament.name}</Typography>
                   </TableCell>
-                  <TableCell align="right">Created </TableCell>
-                  <TableCell align="right">Progress </TableCell>
+                  <TableCell align="right">
+                    {getDate(tournament.createdAt) ?? "-"}{" "}
+                  </TableCell>
+                  <TableCell align="right">
+                    {getTournamentStatus(tournament)}{" "}
+                  </TableCell>
                   <TableCell align="right">
                     <AvatarGroup
                       max={3}
