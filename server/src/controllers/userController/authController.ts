@@ -46,7 +46,7 @@ const signup = async (req: Request, res: Response, next: NextFunction) => {
       lastName: req.body.lastName,
       email: req.body.email,
       password: req.body.password,
-      passwordConfirm: req.body.passwordConfirm,
+      // passwordConfirm: req.body.passwordConfirm,
       accountStatus: "active",
     })
 
@@ -254,7 +254,7 @@ const resetPassword = async (
       return next(new AppError("Token is invalid or has expired", 400))
     }
     user.password = req.body.password
-    user.passwordConfirm = req.body.passwordConfirm
+    // user.passwordConfirm = req.body.passwordConfirm
     user.passwordResetToken = undefined
     user.passwordResetExpires = undefined
     await user.save()
@@ -287,7 +287,7 @@ const updatePassword = async (
 
     // 3) If so, update password
     user.password = req.body.password
-    user.passwordConfirm = req.body.passwordConfirm
+    // user.passwordConfirm = req.body.passwordConfirm
     await user.save()
     // User.findByIdAndUpdate will NOT work as intended!
 

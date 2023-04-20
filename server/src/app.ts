@@ -3,7 +3,7 @@ import tournamentRouter from "./routes/tournamentRoutes"
 import { globalErrorHandler } from "./controllers/errorController"
 import gameRouter from "./routes/gameRoutes"
 import errorRouter from "./routes/errorRoutes"
-// import userRouter from "./routes/userRoutes"
+import userRouter from "./routes/userRoutes"
 import morgan from "morgan"
 import cors from "cors"
 
@@ -24,7 +24,7 @@ const appRouter = express.Router()
 appRouter.use("/tournament", tournamentRouter)
 appRouter.use("/game", gameRouter)
 appRouter.use("/error", errorRouter)
-// appRouter.use("/user", userRouter)
+appRouter.use("/user", userRouter)
 app.use("/api/v1", appRouter)
 
 // error handler middleware should be the last midleware

@@ -8,7 +8,7 @@ interface IUser {
   lastName?: string
   email: string
   password?: string
-  passwordConfirm?: string
+  // passwordConfirm?: string
   phone?: string
   images?: string[]
   role?: "admin" | "user"
@@ -54,17 +54,17 @@ const userSchema = new Schema<IUser, IUserModel, IUserMethods>(
       minlength: 6,
       select: false,
     },
-    passwordConfirm: {
-      type: String,
-      required: [true, "Please confirm your password"],
-      validate: {
-        // This only works on CREATE and SAVE!!!
-        validator: function (el) {
-          return el === this.password
-        },
-        message: "Passwords are not the same!",
-      },
-    },
+    // passwordConfirm: {
+    //   type: String,
+    //   // required: [true, "Please confirm your password"],
+    //   validate: {
+    //     // This only works on CREATE and SAVE!!!
+    //     validator: function (el) {
+    //       return el === this.password
+    //     },
+    //     message: "Passwords are not the same!",
+    //   },
+    // },
     phone: String,
     images: [String],
     role: {
@@ -98,7 +98,7 @@ userSchema.pre("save", async function (next) {
   this.password = await bcrypt.hash(this.password, 12)
 
   // Delete passwordConfirm field
-  this.passwordConfirm = undefined
+  // this.passwordConfirm = undefined
   next()
 })
 
