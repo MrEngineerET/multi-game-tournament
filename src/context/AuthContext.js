@@ -8,6 +8,7 @@ export const useAuth = () => useContext(authContext)
 
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null)
+  // const [user, setUser] = useState({ firstName: "Biruk" })
 
   const signin = async (newUser) => {
     const user = await auth.signin(newUser)

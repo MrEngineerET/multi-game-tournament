@@ -18,8 +18,8 @@ export function LoggedOutHeader() {
         <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
           Tourney
         </Typography>
-        <Button variant="text" href="/signup">
-          Sign Up
+        <Button variant="text" href="/login" sx={{ textTransform: "none" }}>
+          Login
         </Button>
       </Toolbar>
     </AppBar>

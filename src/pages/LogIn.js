@@ -1,111 +1,138 @@
-import * as React from "react"
-import Avatar from "@mui/material/Avatar"
-import Button from "@mui/material/Button"
-import CssBaseline from "@mui/material/CssBaseline"
-import TextField from "@mui/material/TextField"
-import FormControlLabel from "@mui/material/FormControlLabel"
-import Checkbox from "@mui/material/Checkbox"
-import Link from "@mui/material/Link"
-import Grid from "@mui/material/Grid"
-import Box from "@mui/material/Box"
-import LockOutlinedIcon from "@mui/icons-material/LockOutlined"
-import Typography from "@mui/material/Typography"
-import Container from "@mui/material/Container"
+import React from "react"
+import { Box, Paper, TextField, Typography } from "@mui/material"
+import { Button, Grid } from "@mui/material"
+import { InputAdornment } from "@mui/material"
+import EmailIcon from "@mui/icons-material/Email"
+import LockIcon from "@mui/icons-material/Lock"
+import { Form, useNavigation, Link } from "react-router-dom"
+import { sleep } from "../utils"
 
-function Copyright(props) {
+import { Copyright } from "../components/CopyRight"
+
+export function LogIn() {
+  const navigation = useNavigation()
   return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
+    <Form method="post">
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: {
+            xs: "column-reverse",
+            md: "row",
+          },
+        }}
+      >
+        <Box sx={{ flex: 1, height: "94vh", p: 2 }}>
+          <Typography p={10}>Some info about the company</Typography>
+        </Box>
+        <Box
+          sx={{
+            bgcolor: "#eee",
+            flex: 1,
+            height: "100vh",
+            display: "flex",
+            alignItems: "center",
+            flexDirection: "column",
+            p: 2,
+          }}
+        >
+          {/* layout element start */}
+          <Box
+            sx={{
+              height: "150px",
+            }}
+          />
+          {/* layout element end */}
+          <Paper
+            elevation={3}
+            sx={{
+              p: 5,
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: 4,
+              width: "100%",
+              maxWidth: 400,
+              mb: 4,
+            }}
+          >
+            <Typography variant="h2" sx={{ mb: 3 }}>
+              Welcome
+            </Typography>
+            <TextField
+              variant="outlined"
+              type="email"
+              placeholder="Enter your email"
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EmailIcon />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                bgcolor: "#e7f0fe",
+              }}
+            />
+            <TextField
+              variant="outlined"
+              type="password"
+              placeholder="Enter your password"
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon />
+                  </InputAdornment>
+                ),
+              }}
+              sx={{
+                bgcolor: "#e7f0fe",
+              }}
+            />
+            <Button
+              sx={{
+                maxWidth: 200,
+                mt: 3,
+              }}
+              variant="contained"
+              fullWidth
+              size="large"
+              disabled={navigation.state === "submitting"}
+              type="submit"
+            >
+              Login
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#">
+                  <Typography
+                    variant="body2"
+                    color="primary"
+                    sx={{ textDecoration: "none" }}
+                  >
+                    Forgot Password?
+                  </Typography>
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link to="/signup">
+                  <Typography variant="body2" color="primary">
+                    {"Don't have an account? Sign Up"}
+                  </Typography>
+                </Link>
+              </Grid>
+            </Grid>
+            <Copyright sx={{ mt: 8, mb: 4 }} />
+          </Paper>
+        </Box>
+      </Box>
+    </Form>
   )
 }
 
-export function LogIn() {
-  const handleSubmit = (event) => {
-    event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    })
-  }
-
-  return (
-    <Container component="main" maxWidth="xs">
-      <CssBaseline />
-      <Box
-        sx={{
-          marginTop: 8,
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Avatar sx={{ m: 1, bgcolor: "secondary.main" }}>
-          <LockOutlinedIcon />
-        </Avatar>
-        <Typography component="h1" variant="h2">
-          Log in
-        </Typography>
-        <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            id="email"
-            label="Email Address"
-            name="email"
-            autoComplete="email"
-            autoFocus
-          />
-
-          <TextField
-            margin="normal"
-            required
-            fullWidth
-            name="password"
-            label="Password"
-            type="password"
-            id="password"
-          />
-
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
-          />
-          <Button
-            type="submit"
-            fullWidth
-            variant="contained"
-            sx={{ mt: 3, mb: 2 }}
-          >
-            LogIn
-          </Button>
-          <Grid container>
-            <Grid item xs>
-              <Link href="#" variant="body2">
-                Forgot password?
-              </Link>
-            </Grid>
-            <Grid item>
-              <Link href="/signup" variant="body2">
-                {"Don't have an account? Sign Up"}
-              </Link>
-            </Grid>
-          </Grid>
-        </Box>
-      </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }} />
-    </Container>
-  )
+export const action = async () => {
+  await sleep(2000)
+  return null
 }
