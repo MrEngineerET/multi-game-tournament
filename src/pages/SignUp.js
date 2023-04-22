@@ -1,18 +1,51 @@
-import React from "react"
+import React, { useState, useEffect } from "react"
 import { Box, Paper, TextField, Typography } from "@mui/material"
-import { Button, Grid } from "@mui/material"
+import { Button, Grid, Snackbar, Alert } from "@mui/material"
 import { InputAdornment } from "@mui/material"
 import EmailIcon from "@mui/icons-material/Email"
 import LockIcon from "@mui/icons-material/Lock"
-import { Form, useNavigation, Link } from "react-router-dom"
-import { sleep } from "../utils"
-
+import {
+  Form,
+  useNavigation,
+  Link,
+  useActionData,
+  useNavigate,
+} from "react-router-dom"
+import { auth as authModule } from "../utils/auth"
+import { useAuth } from "../context/AuthContext"
 import { Copyright } from "../components/CopyRight"
+import { setToken } from "../utils/axios"
 
 export function SignUp() {
   const navigation = useNavigation()
+  const [openSnackbar, setOpenSnackbar] = useState(false)
+  const actionData = useActionData()
+  const navigate = useNavigate()
+  const { getIdentity } = useAuth()
+
+  useEffect(() => {
+    if (actionData?.error) {
+      setOpenSnackbar(true)
+    }
+    if (actionData?.res) {
+      setToken(actionData.res.token)
+      getIdentity().then(() => {
+        navigate("/")
+      })
+    }
+  }, [actionData])
   return (
     <Form method="post">
+      <Snackbar
+        open={openSnackbar}
+        autoHideDuration={6000}
+        onClose={() => {
+          setOpenSnackbar(false)
+        }}
+        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+      >
+        <Alert severity="error">{actionData?.error}</Alert>
+      </Snackbar>
       <Box
         sx={{
           display: "flex",
@@ -61,9 +94,32 @@ export function SignUp() {
             </Typography>
             <TextField
               variant="outlined"
+              label="First Name"
+              name="firstName"
+              placeholder="Enter your First name"
+              type="text"
+              fullWidth
+              required
+              defaultValue={"fadsfdds"}
+            />
+            <TextField
+              variant="outlined"
+              label="Last Name"
+              placeholder="Enter your Last name"
+              name="lastName"
+              type="text"
+              fullWidth
+              required
+              defaultValue={"fadsfdds"}
+            />
+
+            <TextField
+              variant="outlined"
               type="email"
+              name="email"
               placeholder="Enter your email"
               fullWidth
+              required
               InputProps={{
                 startAdornment: (
                   <InputAdornment position="start">
@@ -71,13 +127,13 @@ export function SignUp() {
                   </InputAdornment>
                 ),
               }}
-              sx={{
-                bgcolor: "#e7f0fe",
-              }}
+              defaultValue={"lala@gmail.com"}
             />
             <TextField
               variant="outlined"
               type="password"
+              name="password"
+              required
               placeholder="Enter your password"
               fullWidth
               InputProps={{
@@ -87,9 +143,7 @@ export function SignUp() {
                   </InputAdornment>
                 ),
               }}
-              sx={{
-                bgcolor: "#e7f0fe",
-              }}
+              value={"fadsfdds"}
             />
             <Button
               sx={{
@@ -121,7 +175,19 @@ export function SignUp() {
   )
 }
 
-export const action = async () => {
-  await sleep(2000)
-  return null
+export const action = async ({ request }) => {
+  const formData = await request.formData()
+  const firstName = formData.get("firstName")
+  const lastName = formData.get("lastName")
+  const email = formData.get("email")
+  const password = formData.get("password")
+  try {
+    const res = await authModule.signup(email, password, firstName, lastName)
+    return { res }
+  } catch (error) {
+    if (error.response?.data?.message) {
+      return { error: error.response.data.message }
+    }
+    throw error
+  }
 }
