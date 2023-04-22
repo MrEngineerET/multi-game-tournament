@@ -56,7 +56,6 @@ export function TournamentListTable({ tournaments }) {
     navigation.state === "submitting" || navigation.state === "loading"
 
   const getTournamentStatus = (tournament) => {
-    console.log(tournament)
     if (tournament.status === "completed") return "Completed"
     if (tournament.status === "progress") return "Progress"
     if (tournament.status === "pending") return "Pending"
