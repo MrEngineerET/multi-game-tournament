@@ -1,6 +1,5 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 import { Box, Paper, TextField, Typography } from "@mui/material"
-import { Snackbar, Alert } from "@mui/material"
 import { Button, Grid } from "@mui/material"
 import { InputAdornment } from "@mui/material"
 import EmailIcon from "@mui/icons-material/Email"
@@ -14,19 +13,19 @@ import {
 } from "react-router-dom"
 import { auth as authModule } from "../utils/auth"
 import { useAuth } from "../context/AuthContext"
-
+import { useAlert } from "../context/AlertContext"
 import { Copyright } from "../components/CopyRight"
 
 export function LogIn() {
   const navigation = useNavigation()
   const actionData = useActionData()
-  const [openSnackbar, setOpenSnackbar] = useState(false)
   const auth = useAuth()
   const navigate = useNavigate()
+  const alert = useAlert()
 
   useEffect(() => {
     if (actionData?.error) {
-      setOpenSnackbar(true)
+      alert(actionData.error)
     }
     if (actionData?.res) {
       auth.getIdentity().then(() => {
@@ -35,131 +34,119 @@ export function LogIn() {
     }
   }, [actionData])
   return (
-    <Box>
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={() => {
-          setOpenSnackbar(false)
+    <Form method="post">
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: {
+            xs: "column-reverse",
+            md: "row",
+          },
         }}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert severity="error">{actionData?.error}</Alert>
-      </Snackbar>
-      <Form method="post">
+        <Box sx={{ flex: 1, height: "94vh", p: 2 }}>
+          <Typography p={10}>Some info about the company</Typography>
+        </Box>
         <Box
           sx={{
+            bgcolor: "#eee",
+            flex: 1,
+            height: "100vh",
             display: "flex",
-            flexDirection: {
-              xs: "column-reverse",
-              md: "row",
-            },
+            alignItems: "center",
+            flexDirection: "column",
+            p: 2,
           }}
         >
-          <Box sx={{ flex: 1, height: "94vh", p: 2 }}>
-            <Typography p={10}>Some info about the company</Typography>
-          </Box>
+          {/* layout element start */}
           <Box
             sx={{
-              bgcolor: "#eee",
-              flex: 1,
-              height: "100vh",
+              height: "150px",
+            }}
+          />
+          {/* layout element end */}
+          <Paper
+            elevation={3}
+            sx={{
+              p: 5,
               display: "flex",
-              alignItems: "center",
               flexDirection: "column",
-              p: 2,
+              alignItems: "center",
+              gap: 4,
+              width: "100%",
+              maxWidth: 400,
+              mb: 4,
             }}
           >
-            {/* layout element start */}
-            <Box
-              sx={{
-                height: "150px",
+            <Typography variant="h2" sx={{ mb: 3 }}>
+              Welcome
+            </Typography>
+            <TextField
+              variant="outlined"
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EmailIcon />
+                  </InputAdornment>
+                ),
               }}
             />
-            {/* layout element end */}
-            <Paper
-              elevation={3}
-              sx={{
-                p: 5,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 4,
-                width: "100%",
-                maxWidth: 400,
-                mb: 4,
+            <TextField
+              variant="outlined"
+              type="password"
+              name="password"
+              placeholder="Enter your password"
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon />
+                  </InputAdornment>
+                ),
               }}
+            />
+            <Button
+              sx={{
+                maxWidth: 200,
+                mt: 3,
+              }}
+              variant="contained"
+              fullWidth
+              size="large"
+              disabled={navigation.state === "submitting"}
+              type="submit"
             >
-              <Typography variant="h2" sx={{ mb: 3 }}>
-                Welcome
-              </Typography>
-              <TextField
-                variant="outlined"
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <EmailIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <TextField
-                variant="outlined"
-                type="password"
-                name="password"
-                placeholder="Enter your password"
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LockIcon />
-                    </InputAdornment>
-                  ),
-                }}
-              />
-              <Button
-                sx={{
-                  maxWidth: 200,
-                  mt: 3,
-                }}
-                variant="contained"
-                fullWidth
-                size="large"
-                disabled={navigation.state === "submitting"}
-                type="submit"
-              >
-                Login
-              </Button>
-              <Grid container>
-                <Grid item xs>
-                  <Link href="#">
-                    <Typography
-                      variant="body2"
-                      color="primary"
-                      sx={{ textDecoration: "none" }}
-                    >
-                      Forgot Password?
-                    </Typography>
-                  </Link>
-                </Grid>
-                <Grid item>
-                  <Link to="/signup">
-                    <Typography variant="body2" color="primary">
-                      {"Don't have an account? Sign Up"}
-                    </Typography>
-                  </Link>
-                </Grid>
+              Login
+            </Button>
+            <Grid container>
+              <Grid item xs>
+                <Link href="#">
+                  <Typography
+                    variant="body2"
+                    color="primary"
+                    sx={{ textDecoration: "none" }}
+                  >
+                    Forgot Password?
+                  </Typography>
+                </Link>
               </Grid>
-              <Copyright sx={{ mt: 8, mb: 4 }} />
-            </Paper>
-          </Box>
+              <Grid item>
+                <Link to="/signup">
+                  <Typography variant="body2" color="primary">
+                    {"Don't have an account? Sign Up"}
+                  </Typography>
+                </Link>
+              </Grid>
+            </Grid>
+            <Copyright sx={{ mt: 8, mb: 4 }} />
+          </Paper>
         </Box>
-      </Form>
-    </Box>
+      </Box>
+    </Form>
   )
 }
 

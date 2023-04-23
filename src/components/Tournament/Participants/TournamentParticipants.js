@@ -10,7 +10,6 @@ import {
   DialogActions,
   Typography,
 } from "@mui/material"
-import { Snackbar, Alert } from "@mui/material"
 import { CircularProgress } from "@mui/material"
 import { useTournamentContext } from "../../../context/TournamentContext"
 // import DragIndicatorIcon from "@mui/icons-material/DragIndicator"
@@ -20,20 +19,24 @@ import {
   updateParticipant,
   removeParticipant,
 } from "../../../api/tournament"
+import { useAlert } from "../../../context/AlertContext"
 
 export function TournamentParticipants() {
   const fetcher = useFetcher()
   const { tournamentData } = useTournamentContext()
   const isPending = tournamentData.status === "pending"
-  const [openSnackbar, setOpenSnackbar] = useState(false)
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     status: false,
     participantId: null,
   })
+  const alert = useAlert()
 
   useEffect(() => {
     if (fetcher.data?.error) {
-      setOpenSnackbar(true)
+      alert(fetcher.data.error, "error", {
+        vertical: "bottom",
+        horizontal: "left",
+      })
     }
   }, [fetcher.data])
 
@@ -57,15 +60,6 @@ export function TournamentParticipants() {
         maxWidth: "600px",
       }}
     >
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={() => {
-          setOpenSnackbar(false)
-        }}
-      >
-        <Alert severity="error">{fetcher?.data?.error}</Alert>
-      </Snackbar>
       <Box>
         {tournamentData.participants.map((participant, index) => (
           <ParticipantListItem
@@ -155,6 +149,7 @@ export async function action({ request, params }) {
       await addParticipant(tournamentId, [name])
       return null
     } catch (error) {
+      console.log("idid", "error", error)
       if (error.response?.data?.message)
         return { error: error.response.data.message }
       else throw error
@@ -169,6 +164,10 @@ export async function action({ request, params }) {
       if (error.response?.data?.message)
         return { error: error.response.data.message }
       else throw error
+      // if (error.response?.data?.message) {
+      //   console.log("idid", "error", error, error.response?.data?.message)
+      //   return { error: error.response.data.message }
+      // } else throw error
     }
   } else if (intent === "delete") {
     const participantId = formData.get("participant_id")

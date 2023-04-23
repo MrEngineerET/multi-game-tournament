@@ -11,6 +11,7 @@ import {
 import { CircularProgress } from "@mui/material"
 import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material"
 import { useFetcher } from "react-router-dom"
+import { useAlert } from "../../../context/AlertContext"
 
 export function ParticipantListItem({
   participant,
@@ -20,12 +21,16 @@ export function ParticipantListItem({
 }) {
   const fetcher = useFetcher()
   const [openNameEditor, setOpenNameEditor] = useState(false)
+  const alert = useAlert()
   useEffect(() => {
     if (fetcher.state === "loading") {
       // this means it has successfully submitted
       setOpenNameEditor(false)
     }
-  }, [fetcher.state])
+    if (fetcher.data?.error) {
+      alert(fetcher.data.error)
+    }
+  }, [fetcher.state, fetcher.data])
 
   return (
     <Box

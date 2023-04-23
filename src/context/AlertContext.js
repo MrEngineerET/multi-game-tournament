@@ -9,9 +9,14 @@ export function AlertProvider({ children }) {
   const [openSnackbar, setOpenSnackbar] = useState(false)
   const [message, setMessage] = useState("")
   const [severity, setSeverity] = useState("error")
-  function openAlert(message, severityType) {
+  const [anchorOrigin, setAnchorOrigin] = useState({
+    vertical: "top",
+    horizontal: "center",
+  })
+  function openAlert(message, severityType, anchorOrigin) {
     setMessage(message)
     if (severityType) setSeverity(severity)
+    if (anchorOrigin) setAnchorOrigin(anchorOrigin)
     setOpenSnackbar(true)
   }
   return (
@@ -22,7 +27,7 @@ export function AlertProvider({ children }) {
         onClose={() => {
           setOpenSnackbar(false)
         }}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
+        anchorOrigin={anchorOrigin}
       >
         <Alert severity={severity}>{message}</Alert>
       </Snackbar>

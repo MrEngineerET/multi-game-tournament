@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"
+import React, { useEffect } from "react"
 import { Box, Paper, TextField, Typography } from "@mui/material"
-import { Button, Grid, Snackbar, Alert } from "@mui/material"
+import { Button, Grid } from "@mui/material"
 import { InputAdornment } from "@mui/material"
 import EmailIcon from "@mui/icons-material/Email"
 import LockIcon from "@mui/icons-material/Lock"
@@ -14,17 +14,18 @@ import {
 import { auth as authModule } from "../utils/auth"
 import { useAuth } from "../context/AuthContext"
 import { Copyright } from "../components/CopyRight"
+import { useAlert } from "../context/AlertContext"
 
 export function SignUp() {
   const navigation = useNavigation()
-  const [openSnackbar, setOpenSnackbar] = useState(false)
   const actionData = useActionData()
   const navigate = useNavigate()
   const { getIdentity } = useAuth()
+  const alert = useAlert()
 
   useEffect(() => {
     if (actionData?.error) {
-      setOpenSnackbar(true)
+      alert(actionData.error)
     }
     if (actionData?.res) {
       getIdentity().then(() => {
@@ -33,145 +34,133 @@ export function SignUp() {
     }
   }, [actionData])
   return (
-    <Box>
-      <Snackbar
-        open={openSnackbar}
-        autoHideDuration={6000}
-        onClose={() => {
-          setOpenSnackbar(false)
+    <Form method="post">
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: {
+            xs: "column-reverse",
+            md: "row",
+          },
         }}
-        anchorOrigin={{ vertical: "top", horizontal: "center" }}
       >
-        <Alert severity="error">{actionData?.error}</Alert>
-      </Snackbar>
-      <Form method="post">
+        <Box sx={{ flex: 1, height: "94vh", p: 2 }}>
+          <Typography p={10}>Some info about the company</Typography>
+        </Box>
         <Box
           sx={{
+            bgcolor: "#eee",
+            flex: 1,
+            height: "100vh",
             display: "flex",
-            flexDirection: {
-              xs: "column-reverse",
-              md: "row",
-            },
+            alignItems: "center",
+            flexDirection: "column",
+            p: 2,
           }}
         >
-          <Box sx={{ flex: 1, height: "94vh", p: 2 }}>
-            <Typography p={10}>Some info about the company</Typography>
-          </Box>
+          {/* layout element start */}
           <Box
             sx={{
-              bgcolor: "#eee",
-              flex: 1,
-              height: "100vh",
+              height: "150px",
+            }}
+          />
+          {/* layout element end */}
+          <Paper
+            elevation={3}
+            sx={{
+              p: 5,
               display: "flex",
-              alignItems: "center",
               flexDirection: "column",
-              p: 2,
+              alignItems: "center",
+              gap: 4,
+              width: "100%",
+              maxWidth: 400,
+              mb: 4,
             }}
           >
-            {/* layout element start */}
-            <Box
-              sx={{
-                height: "150px",
-              }}
+            <Typography variant="h2" sx={{ mb: 3 }}>
+              Sign Up
+            </Typography>
+            <TextField
+              variant="outlined"
+              label="First Name"
+              name="firstName"
+              placeholder="Enter your First name"
+              type="text"
+              fullWidth
+              required
+              defaultValue={"fadsfdds"}
             />
-            {/* layout element end */}
-            <Paper
-              elevation={3}
-              sx={{
-                p: 5,
-                display: "flex",
-                flexDirection: "column",
-                alignItems: "center",
-                gap: 4,
-                width: "100%",
-                maxWidth: 400,
-                mb: 4,
-              }}
-            >
-              <Typography variant="h2" sx={{ mb: 3 }}>
-                Sign Up
-              </Typography>
-              <TextField
-                variant="outlined"
-                label="First Name"
-                name="firstName"
-                placeholder="Enter your First name"
-                type="text"
-                fullWidth
-                required
-                defaultValue={"fadsfdds"}
-              />
-              <TextField
-                variant="outlined"
-                label="Last Name"
-                placeholder="Enter your Last name"
-                name="lastName"
-                type="text"
-                fullWidth
-                required
-                defaultValue={"fadsfdds"}
-              />
+            <TextField
+              variant="outlined"
+              label="Last Name"
+              placeholder="Enter your Last name"
+              name="lastName"
+              type="text"
+              fullWidth
+              required
+              defaultValue={"fadsfdds"}
+            />
 
-              <TextField
-                variant="outlined"
-                type="email"
-                name="email"
-                placeholder="Enter your email"
-                fullWidth
-                required
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <EmailIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                defaultValue={"lala@gmail.com"}
-              />
-              <TextField
-                variant="outlined"
-                type="password"
-                name="password"
-                required
-                placeholder="Enter your password"
-                fullWidth
-                InputProps={{
-                  startAdornment: (
-                    <InputAdornment position="start">
-                      <LockIcon />
-                    </InputAdornment>
-                  ),
-                }}
-                value={"fadsfdds"}
-              />
-              <Button
-                sx={{
-                  maxWidth: 200,
-                  mt: 3,
-                }}
-                variant="contained"
-                fullWidth
-                size="large"
-                disabled={navigation.state === "submitting"}
-                type="submit"
-              >
-                Sign Up
-              </Button>
-              <Grid container justifyContent="flex-end">
-                <Grid item>
-                  <Link to="/login">
-                    <Typography variant="body2" color="primary">
-                      Already have an account? Sign in
-                    </Typography>
-                  </Link>
-                </Grid>
+            <TextField
+              variant="outlined"
+              type="email"
+              name="email"
+              placeholder="Enter your email"
+              fullWidth
+              required
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <EmailIcon />
+                  </InputAdornment>
+                ),
+              }}
+              defaultValue={"lala@gmail.com"}
+            />
+            <TextField
+              variant="outlined"
+              type="password"
+              name="password"
+              required
+              placeholder="Enter your password"
+              fullWidth
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment position="start">
+                    <LockIcon />
+                  </InputAdornment>
+                ),
+              }}
+              value={"fadsfdds"}
+            />
+            <Button
+              sx={{
+                maxWidth: 200,
+                mt: 3,
+              }}
+              variant="contained"
+              fullWidth
+              size="large"
+              disabled={navigation.state === "submitting"}
+              type="submit"
+            >
+              Sign Up
+            </Button>
+            <Grid container justifyContent="flex-end">
+              <Grid item>
+                <Link to="/login">
+                  <Typography variant="body2" color="primary">
+                    Already have an account? Sign in
+                  </Typography>
+                </Link>
               </Grid>
-              <Copyright sx={{ mt: 8, mb: 4 }} />
-            </Paper>
-          </Box>
+            </Grid>
+            <Copyright sx={{ mt: 8, mb: 4 }} />
+          </Paper>
         </Box>
-      </Form>
-    </Box>
+      </Box>
+    </Form>
   )
 }
 
