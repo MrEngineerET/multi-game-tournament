@@ -1,6 +1,7 @@
 import React from "react"
 import { Outlet, Route } from "react-router-dom"
 import { LandingPage } from "../pages/LandingPage"
+import { Box } from "@mui/material"
 
 import { Tournament, loader as tournamentsLoader } from "../pages/Tournament"
 import {
@@ -37,17 +38,16 @@ import {
   archiveTemplateAction,
   deleteTemplateAction,
 } from "../components/TournamentPage/TableToolBar"
+import { LoggedInAppBar } from "../components/LoggedInAppHeader"
 
 export const routes = (
   <Route
     path="/"
     element={
-      <div className="root">
-        <div className="menubar">This is the Navigation bar</div>
-        <div>
-          <Outlet />
-        </div>
-      </div>
+      <Box>
+        <LoggedInAppBar />
+        <Outlet />
+      </Box>
     }
     errorElement={<ErrorPage />}
   >
