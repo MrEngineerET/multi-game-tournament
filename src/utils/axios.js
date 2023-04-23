@@ -6,7 +6,6 @@ export class MyAxios {
   constructor() {
     this.token = LocalStorage.getItem("token")
     this.axios = pureAxios.create({
-      // eslint-disable-next-line no-undef
       baseURL: process.env.REACT_APP_API_URL,
       headers: {
         common: {
@@ -47,10 +46,19 @@ export class MyAxios {
   }
   setToken = (token) => {
     if (!token) throw new Error("no token")
-    LocalStorage.setItem("token", token)
     this.token = token
     this.axios = pureAxios.create({
-      // eslint-disable-next-line no-undef
+      baseURL: process.env.REACT_APP_API_URL,
+      headers: {
+        common: {
+          Authorization: this.token ? `Bearer ${this.token}` : "",
+        },
+      },
+    })
+  }
+  clearToken = () => {
+    this.token = null
+    this.axios = pureAxios.create({
       baseURL: process.env.REACT_APP_API_URL,
       headers: {
         common: {
@@ -64,3 +72,4 @@ export class MyAxios {
 const axiosObj = new MyAxios()
 export const axios = axiosObj.getAxios()
 export const setToken = axiosObj.setToken
+export const clearToken = axiosObj.clearToken

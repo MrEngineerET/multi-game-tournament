@@ -1,7 +1,7 @@
 import React from "react"
 import { Outlet, Route } from "react-router-dom"
 import { LandingPage } from "../pages/LandingPage"
-import { LogIn } from "../pages/LogIn"
+import { LogIn, action as logInAction } from "../pages/LogIn"
 import { SignUp, action as signUpAction } from "../pages/SignUp"
 import { Tournament, loader as tournamentsLoader } from "../pages/Tournament"
 import {
@@ -110,7 +110,7 @@ export const routes = (
       />
       <Route path="game/:id/destroy" action={deleteGameAction} />
     </Route>
-    <Route path={"/login"} element={<LogIn />} />
+    <Route path={"/login"} element={<LogIn />} action={logInAction} />
     <Route path="/signup" element={<SignUp />} action={signUpAction} />
     <Route
       path="forgot-password"
