@@ -5,6 +5,7 @@ import "./index.css"
 import reportWebVitals from "./reportWebVitals"
 import { AuthProvider } from "./context/AuthContext"
 import { ThemeProvider } from "@mui/material/styles"
+import { AlertProvider } from "./context/AlertContext"
 // import { useMediaQuery } from "@mui/material"
 import { getTheme } from "./styles/theme"
 
@@ -32,9 +33,11 @@ function Root() {
     <React.StrictMode>
       <themeModeContext.Provider value={value}>
         <ThemeProvider theme={theme}>
-          <AuthProvider>
-            <App />
-          </AuthProvider>
+          <AlertProvider>
+            <AuthProvider>
+              <App />
+            </AuthProvider>
+          </AlertProvider>
         </ThemeProvider>
       </themeModeContext.Provider>
     </React.StrictMode>
