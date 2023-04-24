@@ -89,7 +89,6 @@ export function SignUp() {
               type="text"
               fullWidth
               required
-              defaultValue={"fadsfdds"}
             />
             <TextField
               variant="outlined"
@@ -99,7 +98,6 @@ export function SignUp() {
               type="text"
               fullWidth
               required
-              defaultValue={"fadsfdds"}
             />
 
             <TextField
@@ -116,7 +114,6 @@ export function SignUp() {
                   </InputAdornment>
                 ),
               }}
-              defaultValue={"lala@gmail.com"}
             />
             <TextField
               variant="outlined"
@@ -132,7 +129,6 @@ export function SignUp() {
                   </InputAdornment>
                 ),
               }}
-              value={"fadsfdds"}
             />
             <Button
               sx={{
