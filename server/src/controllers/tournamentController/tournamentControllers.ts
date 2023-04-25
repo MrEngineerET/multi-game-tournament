@@ -1,11 +1,13 @@
 import { BracketsManager, helpers } from "brackets-manager"
-import { InputStage } from "brackets-model"
+import { InputStage, Seeding } from "brackets-model"
 import { Request, Response, NextFunction } from "express"
 import { Tournament, TournamentType } from "../../model/tournament"
 import { Game } from "../../model/game"
 import { MyDB } from "../../utils/MyDB"
 import { GameManagement } from "../../utils/GameManagement"
 import tournamentParticipantController from "./tournamentParticipantController"
+import { Types } from "mongoose"
+import { User } from "../../model/User"
 
 const getAllTournaments = async (
   req: Request,
@@ -153,11 +155,16 @@ const createTournament = async (
 
     const manager = new BracketsManager(myDB)
 
+    const allParticipants = await prepareParticipants(
+      participants,
+      tournament.id,
+    )
+
     const inputStage: InputStage = {
       tournamentId: Number(tournament._id),
       name,
       type: stageType,
-      seeding: participants,
+      seeding: allParticipants,
       settings: {
         seedOrdering,
       },
@@ -310,6 +317,29 @@ const deleteTournamentGame = async (
     next(error)
   }
 }
+export async function prepareParticipants(
+  participants: string[],
+  tournamentId: number,
+): Promise<Seeding> {
+  const participantPromise = participants.map((p) => {
+    const isMongooseId = Types.ObjectId.isValid(p)
+    if (isMongooseId) {
+      return User.findById(p, { firstName: 1, lastName: 1 })
+    } else return p
+  })
+  const allParticipants = await Promise.all(participantPromise)
+  return allParticipants.map((p, index) => {
+    if (p instanceof User) {
+      return {
+        name: p.firstName + " " + p.lastName,
+        userId: p._id,
+        id: index,
+        tournament_id: tournamentId,
+      }
+    }
+    return p
+  })
+}
 
 export default {
   getAllTournaments,
@@ -320,5 +350,6 @@ export default {
   updateTournamentGame,
   addTournamentGame,
   deleteTournamentGame,
+  prepareParticipants,
   ...tournamentParticipantController,
 }
