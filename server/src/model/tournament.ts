@@ -2,13 +2,16 @@ import { Schema, model, Model, Types, HydratedDocument } from "mongoose"
 import {
   Group,
   Match as M,
-  Participant,
   Round,
   MatchGame,
   Stage,
+  Participant,
 } from "brackets-model"
 import { Game } from "./game"
 
+export declare type CustomParticipant = Participant & {
+  userId: Types.ObjectId
+}
 export interface Match extends M {
   gameId: Types.ObjectId | null
 }
@@ -45,7 +48,7 @@ export interface ITournament {
   _id: number
   name: string
   description: string
-  participant: Participant[]
+  participant: CustomParticipant[]
   stage: Stage[]
   group: Group[]
   round: Round[]
@@ -60,7 +63,7 @@ type TournamentDocumentOverrides = {
   stage: Types.DocumentArray<Stage>
   group: Types.DocumentArray<Group>
   round: Types.DocumentArray<Round>
-  participant: Types.DocumentArray<Participant>
+  participant: Types.DocumentArray<CustomParticipant>
   match: Types.DocumentArray<Match>
   match_game: Types.DocumentArray<MatchGame>
   game: Types.DocumentArray<Game>
@@ -83,9 +86,13 @@ const TournamentSchema = new Schema<ITournament, TournamentModelType>(
     description: String,
     participant: [
       {
-        id: Number,
+        id: Number, // id used by the bracket manager
         tournament_id: Number,
         name: { type: String, required: true },
+        userId: {
+          type: Schema.Types.ObjectId,
+          ref: "User",
+        },
       },
     ],
     stage: [
