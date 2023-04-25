@@ -7,8 +7,10 @@ const gameRouter = express.Router()
 gameRouter.use(authController.protect)
 
 gameRouter.get("/", gameController.getAllGames)
-gameRouter.post("/", validator.createGame, gameController.createGame)
 gameRouter.get("/:id", validator.getGame, gameController.getGame)
+
+gameRouter.use(authController.restrictTo("admin"))
+gameRouter.post("/", validator.createGame, gameController.createGame)
 gameRouter.patch("/:id", validator.updateGame, gameController.updateGame)
 gameRouter.delete("/:id", validator.deleteGame, gameController.deleteGame)
 
