@@ -10,8 +10,8 @@ import {
 import { Game } from "./game"
 
 export declare type CustomParticipant = Participant & {
-  userId: Types.ObjectId
-  invitation: "accepted" | "pending" | "declined"
+  userId?: Types.ObjectId
+  invitation?: "accepted" | "pending" | "declined"
 }
 export interface Match extends M {
   gameId: Types.ObjectId | null
@@ -97,7 +97,6 @@ const TournamentSchema = new Schema<ITournament, TournamentModelType>(
         invitation: {
           type: String,
           enum: ["accepted", "pending", "declined"],
-          default: "pending",
         },
       },
     ],

@@ -6,6 +6,7 @@ import { Game } from "../../model/game"
 import { MyDB } from "../../utils/MyDB"
 import { GameManagement } from "../../utils/GameManagement"
 import tournamentParticipantController from "./tournamentParticipantController"
+import validator from "validator"
 import { Types } from "mongoose"
 import { User } from "../../model/User"
 
@@ -322,10 +323,13 @@ export async function prepareParticipants(
   tournamentId: number,
 ): Promise<Seeding> {
   const participantPromise = participants.map((p) => {
-    const isMongooseId = Types.ObjectId.isValid(p)
-    if (isMongooseId) {
+    if (Types.ObjectId.isValid(p)) {
       return User.findById(p, { firstName: 1, lastName: 1 })
-    } else return p
+    }
+    if (p && validator.isEmail(p)) {
+      return User.findOne({ email: p }, { firstName: 1, lastName: 1 })
+    }
+    return p
   })
   const allParticipants = await Promise.all(participantPromise)
   return allParticipants.map((p, index) => {
@@ -335,6 +339,7 @@ export async function prepareParticipants(
         userId: p._id,
         id: index,
         tournament_id: tournamentId,
+        invitation: "pending",
       }
     }
     return p
