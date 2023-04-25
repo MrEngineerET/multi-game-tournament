@@ -5,7 +5,7 @@ import crypto from "crypto"
 import { Request, Response, NextFunction } from "express"
 import { Email } from "../../utils/email"
 
-interface RequestWithUser extends Request {
+export interface RequestWithUser extends Request {
   user: any
 }
 
