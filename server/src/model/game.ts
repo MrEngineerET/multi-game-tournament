@@ -5,6 +5,7 @@ interface IGame {
   name: string
   images?: string[]
   description?: string
+  createdBy: Types.ObjectId
 }
 
 const GameSchema = new Schema<IGame>(
@@ -12,6 +13,10 @@ const GameSchema = new Schema<IGame>(
     name: { type: String, required: true },
     images: [String],
     description: String,
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true },
 )

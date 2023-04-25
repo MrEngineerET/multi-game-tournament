@@ -1,5 +1,6 @@
 import { Game } from "../../model/game"
 import { Request, Response, NextFunction } from "express"
+import { RequestWithUser } from "../userController/authController"
 
 export const getAllGames = async (
   req: Request,
@@ -34,13 +35,18 @@ export const updateGame = async (
 }
 
 export const createGame = async (
-  req: Request,
+  req: RequestWithUser,
   res: Response,
   next: NextFunction,
 ) => {
   try {
     const { name, description, images } = req.body
-    const game = await Game.create({ name, description, images })
+    const game = await Game.create({
+      name,
+      description,
+      images,
+      createdBy: req.user._id,
+    })
 
     res.status(200).send({
       status: "success",
