@@ -1,6 +1,7 @@
 import { BracketsManager, helpers } from "brackets-manager"
 import { InputStage, Seeding } from "brackets-model"
 import { Request, Response, NextFunction } from "express"
+import { RequestWithUser } from "../userController/authController"
 import { Tournament, TournamentType } from "../../model/tournament"
 import { Game } from "../../model/game"
 import { MyDB } from "../../utils/MyDB"
@@ -122,7 +123,7 @@ async function updateTournamentStageType(
 }
 
 const createTournament = async (
-  req: Request,
+  req: RequestWithUser,
   res: Response,
   next: NextFunction,
 ) => {
@@ -149,6 +150,7 @@ const createTournament = async (
       name,
       description,
       game: games,
+      createdBy: req.user._id,
     })
     await tournament.save()
 

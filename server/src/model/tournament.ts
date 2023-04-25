@@ -58,6 +58,7 @@ export interface ITournament {
   game: Game[]
   participantGameMatrix: { participantId: number; games: Game[] }[]
   status: TournamentStatus
+  createdBy: Types.ObjectId
 }
 
 type TournamentDocumentOverrides = {
@@ -194,6 +195,10 @@ const TournamentSchema = new Schema<ITournament, TournamentModelType>(
       },
     ],
     status: { type: String, default: TournamentStatus.pending },
+    createdBy: {
+      type: Schema.Types.ObjectId,
+      ref: "User",
+    },
   },
   { timestamps: true },
 )
