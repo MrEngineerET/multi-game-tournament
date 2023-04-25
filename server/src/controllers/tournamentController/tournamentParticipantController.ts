@@ -90,6 +90,12 @@ async function updateParticipant(
         message: "Participant name already exists",
       }
     }
+    if (participant.userId) {
+      throw {
+        statusCode: 400,
+        message: "Participant is a User",
+      }
+    }
     await Tournament.findByIdAndUpdate(tournamentId, {
       $set: {
         [`participant.${participantId}.name`]: newName,
