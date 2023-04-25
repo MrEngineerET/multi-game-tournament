@@ -4,6 +4,7 @@ import { InputStage, Seeding } from "brackets-model"
 import { MyDB } from "../../utils/MyDB"
 import { Tournament } from "../../model/tournament"
 import { GameManagement } from "../../utils/GameManagement"
+import { prepareParticipants } from "./tournamentControllers"
 
 async function addParticipant(req: Request, res: Response, next: NextFunction) {
   try {
@@ -11,15 +12,16 @@ async function addParticipant(req: Request, res: Response, next: NextFunction) {
     const { participants: newParticipants } = req.body
     const { tournamentId } = req.params
 
-    let myDB = await MyDB.build(Number(tournamentId))
-    let manager = new BracketsManager(myDB)
     // get current participants list
-    const tournamentData = await manager.export()
-    const currentParticipants = tournamentData.participant.map((p) => p.name)
+    const tournamentData = await Tournament.findById(tournamentId)
+    const currentParticipants = tournamentData.participant.map((p) => {
+      if (p.userId) return p.userId
+      return p.name
+    })
     // add the new participants
-    let updatedParticipants = [...currentParticipants, ...newParticipants]
-    updatedParticipants = helpers.balanceByes(updatedParticipants)
-    helpers.ensureNoDuplicates(updatedParticipants)
+    let allParticipants = [...currentParticipants, ...newParticipants]
+    allParticipants = helpers.balanceByes(allParticipants)
+    helpers.ensureNoDuplicates(allParticipants)
     // delete the stage
     await Tournament.updateOne(
       { _id: tournamentId },
@@ -38,16 +40,20 @@ async function addParticipant(req: Request, res: Response, next: NextFunction) {
     // create a new stage
     const stage = tournamentData.stage[0]
     delete stage.settings.size
+    const preparedParticipants = await prepareParticipants(
+      allParticipants,
+      Number(tournamentId),
+    )
     const inputStage: InputStage = {
       tournamentId: Number(tournamentId),
       name: stage.name,
       type: stage.type,
-      seeding: updatedParticipants,
+      seeding: preparedParticipants,
       settings: stage.settings,
     }
     // create a new Storage interface and Bracket manager since I used the Tournament model directly to update the tournament
-    myDB = await MyDB.build(Number(tournamentId))
-    manager = await new BracketsManager(myDB)
+    const myDB = await MyDB.build(Number(tournamentId))
+    const manager = await new BracketsManager(myDB)
     await manager.create(inputStage)
     const updatedTournament = await Tournament.findById(tournamentId)
     const gameManagement = new GameManagement(updatedTournament)
