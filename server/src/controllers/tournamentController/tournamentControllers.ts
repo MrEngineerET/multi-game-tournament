@@ -12,12 +12,22 @@ import { Types } from "mongoose"
 import { User } from "../../model/User"
 
 const getAllTournaments = async (
-  req: Request,
+  req: RequestWithUser,
   res: Response,
   next: NextFunction,
 ) => {
   try {
-    const allTournaments = await Tournament.find().sort({ _id: -1 })
+    const userId = req.user._id
+    const allTournaments = await Tournament.find({
+      $or: [
+        {
+          participant: {
+            $elemMatch: { userId: userId },
+          },
+        },
+        { createdBy: userId },
+      ],
+    }).sort({ _id: -1 })
     res.status(200).send({ status: "success", data: allTournaments })
   } catch (error) {
     next(error)
