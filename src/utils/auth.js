@@ -36,6 +36,8 @@ export const auth = {
   },
   // get the user's profile
   async getIdentity() {
+    const token = LocalStorage.getItem("token")
+    if (!token) return null
     const res = (await axios.get("/user/me")).data
     const user = res.data.data
     return user

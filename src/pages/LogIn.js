@@ -74,7 +74,7 @@ export function LogIn() {
               alignItems: "center",
               gap: 4,
               width: "100%",
-              maxWidth: 400,
+              maxWidth: 460,
               mb: 4,
             }}
           >

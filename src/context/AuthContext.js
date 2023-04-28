@@ -1,6 +1,5 @@
 import React, { useState, createContext, useContext, useEffect } from "react"
 import { CircularProgress, Box } from "@mui/material"
-import LocalStorage from "../utils/localStorage"
 import PropTypes from "prop-types"
 import { auth } from "../utils/auth"
 
@@ -12,14 +11,7 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(undefined)
 
   useEffect(() => {
-    const token = LocalStorage.getItem("token")
-
-    if (token && !user) {
-      auth
-        .getIdentity()
-        .then((user) => setUser(user))
-        .catch(() => setUser(null))
-    } else setUser(null)
+    getIdentity()
   }, [])
 
   const login = async (email, password) => {
