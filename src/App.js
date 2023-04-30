@@ -14,8 +14,6 @@ import { CssBaseline } from "@mui/material"
 // import { themeModeContext } from "./index"
 import { ErrorPage } from "./pages/ErrorPage"
 
-import "./App.css"
-
 function App() {
   const { user } = useAuth()
   // const themeMode = useContext(themeModeContext)
