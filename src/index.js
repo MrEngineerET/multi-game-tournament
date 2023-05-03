@@ -2,10 +2,7 @@ import React, { useState, createContext, useMemo } from "react"
 import ReactDOM from "react-dom/client"
 import App from "./App"
 import reportWebVitals from "./reportWebVitals"
-import { AuthProvider } from "./context/AuthContext"
 import { ThemeProvider } from "@mui/material/styles"
-import { AlertProvider } from "./context/AlertContext"
-// import { useMediaQuery } from "@mui/material"
 import { getTheme } from "./styles/theme"
 
 export const themeModeContext = createContext({ mode: "light" })
@@ -32,11 +29,7 @@ function Root() {
     <React.StrictMode>
       <themeModeContext.Provider value={value}>
         <ThemeProvider theme={theme}>
-          <AlertProvider>
-            <AuthProvider>
-              <App />
-            </AuthProvider>
-          </AlertProvider>
+          <App />
         </ThemeProvider>
       </themeModeContext.Provider>
     </React.StrictMode>
