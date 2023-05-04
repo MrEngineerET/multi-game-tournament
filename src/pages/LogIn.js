@@ -1,6 +1,7 @@
 import React, { useEffect } from "react"
 import { Box, Paper, TextField, Typography } from "@mui/material"
-import { Button, Grid } from "@mui/material"
+import { Grid } from "@mui/material"
+import { LoadingButton } from "../components/Common/LoadingButton"
 import { InputAdornment } from "@mui/material"
 import EmailIcon from "@mui/icons-material/Email"
 import LockIcon from "@mui/icons-material/Lock"
@@ -109,7 +110,8 @@ export function LogIn() {
                 ),
               }}
             />
-            <Button
+            <LoadingButton
+              loading={navigation.state === "submitting"}
               sx={{
                 maxWidth: 200,
                 mt: 3,
@@ -121,7 +123,7 @@ export function LogIn() {
               type="submit"
             >
               Login
-            </Button>
+            </LoadingButton>
             <Grid container>
               <Grid item xs>
                 <Link href="#">

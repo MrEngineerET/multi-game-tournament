@@ -1,6 +1,6 @@
 import React, { useEffect } from "react"
 import { Box, Paper, TextField, Typography } from "@mui/material"
-import { Button, Grid } from "@mui/material"
+import { Grid } from "@mui/material"
 import { InputAdornment } from "@mui/material"
 import EmailIcon from "@mui/icons-material/Email"
 import LockIcon from "@mui/icons-material/Lock"
@@ -15,6 +15,7 @@ import { auth as authModule } from "../utils/auth"
 import { useAuth } from "../context/AuthContext"
 import { Copyright } from "../components/CopyRight"
 import { useAlert } from "../context/AlertContext"
+import { LoadingButton } from "../components/Common/LoadingButton"
 
 export function SignUp() {
   const navigation = useNavigation()
@@ -130,7 +131,8 @@ export function SignUp() {
                 ),
               }}
             />
-            <Button
+            <LoadingButton
+              loading={navigation.state === "submitting"}
               sx={{
                 maxWidth: 200,
                 mt: 3,
@@ -142,7 +144,7 @@ export function SignUp() {
               type="submit"
             >
               Sign Up
-            </Button>
+            </LoadingButton>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link to="/login">
