@@ -140,7 +140,6 @@ export function SignUp() {
               variant="contained"
               fullWidth
               size="large"
-              disabled={navigation.state === "submitting"}
               type="submit"
             >
               Sign Up
