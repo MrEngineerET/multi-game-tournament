@@ -10,6 +10,7 @@ import tournamentParticipantController from "./tournamentParticipantController"
 import validator from "validator"
 import { Types } from "mongoose"
 import { User } from "../../model/User"
+import jwt from "jsonwebtoken"
 
 const getAllTournaments = async (
   req: RequestWithUser,
@@ -357,6 +358,67 @@ export async function prepareParticipants(
     return p
   })
 }
+async function joinTournament(req: Request, res: Response, next: NextFunction) {
+  try {
+    const { id: tournamentId } = req.params
+    const { firstName } = req.body
+    const tournament = await Tournament.findById(tournamentId)
+
+    if (!tournament) {
+      throw { statusCode: 404, message: "Tournament not found" }
+    }
+    const firstNames = tournament.participant.map((p) => p.name.split(" ")[0])
+    if (!firstNames.includes(firstName)) {
+      throw {
+        statusCode: 400,
+        message: "You are not invited to the tournament",
+      }
+    }
+    // issue a jwt token called tournament_token and send it the user
+    const tournamentToken = jwt.sign({ tournamentId }, process.env.JWT_SECRET, {
+      expiresIn: "30d",
+    })
+
+    res.cookie("tournament_token", tournamentToken, {
+      expires: new Date(
+        Date.now() +
+          Number(process.env.JWT_COOKIE_EXPIRES_IN) * 24 * 60 * 60 * 1000,
+      ),
+      httpOnly: true,
+      secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+    })
+    res.send({ status: "success", data: { tournamentToken } })
+  } catch (error) {
+    next(error)
+  }
+}
+
+async function protectTournament(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const { id } = req.params
+    let tournamentToken = null
+    if (req.cookies?.tournament_token) {
+      tournamentToken = req.cookies.tournament_token
+    }
+    if (!tournamentToken) {
+      throw { statusCode: 401, message: "Please join the tournament first" }
+    }
+    const { tournamentId } = jwt.verify(
+      tournamentToken,
+      process.env.JWT_SECRET,
+    ) as { tournamentId: string }
+    if (id !== tournamentId) {
+      throw { statusCode: 401, message: "Invalid tournament token" }
+    }
+    next()
+  } catch (error) {
+    next(error)
+  }
+}
 
 export default {
   getAllTournaments,
@@ -368,5 +430,7 @@ export default {
   addTournamentGame,
   deleteTournamentGame,
   prepareParticipants,
+  joinTournament,
+  protectTournament,
   ...tournamentParticipantController,
 }

@@ -4,9 +4,13 @@ import { tournamentControllerValidator as validator } from "../controllers/tourn
 import authController from "../controllers/userController/authController"
 
 const tournamentRouter = express.Router()
+
+tournamentRouter.post("/:id/join", tournamentController.joinTournament)
+
 tournamentRouter.get(
   "/:id",
   validator.getTournament,
+  tournamentController.protectTournament,
   tournamentController.getTournament,
 )
 
