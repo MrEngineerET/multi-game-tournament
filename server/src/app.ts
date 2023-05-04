@@ -6,10 +6,12 @@ import errorRouter from "./routes/errorRoutes"
 import userRouter from "./routes/userRoutes"
 import morgan from "morgan"
 import cors from "cors"
+import cookieParser from "cookie-parser"
 
 const app = express()
 //TODO: handle cors properly
 app.use(cors())
+app.use(cookieParser())
 
 app.use(express.static("public"))
 
