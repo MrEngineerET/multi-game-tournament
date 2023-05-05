@@ -47,6 +47,7 @@ import { LoggedInAppBar } from "../components/LoggedInAppHeader"
 import {
   JoinTournament,
   action as joinTournamentAction,
+  loader as joinTouramentLoader,
 } from "../components/Tournament/JoinTournament"
 
 export const routes = (
@@ -146,6 +147,7 @@ export const routes = (
         <Route
           path="/tournament/:id/join"
           element={<JoinTournament />}
+          loader={joinTouramentLoader}
           action={joinTournamentAction}
         />
       </Route>

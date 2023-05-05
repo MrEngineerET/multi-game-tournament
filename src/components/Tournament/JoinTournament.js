@@ -2,7 +2,7 @@ import React from "react"
 import { Form, redirect, useNavigation } from "react-router-dom"
 import { Box, Container, TextField, Typography } from "@mui/material"
 import { LoadingButton } from "../Common/LoadingButton"
-import { joinTournament } from "../../api/tournament"
+import { getTournament, joinTournament } from "../../api/tournament"
 import LocalaStorage from "../../utils/localStorage"
 
 export function JoinTournament() {
@@ -35,6 +35,18 @@ export function JoinTournament() {
       </Container>
     </Box>
   )
+}
+
+export async function loader({ params }) {
+  try {
+    const tournamentId = params.id
+    const tournament = await getTournament(tournamentId)
+    // if the tournament is found it means the user is already joined
+    if (tournament) return redirect(`/tournament/${tournamentId}`)
+    else return null
+  } catch (error) {
+    return null
+  }
 }
 
 export async function action({ request, params }) {
