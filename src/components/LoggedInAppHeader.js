@@ -11,9 +11,10 @@ import {
 
 import { AccountCircle } from "@mui/icons-material"
 import { useAuth } from "../context/AuthContext"
-import { redirect } from "react-router-dom"
+import { useNavigate } from "react-router-dom"
 
 export function LoggedInAppBar() {
+  const navigate = useNavigate()
   const auth = useAuth()
   const [anchorEl, setAnchorEl] = React.useState(null)
 
@@ -25,8 +26,12 @@ export function LoggedInAppBar() {
     setAnchorEl(null)
   }
   const handleLogout = async () => {
-    await auth.logout()
-    redirect("/")
+    try {
+      await auth.logout()
+      navigate("/")
+    } catch (error) {
+      console.log("error", error)
+    }
   }
   return (
     <>

@@ -15,20 +15,12 @@ export const AuthProvider = ({ children }) => {
   }, [])
 
   const login = async (email, password) => {
-    try {
-      const user = await auth.login(email, password)
-      setUser(user)
-    } catch (error) {
-      console.log(error)
-    }
+    const user = await auth.login(email, password)
+    setUser(user)
   }
   const logout = async () => {
-    try {
-      await auth.logout()
-      setUser(null)
-    } catch (error) {
-      setUser(null)
-    }
+    await auth.logout()
+    setUser(null)
   }
   const getIdentity = async () => {
     setUser(undefined)

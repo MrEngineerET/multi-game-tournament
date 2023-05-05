@@ -73,11 +73,7 @@ export async function loader({ params }) {
       rawData: tournament,
     }
   } catch (error) {
-    if (
-      error?.response?.data?.message.includes(
-        "Please join the tournament first",
-      )
-    ) {
+    if (error?.response?.status === 401) {
       return redirect(`/tournament/${params.id}/join`)
     } else throw error
   }
