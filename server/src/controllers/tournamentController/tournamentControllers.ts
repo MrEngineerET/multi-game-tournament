@@ -399,22 +399,32 @@ async function protectTournament(
   next: NextFunction,
 ) {
   try {
-    const { id } = req.params
+    const { id: tournamentIdParam } = req.params
     let tournamentToken = null
-    if (req.cookies?.tournament_token) {
-      tournamentToken = req.cookies.tournament_token
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      tournamentToken = req.headers.authorization.split(" ")[1]
+    } else if (req.cookies?.jwt) {
+      tournamentToken = req.cookies.jwt
     }
     if (!tournamentToken) {
       throw { statusCode: 401, message: "Please join the tournament first" }
     }
-    const { tournamentId } = jwt.verify(
+    const { tournamentId, id } = jwt.verify(
       tournamentToken,
       process.env.JWT_SECRET,
-    ) as { tournamentId: string }
-    if (id !== tournamentId) {
-      throw { statusCode: 401, message: "Invalid tournament token" }
+    ) as {
+      tournamentId: string
+      id: string
     }
-    next()
+    if (tournamentId && tournamentId === tournamentIdParam) return next()
+
+    const tournament = await Tournament.findById(tournamentIdParam)
+    if (id && id === tournament.createdBy.toString()) return next()
+
+    throw { statusCode: 401, message: "Invalid tournament token" }
   } catch (error) {
     next(error)
   }
