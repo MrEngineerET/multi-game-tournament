@@ -44,6 +44,10 @@ import {
   deleteTemplateAction,
 } from "../components/TournamentPage/TableToolBar"
 import { LoggedInAppBar } from "../components/LoggedInAppHeader"
+import {
+  JoinTournament,
+  action as joinTournamentAction,
+} from "../components/Tournament/JoinTournament"
 
 export const routes = (
   <Route
@@ -139,6 +143,11 @@ export const routes = (
             errorElement={<ErrorPage />}
           ></Route>
         </Route>
+        <Route
+          path="/tournament/:id/join"
+          element={<JoinTournament />}
+          action={joinTournamentAction}
+        />
       </Route>
 
       {/* loggedout routes */}

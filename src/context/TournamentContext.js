@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react"
 import PropTypes from "prop-types"
-import { useLoaderData } from "react-router-dom"
+import { redirect, useLoaderData } from "react-router-dom"
 import { getTournament } from "../api/tournament"
 import {
   catagorizeData,
@@ -65,12 +65,21 @@ TournamentProvider.propTypes = {
 }
 
 export async function loader({ params }) {
-  // load a tournament data
-  const tournamentId = params.id
-  const tournament = await getTournament(tournamentId)
-  return {
-    data: formatToUIModel(tournament),
-    rawData: tournament,
+  try {
+    const tournamentId = params.id
+    const tournament = await getTournament(tournamentId)
+    return {
+      data: formatToUIModel(tournament),
+      rawData: tournament,
+    }
+  } catch (error) {
+    if (
+      error?.response?.data?.message.includes(
+        "Please join the tournament first",
+      )
+    ) {
+      return redirect(`/tournament/${params.id}/join`)
+    } else throw error
   }
 }
 
