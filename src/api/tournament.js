@@ -1,4 +1,5 @@
 import { axios } from "../utils/axios"
+import LocalStorage from "../utils/localStorage"
 
 export const stageType = {
   singleElimination: "single_elimination",
@@ -31,6 +32,18 @@ export async function getTournaments() {
 }
 
 export async function getTournament(id) {
+  const tournament_token = LocalStorage.getItem("tournament_token")
+
+  if (tournament_token) {
+    const { data: tournament } = (
+      await axios.get(`/tournament/${id}`, {
+        headers: {
+          Authorization: `Bearer ${tournament_token}`,
+        },
+      })
+    ).data
+    return tournament
+  }
   const { data: tournament } = (await axios.get(`/tournament/${id}`)).data
   return tournament
 }
@@ -112,4 +125,9 @@ export async function removeGameFromTournament(tournamentId, gameId) {
  */
 export async function updateGameInTournament(tournamentId, gameId, update) {
   await axios.patch(`/tournament/${tournamentId}/game/${gameId}`, update)
+}
+
+export async function joinTournament(tournamentId, firstName) {
+  return (await axios.post(`/tournament/${tournamentId}/join`, { firstName }))
+    .data
 }
