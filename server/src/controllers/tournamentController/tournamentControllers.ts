@@ -400,22 +400,14 @@ async function protectTournament(
 ) {
   try {
     const { id: tournamentIdParam } = req.params
-    let tournamentToken = null
-    if (
-      req.headers.authorization &&
-      req.headers.authorization.startsWith("Bearer")
-    ) {
-      tournamentToken = req.headers.authorization.split(" ")[1]
-    } else if (req.cookies?.jwt) {
-      tournamentToken = req.cookies.jwt
+    let token = null
+    if (req.cookies?.tournament_token) {
+      token = req.cookies.tournament_token
     }
-    if (!tournamentToken) {
+    if (!token) {
       throw { statusCode: 401, message: "Please join the tournament first" }
     }
-    const { tournamentId, id } = jwt.verify(
-      tournamentToken,
-      process.env.JWT_SECRET,
-    ) as {
+    const { tournamentId, id } = jwt.verify(token, process.env.JWT_SECRET) as {
       tournamentId: string
       id: string
     }
