@@ -401,7 +401,12 @@ async function protectTournament(
   try {
     const { id: tournamentIdParam } = req.params
     let token = null
-    if (req.cookies?.tournament_token) {
+    if (
+      req.headers.authorization &&
+      req.headers.authorization.startsWith("Bearer")
+    ) {
+      token = req.headers.authorization.split(" ")[1]
+    } else if (req.cookies?.tournament_token) {
       token = req.cookies.tournament_token
     }
     if (!token) {
@@ -413,8 +418,10 @@ async function protectTournament(
     }
     if (tournamentId && tournamentId === tournamentIdParam) return next()
 
-    const tournament = await Tournament.findById(tournamentIdParam)
-    if (id && id === tournament.createdBy.toString()) return next()
+    if (id) {
+      const tournament = await Tournament.findById(tournamentIdParam)
+      if (id && id === tournament.createdBy.toString()) return next()
+    }
 
     throw { statusCode: 401, message: "Invalid tournament token" }
   } catch (error) {
