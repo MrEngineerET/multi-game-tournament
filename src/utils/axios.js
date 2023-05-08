@@ -12,6 +12,7 @@ export class MyAxios {
           Authorization: this.token ? `Bearer ${this.token}` : "",
         },
       },
+      withCredentials: true,
     })
   }
 
