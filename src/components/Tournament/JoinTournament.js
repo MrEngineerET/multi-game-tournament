@@ -29,7 +29,7 @@ export function JoinTournament() {
             type="submit"
             loading={navigation.state === "submitting"}
           >
-            Join →
+            {navigation.state === "submitting" ? "Joining →" : "Join →"}
           </LoadingButton>
         </Form>
       </Container>
