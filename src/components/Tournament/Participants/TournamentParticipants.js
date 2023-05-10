@@ -33,7 +33,7 @@ export function TournamentParticipants() {
 
   useEffect(() => {
     if (fetcher.data?.error) {
-      alert(fetcher.data.error, "error", {
+      alert.showError(fetcher.data.error, "error", {
         vertical: "bottom",
         horizontal: "left",
       })

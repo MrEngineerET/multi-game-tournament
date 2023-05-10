@@ -26,7 +26,7 @@ export function LogIn() {
 
   useEffect(() => {
     if (actionData?.error) {
-      alert(actionData.error)
+      alert.showError(actionData.error)
     }
     if (actionData?.res) {
       auth.getIdentity().then(() => {

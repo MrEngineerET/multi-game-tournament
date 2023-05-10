@@ -15,12 +15,18 @@ export function AlertProvider({ children }) {
   })
   function openAlert(message, severityType, anchorOrigin) {
     setMessage(message)
-    if (severityType) setSeverity(severity)
+    if (severityType) setSeverity(severityType)
     if (anchorOrigin) setAnchorOrigin(anchorOrigin)
     setOpenSnackbar(true)
   }
+  const values = {
+    showSuccess: (message) => openAlert(message, "success"),
+    showError: (message) => openAlert(message, "error"),
+    showInfo: (message) => openAlert(message, "info"),
+    showWarning: (message) => openAlert(message, "warning"),
+  }
   return (
-    <alertContext.Provider value={openAlert}>
+    <alertContext.Provider value={values}>
       <Snackbar
         open={openSnackbar}
         autoHideDuration={6000}

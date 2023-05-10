@@ -28,7 +28,7 @@ export function ParticipantListItem({
       setOpenNameEditor(false)
     }
     if (fetcher.data?.error) {
-      alert(fetcher.data.error)
+      alert.showError(fetcher.data.error)
     }
   }, [fetcher.state, fetcher.data])
 

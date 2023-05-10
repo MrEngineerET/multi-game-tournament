@@ -38,7 +38,7 @@ export function CreateTournament() {
       navigate(actionData.redirectURL, { replace: true })
     }
     if (actionData?.error) {
-      alert(actionData.error)
+      alert.showError(actionData.error)
     }
   }, [actionData])
 

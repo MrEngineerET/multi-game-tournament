@@ -295,7 +295,7 @@ function ShareTournamentDialog({ isOpen = false, onClose }) {
 
   const handleCopy = () => {
     navigator.clipboard.writeText(joinURL)
-    alert("Copied to clipboard")
+    alert.showSuccess("Copied to clipboard")
   }
 
   return (
@@ -312,7 +312,7 @@ function ShareTournamentDialog({ isOpen = false, onClose }) {
           <CloseIcon onClick={onClose} />
         </IconButton>
       </Box>
-      <DialogContent>
+      <DialogContent sx={{ pt: 0 }}>
         <DialogContentText>
           Copy the link below and share it with your friends.
         </DialogContentText>
@@ -320,7 +320,7 @@ function ShareTournamentDialog({ isOpen = false, onClose }) {
           sx={{
             display: "flex",
             alignItems: "center",
-            mt: 5,
+            mt: 2,
           }}
         >
           <TextField

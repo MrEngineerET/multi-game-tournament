@@ -26,7 +26,7 @@ export function SignUp() {
 
   useEffect(() => {
     if (actionData?.error) {
-      alert(actionData.error)
+      alert.showError(actionData.error)
     }
     if (actionData?.res) {
       getIdentity().then(() => {
