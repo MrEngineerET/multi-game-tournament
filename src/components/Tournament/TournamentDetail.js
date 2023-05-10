@@ -1,6 +1,16 @@
 import React, { useMemo, useState, useEffect } from "react"
+import { PropTypes } from "prop-types"
 import { Outlet, Link, useLocation } from "react-router-dom"
-import { Typography, Box, Stack } from "@mui/material"
+import { Typography, Box, Stack, ButtonBase, Button } from "@mui/material"
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  TextField,
+  IconButton,
+} from "@mui/material"
+import CloseIcon from "@mui/icons-material/Close"
 import { useTournamentContext } from "../../context/TournamentContext"
 import { Container } from "@mui/system"
 import PeopleAltIcon from "@mui/icons-material/PeopleAlt"
@@ -9,6 +19,8 @@ import SportsEsportsIcon from "@mui/icons-material/SportsEsports"
 import { tournamentType } from "../../utils/constants"
 import { Tabs, Tab } from "@mui/material"
 import { TournamentStatus } from "./TournamentStatus"
+import ShareIcon from "@mui/icons-material/Share"
+import { useAlert } from "../../context/AlertContext"
 
 const sxStyles = {
   gameImageList: {
@@ -52,6 +64,7 @@ const tabs = { bracket: 0, participants: 1, settings: 2 }
 
 export function TournamentDetail() {
   const location = useLocation()
+  const [openShareDialog, setOpenShareDialog] = useState(false)
   const { tournamentData } = useTournamentContext()
   const [tabValue, setTabValue] = useState(() => {
     if (location.pathname.includes("participants")) return tabs.participants
@@ -168,7 +181,56 @@ export function TournamentDetail() {
                     </Stack>
                   </Stack>
                 </Stack>
-                {/* <Box>additional information</Box> */}
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: {
+                      xs: "column",
+                      sm: "row",
+                    },
+                    alignItems: "flex-end",
+                    justifyContent: "end",
+                    gap: 4,
+                    pr: {
+                      xs: 6,
+                      sm: 3,
+                    },
+                  }}
+                >
+                  <Typography
+                    sx={{
+                      fontSize: 16,
+                      display: {
+                        xs: "none",
+                        sm: "block",
+                      },
+                      mb: "12px",
+                    }}
+                  >
+                    Share Tournament{" "}
+                  </Typography>
+                  <ButtonBase
+                    onClick={() => setOpenShareDialog(true)}
+                    sx={{
+                      bgcolor: "#334",
+                      padding: 2,
+                      borderRadius: 1,
+                    }}
+                  >
+                    <ShareIcon
+                      sx={{
+                        color: "primary.main",
+                        "&:hover": {
+                          color: "primary.dark",
+                        },
+                        fontSize: {
+                          xs: 24,
+                          sm: 32,
+                        },
+                      }}
+                    />
+                  </ButtonBase>
+                </Box>
               </Stack>
               <Box>
                 <Tabs
@@ -217,6 +279,72 @@ export function TournamentDetail() {
           <Outlet />
         </Container>
       </Box>
+      <ShareTournamentDialog
+        isOpen={openShareDialog}
+        onClose={() => {
+          setOpenShareDialog(false)
+        }}
+      />
     </Box>
   )
+}
+
+function ShareTournamentDialog({ isOpen = false, onClose }) {
+  const alert = useAlert()
+  const joinURL = `${window.location.href}/join`
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText(joinURL)
+    alert("Copied to clipboard")
+  }
+
+  return (
+    <Dialog open={isOpen} onClose={onClose}>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+        }}
+      >
+        <DialogTitle>Share Tournament</DialogTitle>
+        <IconButton sx={{ mr: 3 }}>
+          <CloseIcon onClick={onClose} />
+        </IconButton>
+      </Box>
+      <DialogContent>
+        <DialogContentText>
+          Copy the link below and share it with your friends.
+        </DialogContentText>
+        <Box
+          sx={{
+            display: "flex",
+            alignItems: "center",
+            mt: 5,
+          }}
+        >
+          <TextField
+            sx={{ flex: 1 }}
+            value={joinURL}
+            InputProps={{
+              readOnly: true,
+              style: {
+                fontSize: 12,
+              },
+              type: "url",
+            }}
+            onClick={handleCopy}
+          />
+          <Button sx={{ ml: 2 }} onClick={handleCopy}>
+            Copy
+          </Button>
+        </Box>
+      </DialogContent>
+    </Dialog>
+  )
+}
+
+ShareTournamentDialog.propTypes = {
+  isOpen: PropTypes.bool,
+  onClose: PropTypes.func,
 }
