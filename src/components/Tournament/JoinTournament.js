@@ -1,12 +1,26 @@
 import React from "react"
-import { Form, redirect, useNavigation } from "react-router-dom"
+import {
+  Form,
+  useNavigation,
+  useActionData,
+  useLoaderData,
+  useNavigate,
+} from "react-router-dom"
 import { Box, Container, TextField, Typography } from "@mui/material"
 import { LoadingButton } from "../Common/LoadingButton"
 import { getTournament, joinTournament } from "../../api/tournament"
-import LocalaStorage from "../../utils/localStorage"
 
 export function JoinTournament() {
   const navigation = useNavigation()
+  const navigate = useNavigate()
+  const actionData = useActionData()
+  const loaderData = useLoaderData()
+
+  React.useEffect(() => {
+    if (loaderData?.redirect) navigate(loaderData.redirect, { replace: true })
+    if (actionData?.redirect) navigate(actionData.redirect, { replace: true })
+  }, [loaderData, actionData])
+
   return (
     <Box>
       <Container maxWidth="xl">
@@ -42,7 +56,7 @@ export async function loader({ params }) {
     const tournamentId = params.id
     const tournament = await getTournament(tournamentId)
     // if the tournament is found it means the user is already joined
-    if (tournament) return redirect(`/tournament/${tournamentId}`)
+    if (tournament) return { redirect: `/tournament/${tournamentId}` }
     else return null
   } catch (error) {
     return null
@@ -54,12 +68,9 @@ export async function action({ request, params }) {
     const formData = await request.formData()
     const firstName = formData.get("firstName")
     const { id } = params
-    const res = await joinTournament(id, firstName)
-
-    LocalaStorage.setItem("tournament_token", res.data.tournamentToken)
-    return redirect(`/tournament/${id}`)
+    await joinTournament(id, firstName)
+    return { redirect: `/tournament/${id}` }
   } catch (error) {
-    console.log("our error ", error)
     return null
   }
 }

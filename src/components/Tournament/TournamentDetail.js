@@ -308,8 +308,8 @@ function ShareTournamentDialog({ isOpen = false, onClose }) {
         }}
       >
         <DialogTitle>Share Tournament</DialogTitle>
-        <IconButton sx={{ mr: 3 }}>
-          <CloseIcon onClick={onClose} />
+        <IconButton sx={{ mr: 3 }} onClick={onClose}>
+          <CloseIcon />
         </IconButton>
       </Box>
       <DialogContent sx={{ pt: 0 }}>

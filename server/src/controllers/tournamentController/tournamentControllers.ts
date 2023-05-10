@@ -367,8 +367,10 @@ async function joinTournament(req: Request, res: Response, next: NextFunction) {
     if (!tournament) {
       throw { statusCode: 404, message: "Tournament not found" }
     }
-    const firstNames = tournament.participant.map((p) => p.name.split(" ")[0])
-    if (!firstNames.includes(firstName)) {
+    const firstNames = tournament.participant.map((p) =>
+      p.name.split(" ")[0].toLocaleLowerCase(),
+    )
+    if (!firstNames.includes(firstName.toLocaleLowerCase())) {
       throw {
         statusCode: 400,
         message: "You are not invited to the tournament",
