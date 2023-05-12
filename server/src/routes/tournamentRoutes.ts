@@ -14,18 +14,20 @@ tournamentRouter.get(
   tournamentController.getTournament,
 )
 
-tournamentRouter.use(authController.protect)
-
-tournamentRouter.get("/", tournamentController.getAllTournaments)
-tournamentRouter.post(
-  "/",
-  validator.createTournament,
-  tournamentController.createTournament,
-)
 tournamentRouter.patch(
   "/:id",
   validator.updateTournament,
   tournamentController.updateTournament,
+)
+
+tournamentRouter.use(authController.protect)
+
+tournamentRouter.get("/", tournamentController.getAllTournaments)
+
+tournamentRouter.post(
+  "/",
+  validator.createTournament,
+  tournamentController.createTournament,
 )
 tournamentRouter.delete(
   "/:id",
