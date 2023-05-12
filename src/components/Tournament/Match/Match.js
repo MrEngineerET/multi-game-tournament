@@ -36,25 +36,26 @@ const styles = {
     },
     zIndex: 10,
   },
+
   opponent: {
     display: "flex",
     justifyContent: "space-between",
     gap: 2,
     color: styleConstants.fontColor,
     bgcolor: "bracket.background",
-    "&:first-of-type": {
+  },
+  opponentTop: {
+    borderTopRightRadius: styleConstants.borderRadius,
+    borderTopLeftRadius: styleConstants.borderRadius,
+    "& span:last-of-type": {
       borderTopRightRadius: styleConstants.borderRadius,
-      borderTopLeftRadius: styleConstants.borderRadius,
-      "& span:last-of-type": {
-        borderTopRightRadius: styleConstants.borderRadius,
-      },
     },
-    "&:last-of-type": {
+  },
+  opponentBottom: {
+    borderBottomRightRadius: styleConstants.borderRadius,
+    borderBottomLeftRadius: styleConstants.borderRadius,
+    "& span:last-of-type": {
       borderBottomRightRadius: styleConstants.borderRadius,
-      borderBottomLeftRadius: styleConstants.borderRadius,
-      "& span:last-of-type": {
-        borderBottomRightRadius: styleConstants.borderRadius,
-      },
     },
   },
   score: {
@@ -126,6 +127,12 @@ const styles = {
     justifyContent: "center",
     zIndex: 5,
   }),
+  divider: {
+    borderColor: (theme) =>
+      theme.palette.mode === "light"
+        ? "#78787c"
+        : theme.palette.background.default,
+  },
 }
 
 export function Match({ match }) {
@@ -138,38 +145,37 @@ export function Match({ match }) {
   return (
     <Box sx={styles.root}>
       <Box sx={styles.match}>
-        {match.participants.map((participant, i) => {
-          const opponent = [
-            <Box sx={styles.opponent} key={i}>
-              <Typography component="span" sx={styles.name}>
-                {participant?.name}
-              </Typography>
-              <Typography
-                sx={[
-                  styles.score,
-                  !matchCompleted && styles.invisible,
-                  participant?.result === "win" && styles.winner,
-                ]}
-                component="span"
-              >
-                {participant?.score || "-"}
-              </Typography>
-            </Box>,
-          ]
-          if (i == 0)
-            opponent.push(
-              <Divider
-                key="divider"
-                sx={{
-                  borderColor: (theme) =>
-                    theme.palette.mode === "light"
-                      ? "#78787c"
-                      : theme.palette.background.default,
-                }}
-              />,
-            )
-          return opponent
-        })}
+        <Box sx={[styles.opponent, styles.opponentTop]}>
+          <Typography component="span" sx={styles.name}>
+            {match.participants[0]?.name}
+          </Typography>
+          <Typography
+            sx={[
+              styles.score,
+              !matchCompleted && styles.invisible,
+              match.participants[0]?.result === "win" && styles.winner,
+            ]}
+            component="span"
+          >
+            {match.participants[0]?.score || "-"}
+          </Typography>
+        </Box>
+        <Divider key="divider" sx={styles.divider} />
+        <Box sx={[styles.opponent, styles.opponentBottom]}>
+          <Typography component="span" sx={styles.name}>
+            {match.participants[1]?.name}
+          </Typography>
+          <Typography
+            sx={[
+              styles.score,
+              !matchCompleted && styles.invisible,
+              match.participants[1]?.result === "win" && styles.winner,
+            ]}
+            component="span"
+          >
+            {match.participants[1]?.score || "-"}
+          </Typography>
+        </Box>
         {matchReady && (
           <Box sx={styles.editScore}>
             <ClickToolTip
