@@ -1,7 +1,8 @@
 import React from "react"
-import { AppBar, Toolbar, Typography, Button } from "@mui/material"
+import { AppBar, Toolbar, Typography, Button, Box } from "@mui/material"
 import { Container } from "@mui/system"
 import { useTheme, useMediaQuery } from "@mui/material"
+import { Link } from "react-router-dom"
 
 export function LoggedOutAppBar() {
   const theme = useTheme()
@@ -18,9 +19,16 @@ export function LoggedOutAppBar() {
               height="40px"
             /> */}
 
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-              Tourney
-            </Typography>
+            <Box sx={{ flexGrow: 1 }}>
+              <Link
+                to={"/"}
+                style={{ textDecoration: "none", display: "inline-block" }}
+              >
+                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                  Tourney
+                </Typography>
+              </Link>
+            </Box>
             <Button
               href="/login"
               sx={{
