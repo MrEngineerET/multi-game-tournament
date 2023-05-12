@@ -13,6 +13,7 @@ export function AlertProvider({ children }) {
     vertical: "top",
     horizontal: "center",
   })
+
   function openAlert(message, severityType, anchorOrigin) {
     setMessage(message)
     if (severityType) setSeverity(severityType)
@@ -20,10 +21,14 @@ export function AlertProvider({ children }) {
     setOpenSnackbar(true)
   }
   const values = {
-    showSuccess: (message) => openAlert(message, "success"),
-    showError: (message) => openAlert(message, "error"),
-    showInfo: (message) => openAlert(message, "info"),
-    showWarning: (message) => openAlert(message, "warning"),
+    showSuccess: (message, anchorOrigin) =>
+      openAlert(message, "success", anchorOrigin),
+    showError: (message, anchorOrigin) =>
+      openAlert(message, "error", anchorOrigin),
+    showInfo: (message, anchorOrigin) =>
+      openAlert(message, "info", anchorOrigin),
+    showWarning: (message, anchorOrigin) =>
+      openAlert(message, "warning", anchorOrigin),
   }
   return (
     <alertContext.Provider value={values}>
@@ -32,8 +37,14 @@ export function AlertProvider({ children }) {
         autoHideDuration={6000}
         onClose={() => {
           setOpenSnackbar(false)
+          setAnchorOrigin({ vertical: "top", horizontal: "center" })
         }}
-        anchorOrigin={anchorOrigin}
+        anchorOrigin={
+          anchorOrigin ?? {
+            vertical: "top",
+            horizontal: "center",
+          }
+        }
       >
         <Alert severity={severity}>{message}</Alert>
       </Snackbar>
