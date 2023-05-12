@@ -43,7 +43,7 @@ import {
   archiveTemplateAction,
   deleteTemplateAction,
 } from "../components/TournamentPage/TableToolBar"
-import { LoggedInAppBar } from "../components/LoggedInAppHeader"
+import { AppHeaderBar } from "../components/AppHeaderBar"
 import {
   JoinTournament,
   action as joinTournamentAction,
@@ -73,7 +73,7 @@ export const routes = (
         path="/"
         element={
           <>
-            <LoggedInAppBar />
+            <AppHeaderBar />
             <Outlet />
           </>
         }

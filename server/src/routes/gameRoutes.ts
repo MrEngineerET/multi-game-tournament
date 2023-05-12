@@ -4,10 +4,9 @@ import { gameControllerValidator as validator } from "../controllers/gameControl
 import authController from "../controllers/userController/authController"
 
 const gameRouter = express.Router()
-gameRouter.use(authController.protect)
-
-gameRouter.get("/", gameController.getAllGames)
 gameRouter.get("/:id", validator.getGame, gameController.getGame)
+gameRouter.get("/", gameController.getAllGames)
+gameRouter.use(authController.protect)
 
 gameRouter.use(authController.restrictTo("admin"))
 gameRouter.post("/", validator.createGame, gameController.createGame)
