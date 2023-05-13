@@ -9,7 +9,8 @@ import {
   useTheme,
   useMediaQuery,
 } from "@mui/material"
-import { TextField, Button, Box } from "@mui/material"
+// eslint-disable-next-line no-unused-vars
+import { TextField, Button, Box, Alert } from "@mui/material"
 import PropTypes from "prop-types"
 import { useFetcher } from "react-router-dom"
 import { updateTournament } from "../../../api/tournament"
@@ -26,6 +27,18 @@ const styles = {
     pb: 0,
     gap: 4,
   },
+  alert: {
+    opacity: 0,
+    height: 0,
+    overflow: "hidden",
+    transition: "opacity 0.5s, height 0.5s",
+    pt: 0,
+    pb: 0,
+  },
+  alertShow: {
+    opacity: 1,
+    height: "auto",
+  },
 }
 
 export function ReportScore({ match, onClose }) {
@@ -40,6 +53,13 @@ export function ReportScore({ match, onClose }) {
 
   return (
     <fetcher.Form method="post" action={`?match_id=${match.id}`}>
+      <Alert
+        severity="error"
+        sx={[styles.alert, fetcher.data?.error && styles.alertShow]}
+      >
+        {fetcher.data?.error}
+      </Alert>
+
       <TableContainer>
         <Table>
           <TableHead>
@@ -57,6 +77,7 @@ export function ReportScore({ match, onClose }) {
                   type="number"
                   sx={styles.scoreInputField}
                   required
+                  autoFocus
                 />
               </TableCell>
             </TableRow>
@@ -108,6 +129,13 @@ export async function updateMatchAction(request, params) {
   const formData = await request.formData()
   const participantOneScore = Number(formData.get("participant_one_score"))
   const participantTwoScore = Number(formData.get("participant_two_score"))
+
+  if (!participantOneScore || !participantTwoScore)
+    return { error: "Please enter a score for both participants" }
+  if (participantOneScore === participantTwoScore)
+    return { error: "Scores cannot be equal" }
+  if (participantOneScore < 0 || participantTwoScore < 0)
+    return { error: "Scores cannot be negative" }
 
   const playerOneResult =
     participantOneScore > participantTwoScore ? "win" : "loss"
