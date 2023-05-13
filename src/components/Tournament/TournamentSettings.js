@@ -22,22 +22,13 @@ import { useTournamentContext } from "../../context/TournamentContext"
 import { useFetcher } from "react-router-dom"
 
 export function TournamentSettings() {
-  const fetcher = useFetcher()
+  const fetcherBasic = useFetcher()
+  const fetcherGame = useFetcher()
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const { tournamentData } = useTournamentContext()
   const selectedStageType = tournamentData.stages[0].type
-  const [changeDetected, setChangeDetected] = React.useState(false)
   const isPending = tournamentData.status === "pending"
-
-  React.useEffect(() => {
-    if (
-      fetcher.data?.status === "success" &&
-      fetcher.data?.intent === "edit_basic"
-    ) {
-      setChangeDetected(false)
-    }
-  }, [fetcher.data])
 
   return (
     <Box
@@ -52,7 +43,7 @@ export function TournamentSettings() {
       <Card>
         <CardHeader title="Basic Info" sx={{ bgcolor: "background.default" }} />
         <CardContent>
-          <fetcher.Form method="post">
+          <fetcherBasic.Form method="post">
             <Stack gap={5}>
               <TextField
                 label="Tournament name"
@@ -62,10 +53,7 @@ export function TournamentSettings() {
                 variant="outlined"
                 size={isSmallScreen ? "small" : "normal"}
                 defaultValue={tournamentData.name}
-                disabled={fetcher.state === "submitting"}
-                onChange={() => {
-                  setChangeDetected(true)
-                }}
+                disabled={fetcherBasic.state === "submitting"}
               />
 
               <TextField
@@ -79,10 +67,7 @@ export function TournamentSettings() {
                 size={isSmallScreen ? "small" : "normal"}
                 required
                 defaultValue={tournamentData.description}
-                disabled={fetcher.state === "submitting"}
-                onChange={() => {
-                  setChangeDetected(true)
-                }}
+                disabled={fetcherBasic.state === "submitting"}
               />
 
               <TextField
@@ -92,10 +77,7 @@ export function TournamentSettings() {
                 select
                 defaultValue={selectedStageType}
                 size={isSmallScreen ? "small" : "normal"}
-                disabled={fetcher.state === "submitting" || !isPending}
-                onChange={() => {
-                  setChangeDetected(true)
-                }}
+                disabled={fetcherBasic.state === "submitting" || !isPending}
               >
                 <MenuItem value={stageType.singleElimination}>
                   Single Elimination
@@ -110,25 +92,25 @@ export function TournamentSettings() {
                 type="submit"
                 name="intent"
                 value="edit_basic"
-                disabled={fetcher.state === "submitting" || !changeDetected}
+                disabled={fetcherBasic.state === "submitting"}
               >
-                Save
+                {fetcherBasic.state === "submitting" ? "Saving..." : "Save"}
               </Button>
             </Box>
-          </fetcher.Form>
+          </fetcherBasic.Form>
         </CardContent>
       </Card>
-      <fetcher.Form method="post">
+      <fetcherGame.Form method="post">
         <GameInfo
           showSaveButton
           selectedGames={tournamentData.games.map((g) => ({
             ...g.gameId,
             count: g.count,
           }))}
-          submitDisabled={fetcher.state === "submitting"}
-          disableForm={fetcher.state === "submitting" || !isPending}
+          submitDisabled={fetcherGame.state === "submitting"}
+          disableForm={fetcherGame.state === "submitting" || !isPending}
         />
-      </fetcher.Form>
+      </fetcherGame.Form>
       {/* invisible layout Element */}
       <Box
         sx={{
