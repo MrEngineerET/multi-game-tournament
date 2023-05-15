@@ -1,6 +1,41 @@
 import { Game } from "../../model/game"
 import { Request, Response, NextFunction } from "express"
 import { RequestWithUser } from "../userController/authController"
+import multer from "multer"
+import { AppError } from "../../utils/AppError"
+import sharp from "sharp"
+
+const multerFilter = (req, file, cb) => {
+  if (file.mimetype.startsWith("image")) {
+    cb(null, true)
+  } else {
+    cb(new AppError("Not an image! Please upload only images.", 400), false)
+  }
+}
+const upload = multer({
+  storage: multer.memoryStorage(),
+  fileFilter: multerFilter,
+})
+
+const uploadPhoto = upload.single("image")
+
+const resizePhoto = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    if (!req.file) return next()
+
+    req.file.filename = `game-${Date.now()}.jpeg`
+
+    await sharp(req.file.buffer)
+      .resize(500, 500)
+      .toFormat("jpeg")
+      .jpeg({ quality: 90 })
+      .toFile(`public/imgs/uploads/games/${req.file.filename}`)
+
+    next()
+  } catch (error) {
+    next(error)
+  }
+}
 
 export const getAllGames = async (
   req: Request,
@@ -8,7 +43,7 @@ export const getAllGames = async (
   next: NextFunction,
 ) => {
   try {
-    const allGames = await Game.find().sort({ _id: -1 })
+    const allGames = await Game.find(req.query).sort({ _id: -1 })
     res.status(200).send({ status: "success", data: allGames })
   } catch (error) {
     next(error)
@@ -40,11 +75,11 @@ export const createGame = async (
   next: NextFunction,
 ) => {
   try {
-    const { name, description, images } = req.body
+    const { name, description } = req.body
     const game = await Game.create({
       name,
       description,
-      images,
+      images: [req.file.filename],
       createdBy: req.user._id,
     })
 
@@ -77,10 +112,9 @@ export const deleteGame = async (
   next: NextFunction,
 ) => {
   try {
-    const result = await Game.deleteOne({ _id: req.params.id })
-    if (result.deletedCount === 0) {
-      throw { statusCode: 404, message: "Game not found" }
-    }
+    await Game.findByIdAndUpdate(req.params.id, {
+      active: false,
+    })
     res.status(204).send()
   } catch (error) {
     next(error)
@@ -93,4 +127,6 @@ export default {
   createGame,
   getGame,
   deleteGame,
+  uploadPhoto,
+  resizePhoto,
 }

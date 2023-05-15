@@ -2,14 +2,10 @@ import { Types } from "mongoose"
 
 export const gameControllerValidator = {
   createGame(req, res, next) {
-    const { name, description, images } = req.body
-    if (!name || !description)
+    const { name, description } = req.body
+    const image = req.file
+    if (!name || !description || !image)
       throw { statusCode: 422, message: "insufficient data" }
-    if (!Array.isArray(images))
-      throw {
-        statusCode: 333,
-        message: "images should be an array",
-      }
     next()
   },
   getGame(req, res, next) {

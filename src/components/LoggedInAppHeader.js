@@ -42,7 +42,11 @@ export function LoggedInAppBar() {
             <Box sx={{ flexGrow: 1 }}>
               <Link
                 to={"/"}
-                style={{ textDecoration: "none", display: "inline-block" }}
+                style={{
+                  textDecoration: "none",
+                  display: "inline-block",
+                  color: "black",
+                }}
               >
                 <Typography variant="h6" component="div">
                   Tourney

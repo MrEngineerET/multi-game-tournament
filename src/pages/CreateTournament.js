@@ -104,6 +104,6 @@ export async function action({ request }) {
 }
 
 export async function loader() {
-  const gamesPromise = getAllGames()
+  const gamesPromise = getAllGames(true)
   return defer({ games: gamesPromise })
 }

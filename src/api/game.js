@@ -1,6 +1,8 @@
 import { axios } from "../utils/axios"
-export async function getAllGames() {
-  const { data: games } = (await axios.get("/game")).data
+export async function getAllGames(active) {
+  let query = undefined
+  if (active) query = `active=${active}`
+  const { data: games } = (await axios.get(`/game?${query}`)).data
   return games
 }
 
@@ -8,9 +10,17 @@ export async function deleteGame(gameId) {
   await axios.delete(`/game/${gameId}`)
 }
 
-export async function createGame({ name, description, images }) {
+export async function createGame({ name, description, image }) {
   const { data: game } = (
-    await axios.post("/game", { name, description, images })
+    await axios.post(
+      "/game",
+      { name, description, image },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      },
+    )
   ).data
   return game
 }

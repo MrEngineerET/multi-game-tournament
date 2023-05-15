@@ -6,9 +6,10 @@ interface IGame {
   images?: string[]
   description?: string
   createdBy: Types.ObjectId
+  active: boolean
 }
 
-const GameSchema = new Schema<IGame>(
+const gameSchema = new Schema<IGame>(
   {
     name: { type: String, required: true },
     images: [String],
@@ -17,8 +18,9 @@ const GameSchema = new Schema<IGame>(
       type: Schema.Types.ObjectId,
       ref: "User",
     },
+    active: { type: Boolean, default: true },
   },
   { timestamps: true },
 )
 
-export const Game = model<IGame>("Game", GameSchema)
+export const Game = model<IGame>("Game", gameSchema)

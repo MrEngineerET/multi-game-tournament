@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useEffect } from "react"
 import {
   Box,
   Container,
@@ -6,11 +6,10 @@ import {
   TextField,
   Typography,
   Button,
-  Alert,
-  AlertTitle,
 } from "@mui/material"
 import { Form, redirect, useNavigation, useActionData } from "react-router-dom"
 import { createGame } from "../api/game"
+import { useAlert } from "../context/AlertContext"
 
 const sxStyles = {
   bannerWrapper: {
@@ -35,8 +34,16 @@ const sxStyles = {
 }
 
 export function CreateGame() {
+  const alert = useAlert()
   const navigation = useNavigation()
   const actionData = useActionData()
+
+  useEffect(() => {
+    if (actionData?.data?.message) {
+      alert.showError(actionData.data.message)
+    }
+  }, [actionData])
+
   return (
     <Box>
       <Box sx={sxStyles.bannerWrapper}>
@@ -48,7 +55,7 @@ export function CreateGame() {
       </Box>
       <Box sx={sxStyles.content}>
         <Container>
-          <Form method="post">
+          <Form method="post" encType="multipart/form-data">
             <Box sx={{ maxWidth: 700 }}>
               <Stack gap={5}>
                 <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
@@ -72,18 +79,14 @@ export function CreateGame() {
                   />
                 </Stack>
                 <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
+                  {/* TODO: add a label */}
                   <TextField
-                    label="Images"
+                    type="file"
                     sx={sxStyles.fieldInput}
                     name="image"
+                    required
                   />
                 </Stack>
-                {actionData?.data?.message && (
-                  <Alert severity="error">
-                    <AlertTitle>Error</AlertTitle>
-                    {actionData.data.message}
-                  </Alert>
-                )}
                 <Box
                   sx={{ mt: 5, display: "flex", justifyContent: "flex-end" }}
                 >
@@ -109,11 +112,15 @@ export async function action({ request }) {
   const description = formData.get("description")
   const image = formData.get("image")
   try {
-    await createGame({ name, description, images: [image] })
+    await createGame({
+      name,
+      description,
+      image,
+    })
     return redirect("/game")
   } catch (error) {
     // if validation error
-    if (error.response?.status === 422) return error.response.data
+    if (error.response?.status === 422) return error.response
     else throw error
   }
 }
