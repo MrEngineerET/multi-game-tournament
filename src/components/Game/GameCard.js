@@ -9,6 +9,7 @@ import {
   Button,
   Box,
   Skeleton,
+  Alert,
 } from "@mui/material"
 import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material"
 import { GameDeleteDialog } from "./GameDeleteDialog"
@@ -23,9 +24,13 @@ export function GameCard({ game }) {
     return (e.target.src = "/images/image-loading-error.jpg")
   }
 
+  const imageURL = `${process.env.REACT_APP_SERVER_URL}/imgs/uploads/games/${game.images[0]}`
+
+  const isGameActive = game.active
+
   return (
     <Box>
-      <Card elevation={1}>
+      <Card elevation={1} sx={[!isGameActive && { opacity: 0.7 }]}>
         <CardMedia
           sx={{
             height: { xs: 150, sm: 200 },
@@ -33,11 +38,11 @@ export function GameCard({ game }) {
             borderBottom: "1px solid whitesmoke",
           }}
           component={"img"}
-          image={game.images[0]}
+          image={imageURL}
           onError={handleImageOnError}
           loading="lazy"
         />
-        <CardContent>
+        <CardContent sx={{ pb: 2 }}>
           <Typography gutterBottom variant="h6" component="div">
             <EllipsisText text={game.name} />
           </Typography>
@@ -48,8 +53,18 @@ export function GameCard({ game }) {
           >
             {game.description}
           </Typography>
+          <Alert
+            severity="warning"
+            sx={{
+              pt: 0,
+              pb: 0,
+              visibility: isGameActive ? "hidden" : "visible",
+            }}
+          >
+            The game is deactivated
+          </Alert>
         </CardContent>
-        <CardActions>
+        <CardActions sx={{ p: 4, pb: 2, pt: 2 }}>
           <Button
             size="small"
             variant="text"

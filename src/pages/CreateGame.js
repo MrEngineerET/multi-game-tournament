@@ -79,12 +79,13 @@ export function CreateGame() {
                   />
                 </Stack>
                 <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
-                  {/* TODO: add a label */}
                   <TextField
+                    helperText="Image"
                     type="file"
                     sx={sxStyles.fieldInput}
                     name="image"
                     required
+                    component="span"
                   />
                 </Stack>
                 <Box

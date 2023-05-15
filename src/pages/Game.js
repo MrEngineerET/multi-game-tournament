@@ -1,5 +1,6 @@
-import React from "react"
+import React, { useState } from "react"
 import { Container, Typography, Box, Button } from "@mui/material"
+import { Tabs, Tab } from "@mui/material"
 import { GameCard, GameCardSkeleton } from "../components/Game/GameCard"
 import { useLoaderData, defer, Await } from "react-router-dom"
 import { getAllGames } from "../api/game"
@@ -26,10 +27,27 @@ const styles = {
     gap: { xs: 3, sm: 10 },
     justifyContent: "space-between",
   }),
+  tabs: { maxWidth: 500, margin: "auto", minHeight: 35 },
+  tab: (theme) => ({
+    "&.Mui-selected": {
+      bgcolor: "background.paper",
+    },
+    [theme.breakpoints.down("sm")]: {
+      padding: 0,
+      flex: 1,
+      fontSize: 12,
+      minHeight: 35,
+    },
+  }),
 }
 
 export function Game() {
+  const [tabValue, setTabValue] = useState(0)
   const { games } = useLoaderData()
+
+  const handleTabChange = (event, newValue) => {
+    setTabValue(newValue)
+  }
   return (
     <Box sx={styles.root}>
       <Box sx={styles.bannerWrapper}>
@@ -46,38 +64,55 @@ export function Game() {
           </Box>
         </Container>
       </Box>
-      <Container
-        sx={{
-          display: "flex",
-          gap: 5,
-          flexWrap: "wrap",
-          justifyContent: "center",
-        }}
-      >
-        <React.Suspense
-          fallback={new Array(3).fill(0).map((el, i) => (
-            <GameCardSkeleton key={i} />
-          ))}
+      <Container>
+        <Box sx={{ mb: 3, display: "flex", justifyContent: "center" }}>
+          <Tabs sx={styles.tabs} value={tabValue} onChange={handleTabChange}>
+            <Tab sx={styles.tab} label="All Game" />
+            <Tab sx={styles.tab} label="Active" />
+            <Tab sx={styles.tab} label="Inactive" />
+          </Tabs>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            gap: 5,
+            flexWrap: "wrap",
+            justifyContent: "center",
+          }}
         >
-          <Await resolve={games}>
-            {(games) =>
-              games.map((game) => (
-                <Box
-                  sx={{
-                    width: 280,
-                    transition: "box-shadow 0.3s ease-in-out",
-                    ":hover": {
-                      boxShadow: 3,
-                    },
-                  }}
-                  key={game._id}
-                >
-                  <GameCard game={game} />
-                </Box>
-              ))
-            }
-          </Await>
-        </React.Suspense>
+          <React.Suspense
+            fallback={new Array(3).fill(0).map((el, i) => (
+              <GameCardSkeleton key={i} />
+            ))}
+          >
+            <Await resolve={games}>
+              {(games) => {
+                const activeGames = games.filter((game) => game.active)
+                const inactiveGames = games.filter((game) => !game.active)
+                const gamesToBeShown =
+                  tabValue === 0
+                    ? [...activeGames, ...inactiveGames]
+                    : tabValue === 1
+                    ? activeGames
+                    : inactiveGames
+                return gamesToBeShown.map((game) => (
+                  <Box
+                    sx={{
+                      width: 280,
+                      transition: "box-shadow 0.3s ease-in-out",
+                      ":hover": {
+                        boxShadow: 3,
+                      },
+                    }}
+                    key={game._id}
+                  >
+                    <GameCard game={game} />
+                  </Box>
+                ))
+              }}
+            </Await>
+          </React.Suspense>
+        </Box>
       </Container>
     </Box>
   )
