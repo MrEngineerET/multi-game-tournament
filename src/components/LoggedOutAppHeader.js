@@ -22,9 +22,16 @@ export function LoggedOutAppBar() {
             <Box sx={{ flexGrow: 1 }}>
               <Link
                 to={"/"}
-                style={{ textDecoration: "none", display: "inline-block" }}
+                style={{
+                  textDecoration: "none",
+                  display: "inline-block",
+                }}
               >
-                <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ flexGrow: 1, color: "text.primary" }}
+                >
                   Tourney
                 </Typography>
               </Link>

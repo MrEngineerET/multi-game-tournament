@@ -6,7 +6,7 @@ import {
   useLoaderData,
   useNavigate,
 } from "react-router-dom"
-import { Box, Container, TextField, Typography, Stack } from "@mui/material"
+import { Box, Container, TextField, Typography } from "@mui/material"
 import { LoadingButton } from "../Common/LoadingButton"
 import { getTournament, joinTournament } from "../../api/tournament"
 import { useAlert } from "../../context/AlertContext"
@@ -27,35 +27,39 @@ export function JoinTournament() {
   return (
     <Box>
       <Container maxWidth="md" sx={{ pt: { xs: 5, md: 10 } }}>
-        <Stack gap={5}>
-          <Typography variant="h3" component="h1" sx={{ mb: 1 }}>
+        <Box
+          sx={{
+            marginTop: 8,
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <Typography component="h1" variant="h5">
             Join Tournament
           </Typography>
-          <Typography>
-            Could you kindly provide us with your first name, so that we may
-            grant you access?
-          </Typography>
           <Form method="post">
-            <TextField
-              name="firstName"
-              type="text"
-              required
-              label="First Name"
-              variant="outlined"
-              autoFocus
-              disabled={navigation.state === "submitting"}
-              sx={{ width: "350px", mb: 3 }}
-            />
-            <br />
-            <LoadingButton
-              type="submit"
-              loading={navigation.state === "submitting"}
-              sx={{ mt: 2 }}
-            >
-              {navigation.state === "submitting" ? "Joining →" : "Join →"}
-            </LoadingButton>
+            <Box sx={{ mt: 5, display: "flex", flexDirection: "column" }}>
+              <TextField
+                name="firstName"
+                type="text"
+                required
+                label="First Name"
+                variant="outlined"
+                autoFocus
+                disabled={navigation.state === "submitting"}
+                sx={{ width: "330px" }}
+              />
+              <LoadingButton
+                type="submit"
+                loading={navigation.state === "submitting"}
+                sx={{ mt: 3, mb: 2, width: "330px" }}
+              >
+                {navigation.state === "submitting" ? "Joining →" : "Join →"}
+              </LoadingButton>
+            </Box>
           </Form>
-        </Stack>
+        </Box>
       </Container>
     </Box>
   )

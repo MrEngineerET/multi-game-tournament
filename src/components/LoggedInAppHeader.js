@@ -45,10 +45,13 @@ export function LoggedInAppBar() {
                 style={{
                   textDecoration: "none",
                   display: "inline-block",
-                  color: "black",
                 }}
               >
-                <Typography variant="h6" component="div">
+                <Typography
+                  variant="h6"
+                  component="div"
+                  sx={{ color: "text.primary" }}
+                >
                   Tourney
                 </Typography>
               </Link>
