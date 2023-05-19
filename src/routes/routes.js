@@ -21,8 +21,11 @@ import {
   action as tournamentAction,
 } from "../context/TournamentContext"
 import { ErrorPage } from "../pages/ErrorPage"
-import { Game, loader as gameLoader } from "../pages/Game"
-import { action as deleteGameAction } from "../pages/deleteGame"
+import {
+  Game,
+  loader as gameLoader,
+  action as deleteGameAction,
+} from "../pages/Game"
 import { CreateGame, action as createGameAction } from "../pages/CreateGame"
 import {
   EditGame,
@@ -99,7 +102,12 @@ export const routes = (
             <Route path="archive" action={archiveTemplateAction} />
           </Route>
 
-          <Route path="/game" element={<Game />} loader={gameLoader} />
+          <Route
+            path="/game"
+            element={<Game />}
+            loader={gameLoader}
+            action={deleteGameAction}
+          />
           <Route
             path="/game/new"
             element={<CreateGame />}
@@ -111,7 +119,6 @@ export const routes = (
             loader={editGameLoader}
             action={editGameAction}
           />
-          <Route path="/game/:id/destroy" action={deleteGameAction} />
           <Route
             path="/profile"
             element={<div>This is the profile page</div>}

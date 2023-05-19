@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React from "react"
 import PropTypes from "prop-types"
 import {
   Card,
@@ -12,14 +12,9 @@ import {
   Alert,
 } from "@mui/material"
 import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material"
-import { GameDeleteDialog } from "./GameDeleteDialog"
 import { EllipsisText } from "../Common/EllipsisText"
 
-export function GameCard({ game }) {
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const handleDeleteDialogClose = () => {
-    setDeleteDialogOpen(false)
-  }
+export function GameCard({ game, openDeleteDialog }) {
   const handleImageOnError = (e) => {
     return (e.target.src = "/images/image-loading-error.jpg")
   }
@@ -78,18 +73,13 @@ export function GameCard({ game }) {
             color="secondary"
             startIcon={<DeleteIcon />}
             onClick={() => {
-              setDeleteDialogOpen(true)
+              openDeleteDialog(game._id)
             }}
           >
             Delete
           </Button>
         </CardActions>
       </Card>
-      <GameDeleteDialog
-        gameId={game._id}
-        isOpen={deleteDialogOpen}
-        onClose={handleDeleteDialogClose}
-      />
     </Box>
   )
 }
@@ -102,6 +92,7 @@ GameCard.propTypes = {
     images: PropTypes.arrayOf(PropTypes.string),
     _id: PropTypes.string,
   }),
+  openDeleteDialog: PropTypes.func.isRequired,
 }
 
 export function GameCardSkeleton() {

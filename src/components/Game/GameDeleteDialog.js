@@ -2,9 +2,15 @@ import React from "react"
 import PropTypes from "prop-types"
 import { Dialog, DialogActions, DialogContent, Button } from "@mui/material"
 import { CustomDialogTitle } from "../Common/Dialog/CustomDialogTitle"
-import { Form, useNavigation } from "react-router-dom"
+import { useNavigation, useFetcher } from "react-router-dom"
 
 export function GameDeleteDialog({ isOpen, onClose, gameId }) {
+  const fetcher = useFetcher()
+
+  React.useEffect(() => {
+    if (fetcher.data?.closeDialog && fetcher.state === "idle") onClose()
+  }, [fetcher.data, fetcher.state])
+
   const navigation = useNavigation()
   return (
     <Dialog open={isOpen} onClose={onClose}>
@@ -15,7 +21,7 @@ export function GameDeleteDialog({ isOpen, onClose, gameId }) {
         Are you sure you want to delete this game? This action cannot be undone.
       </DialogContent>
       <DialogActions>
-        <Form method="post" action={`/game/${gameId}/destroy`}>
+        <fetcher.Form method="post" action={`/game?gameId=${gameId}`}>
           <Button
             type="submit"
             size="small"
@@ -23,7 +29,7 @@ export function GameDeleteDialog({ isOpen, onClose, gameId }) {
           >
             Delete
           </Button>
-        </Form>
+        </fetcher.Form>
       </DialogActions>
     </Dialog>
   )

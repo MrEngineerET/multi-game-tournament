@@ -3,7 +3,9 @@ import { Container, Typography, Box, Button } from "@mui/material"
 import { Tabs, Tab } from "@mui/material"
 import { GameCard, GameCardSkeleton } from "../components/Game/GameCard"
 import { useLoaderData, defer, Await } from "react-router-dom"
+import { deleteGame } from "../api/game"
 import { getAllGames } from "../api/game"
+import { GameDeleteDialog } from "../components/Game/GameDeleteDialog"
 
 const styles = {
   root: {
@@ -44,6 +46,14 @@ const styles = {
 export function Game() {
   const [tabValue, setTabValue] = useState(0)
   const { games } = useLoaderData()
+
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState({
+    status: false,
+    gameId: null,
+  })
+  const openDeleteDialog = (gameId) => {
+    setDeleteDialogOpen({ status: true, gameId })
+  }
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue)
@@ -106,7 +116,7 @@ export function Game() {
                     }}
                     key={game._id}
                   >
-                    <GameCard game={game} />
+                    <GameCard game={game} openDeleteDialog={openDeleteDialog} />
                   </Box>
                 ))
               }}
@@ -114,6 +124,13 @@ export function Game() {
           </React.Suspense>
         </Box>
       </Container>
+      <GameDeleteDialog
+        gameId={deleteDialogOpen.gameId}
+        isOpen={deleteDialogOpen.status}
+        onClose={() => {
+          setDeleteDialogOpen({ status: false, gameId: null })
+        }}
+      />
     </Box>
   )
 }
@@ -123,4 +140,15 @@ export async function loader() {
   return defer({ games: gamesPromise })
 }
 
-//TODO: move all the styling to sxStyles
+export async function action({ request }) {
+  try {
+    const url = new URL(request.url)
+    const gameId = url.searchParams.get("gameId")
+    console.log("idid", "url", gameId)
+    await deleteGame(gameId)
+    return { closeDialog: true }
+  } catch (error) {
+    console.log("error in delete game action")
+    return null
+  }
+}
