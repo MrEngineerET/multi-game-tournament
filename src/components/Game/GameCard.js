@@ -24,8 +24,6 @@ export function GameCard({ game }) {
     return (e.target.src = "/images/image-loading-error.jpg")
   }
 
-  const imageURL = `${process.env.REACT_APP_SERVER_URL}/imgs/uploads/games/${game.images[0]}`
-
   const isGameActive = game.active
 
   return (
@@ -38,7 +36,7 @@ export function GameCard({ game }) {
             borderBottom: "1px solid whitesmoke",
           }}
           component={"img"}
-          image={imageURL}
+          image={game.images[0]}
           onError={handleImageOnError}
           loading="lazy"
         />
