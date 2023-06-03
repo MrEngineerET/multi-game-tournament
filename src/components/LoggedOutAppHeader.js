@@ -12,12 +12,12 @@ export function LoggedOutAppBar() {
       <AppBar position="relative" color="transparent" enableColorOnDark>
         <Container maxWidth="xl">
           <Toolbar sx={{ gap: { xs: 1, md: 2 }, p: 0 }}>
-            {/* <Box
+            <Box
               component="img"
-              src="/images/trophy_small.jpg"
+              src="/icons/tournament.png"
               width="40px"
               height="40px"
-            /> */}
+            />
 
             <Box sx={{ flexGrow: 1 }}>
               <Link

@@ -39,6 +39,12 @@ export function LoggedInAppBar() {
       <AppBar position="relative">
         <Container maxWidth="xl">
           <Toolbar>
+            <Box
+              component="img"
+              src="/icons/tournament.png"
+              width="40px"
+              height="40px"
+            />
             <Box sx={{ flexGrow: 1 }}>
               <Link
                 to={"/"}
