@@ -1,8 +1,8 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Button, Box, Typography, Container, Stack } from "@mui/material"
+import { Navigate } from "react-router-dom"
+import { Box } from "@mui/material"
 import { useAuth } from "../context/AuthContext"
-import { AppHeaderBar } from "../components/AppHeaderBar"
 import { Hero } from "../components/LandingPage/Hero"
 import { Features } from "../components/LandingPage/Features"
 import { HowItWorks } from "../components/LandingPage/HowItWorks"
@@ -16,7 +16,6 @@ export const LandingPage = () => {
   if (!user)
     return (
       <>
-        <AppHeaderBar />
         <Hero />
         <CurveDivider position="bottom" fillColor="#f5f5f6" />
         <Features />
@@ -29,26 +28,7 @@ export const LandingPage = () => {
       </>
     )
 
-  return (
-    <>
-      <AppHeaderBar />
-      <Box sx={{ flexGrow: 1 }}>
-        <Container maxWidth="md">
-          <Stack
-            sx={{
-              gap: 5,
-              mt: 10,
-              alignItems: "center",
-            }}
-          >
-            <Typography variant="h4">Simplify Tournament Management</Typography>
-            <Button href="tournament">Tournament</Button>
-            <Button href="game">Game</Button>
-          </Stack>
-        </Container>
-      </Box>
-    </>
-  )
+  return <Navigate to="/tournament" />
 }
 
 function CurveDivider({ position = "bottom", fillColor = "#f5f5f6" }) {
