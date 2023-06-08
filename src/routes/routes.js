@@ -71,7 +71,6 @@ export const routes = (
       }
       errorElement={<ErrorPage />}
     >
-      <Route index element={<LandingPage />} />
       <Route
         path="/"
         element={
@@ -81,6 +80,7 @@ export const routes = (
           </>
         }
       >
+        <Route index element={<LandingPage />} />
         <Route
           path="/"
           element={

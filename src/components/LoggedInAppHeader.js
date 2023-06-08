@@ -13,11 +13,13 @@ import {
 import { AccountCircle } from "@mui/icons-material"
 import { useAuth } from "../context/AuthContext"
 import { useNavigate, Link } from "react-router-dom"
+import { useAlert } from "../context/AlertContext"
 
 export function LoggedInAppBar() {
   const navigate = useNavigate()
   const auth = useAuth()
   const [anchorEl, setAnchorEl] = React.useState(null)
+  const alert = useAlert()
 
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget)
@@ -27,11 +29,14 @@ export function LoggedInAppBar() {
     setAnchorEl(null)
   }
   const handleLogout = async () => {
+    alert.showInfo("Logging out ...")
     try {
       await auth.logout()
       navigate("/")
+      alert.showSuccess("Logged out successfully")
     } catch (error) {
       console.log("error", error)
+      alert.showError("Loggin out failed")
     }
   }
   return (
@@ -77,13 +82,13 @@ export function LoggedInAppBar() {
                 id="menu-appbar"
                 anchorEl={anchorEl}
                 anchorOrigin={{
-                  vertical: "top",
-                  horizontal: "right",
+                  vertical: "bottom",
+                  horizontal: "left",
                 }}
                 keepMounted
                 transformOrigin={{
                   vertical: "top",
-                  horizontal: "right",
+                  horizontal: "left",
                 }}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
