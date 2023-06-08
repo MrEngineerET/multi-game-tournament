@@ -55,13 +55,14 @@ export function AreYouReady() {
                 height: "100%",
               }}
             >
-              <img
-                src="/images/tournament_large.jpg"
+              <Box
+                component={"img"}
+                src="/images/are_you_ready_two.jpg"
                 alt="Tournament"
-                style={{
+                sx={{
                   maxWidth: "100%",
                   maxHeight: "100%",
-                  borderRadius: "2px",
+                  borderRadius: "5px",
                 }}
               />
             </Box>
