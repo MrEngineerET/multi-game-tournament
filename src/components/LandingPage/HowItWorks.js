@@ -8,7 +8,7 @@ export function HowItWorks() {
   const theme = useTheme()
   const isLaptop = useMediaQuery(theme.breakpoints.up("md"))
   return (
-    <Box sx={{ bgcolor: "#e5e7eb" }}>
+    <Box sx={{ bgcolor: "#e5e7eb", py: 10 }}>
       <Container
         maxWidth="lg"
         sx={(theme) => ({

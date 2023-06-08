@@ -5,7 +5,7 @@ import InstagramIcon from "@mui/icons-material/Instagram"
 import React from "react"
 
 const commonStyles = {
-  icon: { fill: "#374151" },
+  icon: { fill: "#374151", fontSize: { xs: 15, sm: 20, md: 25 } },
 }
 
 export function Footer() {
@@ -15,12 +15,27 @@ export function Footer() {
         pt: 5,
         pb: 5,
         borderTopWidth: 1,
-        borderColor: "rgba(17,24,39,var(0.1))",
+        borderColor: "rgba(17,24,39,0.5)",
+        bgcolor: "#e4e7eb",
       }}
     >
       <Container maxWidth="lg">
-        <Box sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
+          <Typography
+            sx={{
+              fontSize: {
+                xs: 12,
+                sm: 14,
+                md: 16,
+              },
+            }}
+          >
             © Copyright 2023 Company. All rights reserved.
           </Typography>
           <Box>

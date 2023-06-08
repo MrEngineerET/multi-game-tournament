@@ -3,7 +3,7 @@ import React from "react"
 
 export function Hero() {
   return (
-    <Box sx={{ bgcolor: "#e4e7eb", py: 10 }}>
+    <Box sx={{ bgcolor: "#e4e7eb", py: 20, pt: 10 }}>
       <Container
         maxWidth="lg"
         sx={(theme) => ({ [theme.breakpoints.down("lg")]: { pl: 6, pr: 6 } })}

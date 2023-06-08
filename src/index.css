@@ -1,3 +1,67 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+.curve {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.transform {
+  transform: rotate(180deg);
+}
+.bottom {
+  bottom: 0;
+}
+.top {
+  top: 0;
+}
+
+.curve svg {
+  position: relative;
+  display: block;
+  width: calc(128% + 1.3px);
+  height: 110px;
+}
+
+@media screen and (max-width: 900px) {
+  .curve svg {
+    height: 50px;
+  }
+}
+@media screen and (max-width: 500px) {
+  .curve svg {
+    height: 30px;
+  }
+}
+
+.curve .shape-fill {
+  fill: #f5f5f6;
+}
+
+.tilt {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.tilt svg {
+  position: relative;
+  display: block;
+  width: calc(100% + 1.3px);
+  height: 79px;
+}
+
+.tilt .shape-fill {
+  fill: #e4e7eb;
+}
+
+/** For mobile devices **/
+@media (max-width: 767px) {
+  .tilt svg {
+    width: calc(140% + 1.3px);
+    height: 89px;
+  }
+}
