@@ -18,6 +18,7 @@ import { useAlert } from "../context/AlertContext"
 import { Copyright } from "../components/CopyRight"
 
 export function LogIn() {
+  const showShowCasing = false
   const navigation = useNavigation()
   const actionData = useActionData()
   const auth = useAuth()
@@ -45,19 +46,23 @@ export function LogIn() {
           },
         }}
       >
-        <Box sx={{ flex: 1, height: "94vh", p: 2 }}>
-          <Typography p={10}>Some info about the company</Typography>
-        </Box>
+        {showShowCasing && (
+          <Box sx={{ flex: 1, height: "94vh", p: 2 }}>
+            <Typography p={10}>Some info about the company</Typography>
+          </Box>
+        )}
         <Box
-          sx={{
-            bgcolor: "#eee",
-            flex: 1,
-            height: "100vh",
-            display: "flex",
-            alignItems: "center",
-            flexDirection: "column",
-            p: 2,
-          }}
+          sx={[
+            {
+              flex: 1,
+              height: "100vh",
+              display: "flex",
+              alignItems: "center",
+              flexDirection: "column",
+              p: 2,
+            },
+            showShowCasing && { bgcolor: "#eee" },
+          ]}
         >
           {/* layout element start */}
           <Box

@@ -77,6 +77,7 @@ export function Hero() {
                 pr: 10,
                 fontSize: 16,
               }}
+              href="/login"
             >
               Get Started
             </Button>

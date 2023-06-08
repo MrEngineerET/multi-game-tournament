@@ -40,6 +40,7 @@ export function AreYouReady() {
                 variant="contained"
                 color="primary"
                 size="large"
+                href="/login"
               >
                 Get Started
               </Button>
