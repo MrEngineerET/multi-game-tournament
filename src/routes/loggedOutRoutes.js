@@ -6,6 +6,7 @@ import { LoggedOutAppBar } from "../components/LoggedOutAppHeader"
 import { Box } from "@mui/material"
 import { ErrorPage } from "../pages/ErrorPage"
 import TestingComponent from "../components/TestingComponent"
+import { LandingPage } from "../pages/LandingPage"
 
 /**
  *  /login
@@ -31,7 +32,7 @@ export const routes = (
           <div
             style={{ fontSize: "40px", marginLeft: "40px", marginTop: "40px" }}
           >
-            Landing page on progress
+            <LandingPage />
           </div>
         }
       />

@@ -2,6 +2,12 @@ import React from "react"
 import { Button, Box, Typography, Container, Stack } from "@mui/material"
 import { useAuth } from "../context/AuthContext"
 import { AppHeaderBar } from "../components/AppHeaderBar"
+import { Hero } from "../components/LandingPage/Hero"
+import { Features } from "../components/LandingPage/Features"
+import { HowItWorks } from "../components/LandingPage/HowItWorks"
+// import { Pricing } from "../components/LandingPage/Pricing"
+import { AreYouReady } from "../components/LandingPage/AreYourReady"
+import { Footer } from "../components/LandingPage/Footer"
 
 export const LandingPage = () => {
   const { user } = useAuth()
@@ -10,15 +16,12 @@ export const LandingPage = () => {
     return (
       <>
         <AppHeaderBar />
-        <div
-          style={{
-            fontSize: "40px",
-            marginLeft: "40px",
-            marginTop: "40px",
-          }}
-        >
-          This is the landing page for loggedout user
-        </div>
+        <Hero />
+        <Features />
+        <HowItWorks />
+        {/* <Pricing /> */}
+        <AreYouReady />
+        <Footer />
       </>
     )
 
