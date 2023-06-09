@@ -94,6 +94,15 @@ export function LoggedInAppBar() {
                 onClose={handleClose}
               >
                 <MenuItem onClick={handleClose}>Profile</MenuItem>
+                {auth.user.role === "admin" && (
+                  <MenuItem
+                    onClick={() => {
+                      navigate("/dashboard")
+                    }}
+                  >
+                    Dashboard
+                  </MenuItem>
+                )}
                 <MenuItem onClick={handleLogout}>Log out</MenuItem>
               </Menu>
             </div>
