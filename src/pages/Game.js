@@ -91,7 +91,7 @@ export function Game() {
           }}
         >
           <React.Suspense
-            fallback={new Array(3).fill(0).map((el, i) => (
+            fallback={new Array(9).fill(0).map((el, i) => (
               <GameCardSkeleton key={i} />
             ))}
           >

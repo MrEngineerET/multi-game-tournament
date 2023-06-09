@@ -1,5 +1,5 @@
 import React from "react"
-import { Outlet, Route } from "react-router-dom"
+import { Navigate, Outlet, Route } from "react-router-dom"
 import { LandingPage } from "../pages/LandingPage"
 import { ProtectedRoute, RestrictedRoute } from "./util"
 import { AlertProvider } from "../context/AlertContext"
@@ -53,7 +53,7 @@ import {
   action as joinTournamentAction,
   loader as joinTouramentLoader,
 } from "../components/Tournament/JoinTournament"
-import { Dashboard } from "../pages/Dashboard"
+import { DashBoardLayOut } from "../pages/Dashboard"
 
 export const routes = (
   <Route
@@ -165,11 +165,22 @@ export const routes = (
         element={
           <ProtectedRoute>
             <RestrictedRoute role="admin">
-              <Dashboard />
+              <DashBoardLayOut>
+                <Outlet />
+              </DashBoardLayOut>
             </RestrictedRoute>
           </ProtectedRoute>
         }
-      />
+      >
+        <Route index element={<Navigate to={"games"} />} />
+        <Route path="users" element={<div>This is the users page</div>} />
+        <Route
+          path="games"
+          element={<Game />}
+          loader={gameLoader}
+          action={deleteGameAction}
+        />
+      </Route>
 
       {/* loggedout routes */}
       <Route path="/login" element={<LogIn />} action={loginAction} />
