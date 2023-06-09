@@ -7,6 +7,7 @@ import { AuthProvider } from "../context/AuthContext"
 import { LogIn, action as loginAction } from "../pages/LogIn"
 import { SignUp, action as signupAction } from "../pages/SignUp"
 import TestingComponent from "../components/TestingComponent"
+import { PageNotFound } from "../pages/PageNotFound"
 
 import { Tournament, loader as tournamentsLoader } from "../pages/Tournament"
 import {
@@ -168,7 +169,6 @@ export const routes = (
             </RestrictedRoute>
           </ProtectedRoute>
         }
-        errorElement={<div>This is an error for a restricted page</div>}
       />
 
       {/* loggedout routes */}
@@ -190,6 +190,7 @@ export const routes = (
       path="terms_and_condition"
       element={<div>This is the terms and condition page</div>}
     />
+    <Route path="*" element={<PageNotFound />} />
   </Route>
 )
 
