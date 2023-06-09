@@ -25,9 +25,16 @@ export const AuthProvider = ({ children }) => {
   const getIdentity = async () => {
     setUser(undefined)
     try {
+      console.log("idid", "getting identity in authContext")
       const user = await auth.getIdentity()
+      console.log("idid", "getting identity in authContext --done")
       setUser(user)
     } catch (error) {
+      console.log(
+        "idid",
+        "getting identity in authContext --error happened",
+        error,
+      )
       setUser(null)
     }
   }
