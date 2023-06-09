@@ -20,6 +20,7 @@ export class MyAxios {
     const sleepTime = 1000
     if (process.env.NODE_ENV === "development") {
       return {
+        ...this.axios,
         get: async (...rest) => {
           await sleep(sleepTime)
           return this.axios.get(...rest)

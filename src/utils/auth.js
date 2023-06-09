@@ -7,7 +7,12 @@ export const auth = {
     auth.isAuthenticated = true
     const res = (await axios.post("/user/login", { email, password })).data
     LocalStorage.setItem("token", res.token)
-    setToken(res.token)
+    if (res.token) {
+      axios.defaults.headers.Authorization = res.token
+        ? `Bearer ${res.token}`
+        : ""
+      // setToken(res.token)
+    }
     return res.data.user
   },
   async signup(email, password, firstName, lastName) {
@@ -37,7 +42,6 @@ export const auth = {
   // get the user's profile
   async getIdentity() {
     const token = LocalStorage.getItem("token")
-    console.log("idid", "token in auth line 40", token)
     if (!token) return null
     const res = (await axios.get("/user/me")).data
     const user = res.data.data
