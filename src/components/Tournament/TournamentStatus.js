@@ -14,16 +14,12 @@ export function TournamentStatus() {
   const isReadyToStart =
     isPending && tournamentData.participants.length >= 2 && stage
 
-  const showAddParticipantInfo =
-    !location.pathname.includes("participants") &&
-    tournamentData.participants.length < 2 &&
-    stage
-
   const isBracketPage = location.pathname.trim().match(/tournament\/\d+$/)
 
+  if (!isBracketPage) return ""
   return (
     <Box>
-      {isReadyToStart && isBracketPage && (
+      {isReadyToStart && (
         <>
           <Alert severity="info" sx={{ mb: 5 }}>
             <AlertTitle>Info</AlertTitle>
@@ -47,45 +43,22 @@ export function TournamentStatus() {
           </Alert>
         </>
       )}
-      {!location.pathname.includes("settings") &&
-        isPending &&
-        tournamentData.games.length === 0 && (
-          <Box sx={{ mb: 5 }}>
-            <Alert severity="info">
-              <Typography sx={{ mb: 3 }}>
-                If you want to add games to your tournament
-              </Typography>
-              <Button href="settings">Add Game</Button>
-            </Alert>
-          </Box>
-        )}
-
-      {showAddParticipantInfo && (
-        <Box sx={{ mt: 5 }}>
+      {isPending && tournamentData.games.length === 0 && (
+        <Box sx={{ mb: 5 }}>
           <Alert severity="info">
-            <Typography sx={{ pb: 3 }}>
-              To get started add participants
+            <Typography sx={{ mb: 3 }}>
+              If you want to add games to your tournament
             </Typography>
-            <Button href="participants">Add Participants</Button>
+            <Button href="settings">Add Game</Button>
           </Alert>
         </Box>
       )}
-      {isBracketPage && (
-        <>
-          {isReadyToStart ? (
-            <Alert severity="info" sx={{ mb: 5 }}>
-              This bracket is a preview and subject to change until the
-              tournament is started.
-            </Alert>
-          ) : showAddParticipantInfo ? (
-            <Alert severity="warning" sx={{ mt: 5 }}>
-              A bracket preview will be displayed once 2 or more participants
-              are registered.
-            </Alert>
-          ) : (
-            ""
-          )}
-        </>
+
+      {isReadyToStart && (
+        <Alert severity="info" sx={{ mb: 5 }}>
+          This bracket is a preview and subject to change until the tournament
+          is started.
+        </Alert>
       )}
     </Box>
   )
