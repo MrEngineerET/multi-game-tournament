@@ -127,11 +127,10 @@ export async function updateMatchAction(request, params) {
   const matchId = url.searchParams.get("match_id")
   const { id } = params
   const formData = await request.formData()
+
   const participantOneScore = Number(formData.get("participant_one_score"))
   const participantTwoScore = Number(formData.get("participant_two_score"))
 
-  if (!participantOneScore || !participantTwoScore)
-    return { error: "Please enter a score for both participants" }
   if (participantOneScore === participantTwoScore)
     return { error: "Scores cannot be equal" }
   if (participantOneScore < 0 || participantTwoScore < 0)

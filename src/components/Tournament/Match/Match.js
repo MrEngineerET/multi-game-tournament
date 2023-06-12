@@ -157,7 +157,9 @@ export function Match({ match }) {
             ]}
             component="span"
           >
-            {match.participants[0]?.score || "-"}
+            {match.participants[0]?.score === 0
+              ? 0
+              : match.participants[0]?.score || "-"}
           </Typography>
         </Box>
         <Divider key="divider" sx={styles.divider} />
@@ -173,7 +175,9 @@ export function Match({ match }) {
             ]}
             component="span"
           >
-            {match.participants[1]?.score || "-"}
+            {match.participants[1]?.score === 0
+              ? 0
+              : match.participants[1]?.score || "-"}
           </Typography>
         </Box>
         {matchReady && (
