@@ -55,6 +55,7 @@ export function TournamentListTable({ tournaments, filter }) {
     if (tournament.status === "completed") return "Completed"
     if (tournament.status === "progress") return "Progress"
     if (tournament.status === "pending") return "Pending"
+    if (tournament.status === "archived") return "Archived"
   }
   const getDate = (rawDate) => {
     if (!rawDate) return null

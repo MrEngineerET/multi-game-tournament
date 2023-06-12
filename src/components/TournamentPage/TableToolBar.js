@@ -5,7 +5,7 @@ import { Box, Typography, Button } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 import ArchiveIcon from "@mui/icons-material/Archive"
 import { sleep } from "../../utils"
-import { deleteTournament } from "../../api/tournament"
+import { deleteTournament, updateTournament } from "../../api/tournament"
 
 export function TableToolBar({ tournamentIds }) {
   const numSelected = tournamentIds.length
@@ -34,6 +34,7 @@ export function TableToolBar({ tournamentIds }) {
           //TODO: show a confirmation dialog
         }}
       >
+        <input hidden name="tournament_ids" value={tournamentIds} readOnly />
         <Button
           startIcon={<ArchiveIcon />}
           variant="text"
@@ -78,8 +79,12 @@ export async function deleteTemplateAction({ request }) {
   return redirect("/tournament")
 }
 
-export async function archiveTemplateAction() {
+export async function archiveTemplateAction({ request }) {
   await sleep(2000)
-  //TODO: implement the archive code
+  const formData = await request.formData()
+  const tournamentIds = formData.get("tournament_ids").split(",")
+  await Promise.all(
+    tournamentIds.map((id) => updateTournament(id, { status: "archived" })),
+  )
   return redirect("/tournament")
 }
