@@ -1,6 +1,6 @@
-import React, { useEffect } from "react"
+import React from "react"
 import PropTypes from "prop-types"
-import { useNavigation, useLocation } from "react-router-dom"
+import { useNavigation } from "react-router-dom"
 import { Box, Typography, ButtonBase } from "@mui/material"
 import {
   Paper,
@@ -16,20 +16,18 @@ import {
 import { Avatar, AvatarGroup } from "@mui/material"
 import { TableToolBar } from "./TableToolBar"
 
-export function TournamentListTable({ tournaments }) {
-  const location = useLocation()
+export function TournamentListTable({ tournaments, filter }) {
+  // console.log("idid", "filter", filter)
   const [selected, setSelected] = React.useState([])
 
-  useEffect(() => {
-    function filterSelectedTournament() {
-      const filtered = selected.filter((id) => {
-        const index = tournaments.findIndex((el) => el._id === id)
-        if (index !== -1) return id
-      })
-      setSelected(filtered)
-    }
-    filterSelectedTournament()
-  }, [location.key])
+  const filteredTournaments = tournaments.filter((tournament) => {
+    if (filter == "all" || filter === null || filter.trim() === "") return true
+    if (filter == "pending" && tournament.status === "pending") return true
+    if (filter == "progress" && tournament.status === "progress") return true
+    if (filter == "completed" && tournament.status === "completed") return true
+    if (filter == "archived" && tournament.status === "archived") return true
+    return false
+  })
 
   const handleTournamentSelect = (event, _id) => {
     const selectedIndex = selected.indexOf(_id)
@@ -47,7 +45,6 @@ export function TournamentListTable({ tournaments }) {
         selected.slice(selectedIndex + 1),
       )
     }
-
     setSelected(newSelected)
   }
   const isSelected = (_id) => selected.indexOf(_id) !== -1
@@ -97,9 +94,9 @@ export function TournamentListTable({ tournaments }) {
               </TableCell>
             </TableRow>
           </TableHead>
-          {tournaments.length !== 0 ? (
+          {filteredTournaments.length !== 0 ? (
             <TableBody>
-              {tournaments.map((tournament) => (
+              {filteredTournaments.map((tournament) => (
                 <TableRow
                   key={tournament._id}
                   component={ButtonBase}
@@ -177,4 +174,5 @@ export function TournamentListTable({ tournaments }) {
 
 TournamentListTable.propTypes = {
   tournaments: PropTypes.array,
+  filter: PropTypes.string,
 }

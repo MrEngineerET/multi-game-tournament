@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import { Button, Box, Typography } from "@mui/material"
 import { Container } from "@mui/system"
 import { defer } from "react-router-dom"
@@ -29,6 +29,11 @@ const styles = {
 }
 
 export function Tournament() {
+  const [selectedFilter, setSelectedFilter] = useState("all")
+
+  function handleFilterChange(filterOption) {
+    setSelectedFilter(filterOption)
+  }
   return (
     <Box>
       <Box sx={styles.bannerWrapper}>
@@ -57,10 +62,13 @@ export function Tournament() {
           }}
         >
           <Box sx={{ flex: 10 }}>
-            <TournamentList />
+            <TournamentList filter={selectedFilter} />
           </Box>
           <Box sx={{ flex: 3, maxWidth: { xs: "unset", md: 300 } }}>
-            <TournamentFilter />
+            <TournamentFilter
+              selectedFilter={selectedFilter}
+              onChange={handleFilterChange}
+            />
           </Box>
         </Box>
       </Container>

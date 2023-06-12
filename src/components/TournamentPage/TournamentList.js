@@ -1,5 +1,5 @@
-import React, { useState } from "react"
-
+import React from "react"
+import PropTypes from "prop-types"
 import { Box, Typography, Card, Button } from "@mui/material"
 import { Await, useLoaderData } from "react-router-dom"
 import { TournamentListSkeleton } from "./TournamentListSkeleton"
@@ -12,7 +12,7 @@ import PlayCircleOutlinedIcon from "@mui/icons-material/PlayCircleOutlined"
 import PendingOutlinedIcon from "@mui/icons-material/PendingOutlined"
 import { TournamentListTable } from "./TournamentListTable"
 
-export function TournamentList() {
+export function TournamentList({ filter = "all" }) {
   const { tournaments } = useLoaderData()
   return (
     <Box sx={{ width: 1 }}>
@@ -46,7 +46,10 @@ export function TournamentList() {
           >
             {(tournaments) => (
               <>
-                <TournamentListTable tournaments={tournaments} />
+                <TournamentListTable
+                  tournaments={tournaments}
+                  filter={filter}
+                />
               </>
             )}
           </Await>
@@ -54,6 +57,9 @@ export function TournamentList() {
       </Card>
     </Box>
   )
+}
+TournamentList.propTypes = {
+  filter: PropTypes.string,
 }
 
 const sxStyles = {
@@ -79,22 +85,13 @@ const sxStyles = {
   },
 }
 
-const filteringOptions = {
-  all: "all",
-  pending: "pending",
-  progress: "progress",
-  completed: "completed",
-  archived: "archived",
-}
-export function TournamentFilter() {
+export function TournamentFilter({ selectedFilter = "all", onChange }) {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
 
-  const [selectedFilter, setSelectedFilter] = useState(filteringOptions.all)
-
   const handleFilterChange = (option) => {
-    setSelectedFilter(option)
+    onChange(option)
   }
 
   if (isMediumScreen)
@@ -105,27 +102,11 @@ export function TournamentFilter() {
         sx={sxStyles.tabs}
         variant={isSmallScreen ? "scrollable" : "standard"}
       >
-        <Tab sx={sxStyles.tab} label="All" value={filteringOptions.all} />
-        <Tab
-          sx={sxStyles.tab}
-          label="Pending"
-          value={filteringOptions.pending}
-        />
-        <Tab
-          sx={sxStyles.tab}
-          label="Progress"
-          value={filteringOptions.progress}
-        />
-        <Tab
-          sx={sxStyles.tab}
-          label="Completed"
-          value={filteringOptions.completed}
-        />
-        <Tab
-          sx={sxStyles.tab}
-          label="Arvhived"
-          value={filteringOptions.archived}
-        />
+        <Tab sx={sxStyles.tab} label="All" value={"all"} />
+        <Tab sx={sxStyles.tab} label="Pending" value={"pending"} />
+        <Tab sx={sxStyles.tab} label="Progress" value={"progress"} />
+        <Tab sx={sxStyles.tab} label="Completed" value={"completed"} />
+        <Tab sx={sxStyles.tab} label="Arvhived" value={"archived"} />
       </Tabs>
     )
 
@@ -133,16 +114,16 @@ export function TournamentFilter() {
     <Card sx={{ bgcolor: "background.lightest" }} elevation={0}>
       <List>
         <ListItemButton
-          selected={selectedFilter === filteringOptions.all}
+          selected={"all" == selectedFilter}
           sx={sxStyles.listItemButton}
-          onClick={() => handleFilterChange(filteringOptions.all)}
+          onClick={() => handleFilterChange("all")}
         >
           <ListItemText>All Tournaments</ListItemText>
         </ListItemButton>
         <ListItemButton
-          selected={selectedFilter === filteringOptions.pending}
+          selected={"pending" == selectedFilter}
           sx={sxStyles.listItemButton}
-          onClick={() => handleFilterChange(filteringOptions.pending)}
+          onClick={() => handleFilterChange("pending")}
         >
           <ListItemIcon>
             <PendingOutlinedIcon />
@@ -150,9 +131,9 @@ export function TournamentFilter() {
           <ListItemText>Pending</ListItemText>
         </ListItemButton>
         <ListItemButton
-          selected={selectedFilter === filteringOptions.progress}
+          selected={"progress" == selectedFilter}
           sx={sxStyles.listItemButton}
-          onClick={() => handleFilterChange(filteringOptions.progress)}
+          onClick={() => handleFilterChange("progress")}
         >
           <ListItemIcon>
             <PlayCircleOutlinedIcon />
@@ -160,9 +141,9 @@ export function TournamentFilter() {
           <ListItemText>In Progress</ListItemText>
         </ListItemButton>
         <ListItemButton
-          selected={selectedFilter === filteringOptions.completed}
+          selected={"completed" == selectedFilter}
           sx={sxStyles.listItemButton}
-          onClick={() => handleFilterChange(filteringOptions.completed)}
+          onClick={() => handleFilterChange("completed")}
         >
           <ListItemIcon>
             <DoneAllIcon />
@@ -170,9 +151,9 @@ export function TournamentFilter() {
           <ListItemText>Completed</ListItemText>
         </ListItemButton>
         <ListItemButton
-          selected={selectedFilter === filteringOptions.archived}
+          selected={"archived" == selectedFilter}
           sx={sxStyles.listItemButton}
-          onClick={() => handleFilterChange(filteringOptions.archived)}
+          onClick={() => handleFilterChange("archived")}
         >
           <ListItemIcon>
             <ArchiveIcon />
@@ -182,4 +163,9 @@ export function TournamentFilter() {
       </List>
     </Card>
   )
+}
+
+TournamentFilter.propTypes = {
+  selectedFilter: PropTypes.string.isRequired,
+  onChange: PropTypes.func.isRequired,
 }
