@@ -1,7 +1,7 @@
 import React from "react"
 import PropTypes from "prop-types"
 import { useNavigation } from "react-router-dom"
-import { Box, Typography, ButtonBase } from "@mui/material"
+import { Box, Typography, ButtonBase, Button } from "@mui/material"
 import {
   Paper,
   Table,
@@ -17,7 +17,6 @@ import { Avatar, AvatarGroup } from "@mui/material"
 import { TableToolBar } from "./TableToolBar"
 
 export function TournamentListTable({ tournaments, filter }) {
-  // console.log("idid", "filter", filter)
   const [selected, setSelected] = React.useState([])
 
   const filteredTournaments = tournaments.filter((tournament) => {
@@ -154,17 +153,71 @@ export function TournamentListTable({ tournaments, filter }) {
                     </AvatarGroup>
                   </TableCell>
                   <TableCell align="right" sx={{ pr: { sx: 4, sm: 6 } }}>
-                    {tournament.game.length}{" "}
+                    {tournament.game.length}
                   </TableCell>
                 </TableRow>
               ))}
             </TableBody>
           ) : (
-            <TableRow>
-              <TableCell colSpan={6}>
-                <Typography>No tournament were found</Typography>
-              </TableCell>
-            </TableRow>
+            <TableBody>
+              <TableRow>
+                <TableCell colSpan={6}>
+                  {filter === "all" ? (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        flexDirection: "column",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        height: "30vh",
+                      }}
+                    >
+                      <Typography variant="h4" gutterBottom>
+                        No tournaments were found
+                      </Typography>
+                      <Button
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        href="/tournament/new"
+                      >
+                        Create New Tournament
+                      </Button>
+                    </Box>
+                  ) : (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        height: "30vh",
+                      }}
+                    >
+                      {filter === "pending" && (
+                        <Typography variant="h4">
+                          No Pending tournament were found
+                        </Typography>
+                      )}
+                      {filter === "progress" && (
+                        <Typography variant="h4">
+                          No In progress tournament were found
+                        </Typography>
+                      )}
+                      {filter === "completed" && (
+                        <Typography variant="h4">
+                          No Completed tournament were found
+                        </Typography>
+                      )}
+                      {filter === "archived" && (
+                        <Typography variant="h4">
+                          No Archived tournament were found
+                        </Typography>
+                      )}
+                    </Box>
+                  )}
+                </TableCell>
+              </TableRow>
+            </TableBody>
           )}
         </Table>
       </TableContainer>
