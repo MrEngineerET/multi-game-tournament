@@ -44,8 +44,8 @@ import {
   action as updateTournamentAction,
 } from "../components/Tournament/TournamentSettings"
 import {
-  archiveTemplateAction,
-  deleteTemplateAction,
+  archiveTournamentAction,
+  deleteTournamentAction,
 } from "../components/TournamentPage/TableToolBar"
 import { AppHeaderBar } from "../components/AppHeaderBar"
 import {
@@ -101,8 +101,8 @@ export const routes = (
               action={createTournamentAction}
               loader={createTournamentLoader}
             />
-            <Route path="destroy" action={deleteTemplateAction} />
-            <Route path="archive" action={archiveTemplateAction} />
+            <Route path="destroy" action={deleteTournamentAction} />
+            <Route path="archive" action={archiveTournamentAction} />
           </Route>
 
           <Route

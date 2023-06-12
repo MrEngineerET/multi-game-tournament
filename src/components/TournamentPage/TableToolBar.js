@@ -1,10 +1,10 @@
+/* eslint-disable no-unused-vars */
 import React from "react"
 import PropTypes from "prop-types"
 import { Form, redirect, useNavigation } from "react-router-dom"
 import { Box, Typography, Button } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
 import ArchiveIcon from "@mui/icons-material/Archive"
-import { sleep } from "../../utils"
 import { deleteTournament, updateTournament } from "../../api/tournament"
 
 export function TableToolBar({ tournamentIds }) {
@@ -27,7 +27,7 @@ export function TableToolBar({ tournamentIds }) {
       ) : (
         <Box sx={{ flex: "1 1 100%" }}></Box>
       )}
-      <Form
+      {/* <Form
         action="archive"
         method="post"
         onSubmit={() => {
@@ -45,7 +45,7 @@ export function TableToolBar({ tournamentIds }) {
         >
           Archive
         </Button>
-      </Form>
+      </Form> */}
       <Form
         action="destroy"
         method="delete"
@@ -72,15 +72,14 @@ TableToolBar.propTypes = {
   tournamentIds: PropTypes.array.isRequired,
 }
 
-export async function deleteTemplateAction({ request }) {
+export async function deleteTournamentAction({ request }) {
   const formData = await request.formData()
   const tournamentIds = formData.get("tournament_ids").split(",")
   await Promise.all(tournamentIds.map((id) => deleteTournament(id)))
   return redirect("/tournament")
 }
 
-export async function archiveTemplateAction({ request }) {
-  await sleep(2000)
+export async function archiveTournamentAction({ request }) {
   const formData = await request.formData()
   const tournamentIds = formData.get("tournament_ids").split(",")
   await Promise.all(
