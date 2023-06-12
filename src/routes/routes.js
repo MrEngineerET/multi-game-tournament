@@ -90,6 +90,7 @@ export const routes = (
               <Outlet />
             </ProtectedRoute>
           }
+          errorElement={<ErrorPage />}
         >
           <Route index element={<LandingPage />} />
           <Route path="/tournament">

@@ -1,5 +1,6 @@
 import React from "react"
 import { useRouteError } from "react-router-dom"
+import { Box, Typography } from "@mui/material"
 
 export function ErrorPage() {
   const error = useRouteError()
@@ -8,12 +9,24 @@ export function ErrorPage() {
   if (error.statusText === "Not Found") errorMessage = "Page not found"
 
   return (
-    <div id="error-page">
-      <h1>Oops!</h1>
-      <p>Sorry, an unexpected error has occurred.</p>
-      <p>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        height: "100vh",
+      }}
+    >
+      <Typography variant="h4" gutterBottom>
+        Oops!
+      </Typography>
+      <Typography variant="body1" gutterBottom>
+        Sorry, an unexpected error has occurred.
+      </Typography>
+      <Typography variant="body1" gutterBottom>
         <i>{errorMessage || error?.message || "Something went wrong"}</i>
-      </p>
-    </div>
+      </Typography>
+    </Box>
   )
 }
