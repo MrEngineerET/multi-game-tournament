@@ -154,12 +154,16 @@ const TournamentSchema = new Schema<ITournament, TournamentModelType>(
         child_count: Number,
         status: Number,
         opponent1: {
+          type: Object,
+          default: null,
           id: Number,
           position: Number,
           score: Number,
           result: { type: String, enum: ["win", "loss"] },
         },
         opponent2: {
+          type: Object,
+          default: null,
           id: Number,
           position: Number,
           score: Number,
