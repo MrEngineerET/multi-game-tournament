@@ -107,6 +107,7 @@ export function ParticipantListItem({
                 defaultValue={participant.name}
                 disabled={fetcher.state === "submitting"}
                 size="small"
+                autoFocus
               />
               <Button
                 sx={{ width: 100 }}

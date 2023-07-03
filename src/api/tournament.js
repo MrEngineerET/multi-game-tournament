@@ -119,3 +119,7 @@ export async function joinTournament(tournamentId, firstName) {
   return (await axios.post(`/tournament/${tournamentId}/join`, { firstName }))
     .data
 }
+
+export async function getTournamentStanding(tournamentId) {
+  return (await axios.get(`/tournament/${tournamentId}/standing`)).data
+}

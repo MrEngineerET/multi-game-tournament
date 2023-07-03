@@ -60,7 +60,7 @@ const sxStyles = {
   },
 }
 
-const tabs = { bracket: 0, participants: 1, settings: 2 }
+const tabs = { bracket: 0, participants: 1, standing: 2, settings: 3 }
 
 export function TournamentDetail() {
   const location = useLocation()
@@ -69,6 +69,7 @@ export function TournamentDetail() {
   const [tabValue, setTabValue] = useState(() => {
     if (location.pathname.includes("participants")) return tabs.participants
     else if (location.pathname.includes("settings")) return tabs.settings
+    else if (location.pathname.includes("/standing")) return tabs.standing
     else return tabs.bracket
   })
 
@@ -76,6 +77,7 @@ export function TournamentDetail() {
     let tab = tabs.bracket
     if (location.pathname.includes("participants")) tab = tabs.participants
     else if (location.pathname.includes("settings")) tab = tabs.settings
+    else if (location.pathname.includes("standing")) tab = tabs.standing
     setTabValue(tab)
   }, [location.pathname])
 
@@ -252,6 +254,13 @@ export function TournamentDetail() {
                     to="participants"
                     replace
                     value={tabs.participants}
+                  />
+                  <Tab
+                    label="Standing"
+                    LinkComponent={Link}
+                    to="standing"
+                    replace
+                    value={tabs.standing}
                   />
                   <Tab
                     label="Settings"

@@ -33,7 +33,7 @@ const styles = {
   },
   roundName: {
     mb: 5,
-    bgcolor: "background.lightest",
+    bgcolor: "background.themostlight",
     height: 40,
     display: "flex",
     alignItems: "center",

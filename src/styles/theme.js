@@ -33,6 +33,7 @@ const lightModeTheme = {
       paper: "#ffffff",
       lighter: "#C8D2DC",
       lightest: "#EAEEF0",
+      themostlight: "#F6F6F6",
       darkBanner: "#282a33",
     },
     primary: {

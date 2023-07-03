@@ -44,6 +44,10 @@ import {
   action as updateTournamentAction,
 } from "../components/Tournament/TournamentSettings"
 import {
+  TournamentStanding,
+  loader as tournamentStandingLoader,
+} from "../components/Tournament/TournamentStanding"
+import {
   archiveTournamentAction,
   deleteTournamentAction,
 } from "../components/TournamentPage/TableToolBar"
@@ -139,20 +143,25 @@ export const routes = (
             index
             element={<TournamentBracket />}
             errorElement={<ErrorPage />}
-          ></Route>
+          />
           <Route
             path="participants"
             element={<TournamentParticipants />}
             errorElement={<ErrorPage />}
             action={addParticipantAction}
-          ></Route>
+          />
+          <Route
+            path="standing"
+            element={<TournamentStanding />}
+            loader={tournamentStandingLoader}
+          />
           <Route
             path="settings"
             element={<TournamentSettings />}
             loader={createTournamentLoader}
             action={updateTournamentAction}
             errorElement={<ErrorPage />}
-          ></Route>
+          />
         </Route>
         <Route
           path="/tournament/:id/join"
