@@ -13,11 +13,21 @@ import {
   Paper,
   Box,
 } from "@mui/material"
+import { useTournamentContext } from "../../context/TournamentContext"
 
 export function TournamentStanding() {
-  const standing = useLoaderData()
-  if (standing.length === 0)
-    return <Box>Finish the Tournament matches first</Box>
+  const { tournamentData } = useTournamentContext()
+  const finalStanding = useLoaderData()
+  let standing
+  if (finalStanding.length > 0) standing = finalStanding
+  else {
+    const participantsLength = tournamentData.participants.length
+    const temp = Array(participantsLength).fill({ name: "-", rank: "-" })
+    temp.forEach((participant, index) => {
+      participant.rank = index + 1
+    })
+    standing = temp
+  }
 
   return (
     <div>
@@ -63,7 +73,7 @@ export function TournamentStanding() {
                       <StandingIcon src={"/icons/medal_three.png"} />
                     </Box>
                   ) : (
-                    <Box sx={{ ml: 2 }}>{participant.rank}</Box>
+                    <Box sx={{ ml: 3 }}>{participant.rank}</Box>
                   )}
                 </TableCell>
                 <TableCell
