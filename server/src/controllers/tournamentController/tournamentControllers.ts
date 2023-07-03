@@ -451,6 +451,8 @@ async function protectTournament(
       }
       if (id) {
         const tournament = await Tournament.findById(tournamentIdParam)
+        if (!tournament)
+          throw { statusCode: 404, message: "Tournament not found" }
         if (id && id === tournament.createdBy.toString()) return next()
       }
     }
