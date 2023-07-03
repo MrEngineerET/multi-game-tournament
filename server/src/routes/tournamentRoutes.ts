@@ -65,4 +65,9 @@ tournamentRouter.delete(
   "/:tournamentId/participant/:participantId",
   tournamentController.deleteParticipant,
 )
+
+tournamentRouter.get(
+  "/:tournamentId/standing",
+  tournamentController.getTournamentStanding,
+)
 export default tournamentRouter

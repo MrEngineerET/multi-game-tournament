@@ -1,8 +1,12 @@
 import { BracketsManager, helpers } from "brackets-manager"
-import { InputStage, Seeding } from "brackets-model"
+import { InputStage, Seeding, Status } from "brackets-model"
 import { Request, Response, NextFunction } from "express"
 import { RequestWithUser } from "../userController/authController"
-import { Tournament, TournamentType } from "../../model/tournament"
+import {
+  Tournament,
+  TournamentType,
+  TournamentStatus,
+} from "../../model/tournament"
 import { Game } from "../../model/game"
 import { MyDB } from "../../utils/MyDB"
 import { GameManagement } from "../../utils/GameManagement"
@@ -82,8 +86,16 @@ async function updateTournamentMatch(
   const manager = new BracketsManager(myDB)
   await manager.update.match(match)
   const updatedTournament = await Tournament.findById(tournamentId)
+  // manage game assignment
   const gameManagement = new GameManagement(updatedTournament)
   await gameManagement.addGameToMatches()
+  // check if the tournament is finished
+  const { match: matches } = await manager.export()
+  const isCompleted = matches.every((m) => m.status === Status.Archived)
+  if (isCompleted) {
+    updatedTournament.status = TournamentStatus.completed
+    await updatedTournament.save()
+  }
   return updatedTournament
 }
 
@@ -449,6 +461,28 @@ async function protectTournament(
   }
 }
 
+async function getTournamentStanding(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const tournamentId = req.params.tournamentId
+    const tournament = await Tournament.findById(tournamentId)
+    const storage = new MyDB(tournament)
+    const manager = new BracketsManager(storage)
+    const { match: matches } = await manager.export()
+    const isCompleted = matches.every((m) => m.status === Status.Archived)
+    if (isCompleted) {
+      const standing = await manager.get.finalStandings(0)
+      return res.send(standing)
+    }
+    res.send([])
+  } catch (error) {
+    next(error)
+  }
+}
+
 export default {
   getAllTournaments,
   getTournament,
@@ -461,5 +495,6 @@ export default {
   prepareParticipants,
   joinTournament,
   protectTournament,
+  getTournamentStanding,
   ...tournamentParticipantController,
 }
