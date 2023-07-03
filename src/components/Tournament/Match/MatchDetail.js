@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react"
+import React from "react"
 import PropTypes from "prop-types"
 import {
   Box,
@@ -10,12 +10,13 @@ import {
   CardContent,
 } from "@mui/material"
 import { Avatar, Card } from "@mui/material"
-import { getGame } from "../../../api/game"
+import { useTournamentContext } from "../../../context/TournamentContext"
 export function MatchDetail({ match, onClose }) {
-  const [game, setGame] = useState(null)
-  useEffect(() => {
-    if (match.gameId) getGame(match.gameId).then((game) => setGame(game))
-  }, [match.gameId])
+  const {
+    tournamentData: { games },
+  } = useTournamentContext()
+  const game = games.find((g) => g.gameId._id == match.gameId)?.gameId
+
   const theme = useTheme()
 
   const handleImageOnError = (e) => {
