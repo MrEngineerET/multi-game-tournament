@@ -112,9 +112,12 @@ export const deleteGame = async (
   next: NextFunction,
 ) => {
   try {
-    await Game.findByIdAndUpdate(req.params.id, {
-      active: false,
-    })
+    const force = req.query.force === "true"
+    if (force) await Game.findByIdAndDelete(req.params.id)
+    else
+      await Game.findByIdAndUpdate(req.params.id, {
+        active: false,
+      })
     res.status(204).send()
   } catch (error) {
     next(error)

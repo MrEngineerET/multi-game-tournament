@@ -108,24 +108,6 @@ export const routes = (
             <Route path="destroy" action={deleteTournamentAction} />
             <Route path="archive" action={archiveTournamentAction} />
           </Route>
-
-          <Route
-            path="/game"
-            element={<Game />}
-            loader={gameLoader}
-            action={deleteGameAction}
-          />
-          <Route
-            path="/game/new"
-            element={<CreateGame />}
-            action={createGameAction}
-          />
-          <Route
-            path="/game/:id/edit"
-            element={<EditGame />}
-            loader={editGameLoader}
-            action={editGameAction}
-          />
           <Route
             path="/profile"
             element={<div>This is the profile page</div>}
@@ -182,13 +164,24 @@ export const routes = (
           </ProtectedRoute>
         }
       >
-        <Route index element={<Navigate to={"games"} />} />
+        <Route index element={<Navigate to={"game"} />} />
         <Route path="users" element={<div>This is the users page</div>} />
         <Route
-          path="games"
+          path="game"
           element={<Game />}
           loader={gameLoader}
           action={deleteGameAction}
+        />
+        <Route
+          path="game/new"
+          element={<CreateGame />}
+          action={createGameAction}
+        />
+        <Route
+          path="game/:id/edit"
+          element={<EditGame />}
+          loader={editGameLoader}
+          action={editGameAction}
         />
       </Route>
 

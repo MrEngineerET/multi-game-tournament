@@ -13,8 +13,8 @@ export function CustomDialogTitle(props) {
         onClick={onClose}
         sx={{
           position: "absolute",
-          right: 4,
-          top: 4,
+          right: 5,
+          top: 5,
         }}
       >
         <CloseIcon />

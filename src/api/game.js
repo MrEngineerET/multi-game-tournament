@@ -6,8 +6,8 @@ export async function getAllGames(active) {
   return games
 }
 
-export async function deleteGame(gameId) {
-  await axios.delete(`/game/${gameId}`)
+export async function deleteGame(gameId, force) {
+  await axios.delete(`/game/${gameId}?force=${force}`)
 }
 
 export async function createGame({ name, description, image }) {

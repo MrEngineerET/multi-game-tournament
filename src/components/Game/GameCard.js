@@ -67,17 +67,19 @@ export function GameCard({ game, openDeleteDialog }) {
           >
             Edit
           </Button>
-          <Button
-            size="small"
-            variant="text"
-            color="secondary"
-            startIcon={<DeleteIcon />}
-            onClick={() => {
-              openDeleteDialog(game._id)
-            }}
-          >
-            Delete
-          </Button>
+          {game.active && (
+            <Button
+              size="small"
+              variant="text"
+              color="secondary"
+              startIcon={<DeleteIcon />}
+              onClick={() => {
+                openDeleteDialog(game._id)
+              }}
+            >
+              Delete
+            </Button>
+          )}
         </CardActions>
       </Card>
     </Box>

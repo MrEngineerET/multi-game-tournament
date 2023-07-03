@@ -144,11 +144,15 @@ export async function action({ request }) {
   try {
     const url = new URL(request.url)
     const gameId = url.searchParams.get("gameId")
-    console.log("idid", "url", gameId)
-    await deleteGame(gameId)
-    return { closeDialog: true }
+    const deleteCompletely = toBoolean(url.searchParams.get("deleteCompletely"))
+    await deleteGame(gameId, deleteCompletely)
+    return { redirect: "/dashboard/game" }
   } catch (error) {
     console.log("error in delete game action")
     return null
+  }
+
+  function toBoolean(str) {
+    return str === "true"
   }
 }
