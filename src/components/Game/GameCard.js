@@ -13,6 +13,7 @@ import {
 } from "@mui/material"
 import { Delete as DeleteIcon, Edit as EditIcon } from "@mui/icons-material"
 import { EllipsisText } from "../Common/EllipsisText"
+import { Link } from "react-router-dom"
 
 export function GameCard({ game, openDeleteDialog }) {
   const handleImageOnError = (e) => {
@@ -24,39 +25,45 @@ export function GameCard({ game, openDeleteDialog }) {
   return (
     <Box>
       <Card elevation={1} sx={[!isGameActive && { opacity: 0.7 }]}>
-        <CardMedia
-          sx={{
-            height: { xs: 150, sm: 200 },
-            bgcolor: "background.default",
-            borderBottom: "1px solid whitesmoke",
-          }}
-          component={"img"}
-          image={game.images[0]}
-          onError={handleImageOnError}
-          loading="lazy"
-        />
-        <CardContent sx={{ pb: 2 }}>
-          <Typography gutterBottom variant="h6" component="div">
-            <EllipsisText text={game.name} />
-          </Typography>
-          <Typography
-            variant="body2"
-            color="text.secondary"
-            sx={{ height: 100, overflow: "scroll" }}
-          >
-            {game.description}
-          </Typography>
-          <Alert
-            severity="warning"
+        <Box
+          component={Link}
+          to={`${game._id}/edit`}
+          sx={{ textDecoration: "none" }}
+        >
+          <CardMedia
             sx={{
-              pt: 0,
-              pb: 0,
-              visibility: isGameActive ? "hidden" : "visible",
+              height: { xs: 150, sm: 200 },
+              bgcolor: "background.default",
+              borderBottom: "1px solid whitesmoke",
             }}
-          >
-            The game is deactivated
-          </Alert>
-        </CardContent>
+            component={"img"}
+            image={game.images[0]}
+            onError={handleImageOnError}
+            loading="lazy"
+          />
+          <CardContent sx={{ pb: 2 }}>
+            <EllipsisText gutterBottom variant="h6" color="text.primary">
+              {game.name}
+            </EllipsisText>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{ height: 100, overflow: "scroll" }}
+            >
+              {game.description}
+            </Typography>
+            <Alert
+              severity="warning"
+              sx={{
+                pt: 0,
+                pb: 0,
+                visibility: isGameActive ? "hidden" : "visible",
+              }}
+            >
+              This game is deactivated
+            </Alert>
+          </CardContent>
+        </Box>
         <CardActions sx={{ p: 4, pb: 2, pt: 2 }}>
           <Button
             size="small"

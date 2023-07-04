@@ -118,7 +118,7 @@ export async function action({ request }) {
       description,
       image,
     })
-    return redirect("/game")
+    return redirect("/dashboard/game")
   } catch (error) {
     // if validation error
     if (error.response?.status === 422) return error.response
