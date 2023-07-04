@@ -97,6 +97,18 @@ export function Game() {
           >
             <Await resolve={games}>
               {(games) => {
+                if (games.length === 0)
+                  return (
+                    <Box sx={{ p: 10 }}>
+                      <Typography
+                        variant="h5"
+                        component="h2"
+                        sx={{ textAlign: "center" }}
+                      >
+                        No Games Found
+                      </Typography>
+                    </Box>
+                  )
                 const activeGames = games.filter((game) => game.active)
                 const inactiveGames = games.filter((game) => !game.active)
                 const gamesToBeShown =

@@ -7,16 +7,23 @@ import {
   Typography,
   Button,
 } from "@mui/material"
-import { Form, redirect, useNavigation, useActionData } from "react-router-dom"
+import {
+  Form,
+  redirect,
+  useNavigation,
+  useActionData,
+  useNavigate,
+} from "react-router-dom"
 import { createGame } from "../api/game"
 import { useAlert } from "../context/AlertContext"
 
 const sxStyles = {
   bannerWrapper: {
     bgcolor: "background.paper",
+    p: 5,
   },
   banner: {
-    p: 20,
+    p: 15,
     pl: 5,
     pr: 5,
   },
@@ -24,18 +31,12 @@ const sxStyles = {
     p: 5,
     pt: 10,
   },
-  fieldName: {
-    width: 100,
-    fontSize: { xs: 16, md: 20 },
-  },
-  fieldInput: {
-    flex: 1,
-  },
 }
 
 export function CreateGame() {
   const alert = useAlert()
   const navigation = useNavigation()
+  const navigate = useNavigate()
   const actionData = useActionData()
 
   useEffect(() => {
@@ -56,41 +57,58 @@ export function CreateGame() {
       <Box sx={sxStyles.content}>
         <Container>
           <Form method="post" encType="multipart/form-data">
-            <Box sx={{ maxWidth: 700 }}>
+            <Box>
               <Stack gap={5}>
-                <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
-                  <TextField
-                    label="Name"
-                    sx={sxStyles.fieldInput}
-                    name="name"
-                    required
-                    autoFocus
-                  />
-                </Stack>
-                <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
-                  <TextField
-                    label="Description"
-                    sx={sxStyles.fieldInput}
-                    name="description"
-                    required
-                    multiline
-                    minRows={4}
-                    maxRows={6}
-                  />
-                </Stack>
-                <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
-                  <TextField
-                    helperText="Image"
-                    type="file"
-                    sx={sxStyles.fieldInput}
-                    name="image"
-                    required
-                    component="span"
-                  />
-                </Stack>
-                <Box
-                  sx={{ mt: 5, display: "flex", justifyContent: "flex-end" }}
-                >
+                <TextField
+                  label="Name"
+                  sx={sxStyles.fieldInput}
+                  name="name"
+                  required
+                  autoFocus
+                />
+                <TextField
+                  label="Description"
+                  sx={sxStyles.fieldInput}
+                  name="description"
+                  required
+                  multiline
+                  minRows={4}
+                  maxRows={6}
+                />
+                <Box sx={{ flex: 1 }}>
+                  <Typography
+                    color="text.secondary"
+                    sx={{ mb: "2px", ml: 1, fontSize: 13 }}
+                  >
+                    Image
+                  </Typography>
+                  <Box sx={{ display: "flex", gap: 4 }}>
+                    <TextField
+                      type="file"
+                      inputProps={{
+                        accept: "image/*",
+                      }}
+                      sx={{ width: 1 }}
+                      name="image"
+                      required
+                      component="span"
+                    />
+                    {/* <Box
+                      component={"img"}
+                      src="the new image url"
+                      sx={{ flex: 1 }}
+                    /> */}
+                  </Box>
+                </Box>
+                <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
+                  <Button
+                    onClick={() => {
+                      navigate(-1)
+                    }}
+                    color="secondary"
+                  >
+                    Cancel
+                  </Button>
                   <Button
                     type="submit"
                     disabled={navigation.state === "submitting"}

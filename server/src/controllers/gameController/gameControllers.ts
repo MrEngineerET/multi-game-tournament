@@ -61,25 +61,29 @@ export const updateGame = async (
       runValidators: true,
     })
     if (!game) {
-      return res.status(404).send({ status: "success", data: game })
+      return res
+        .status(404)
+        .send({ status: "error", message: "Game not found" })
     }
     res.status(200).send({ status: "success", data: game })
   } catch (error) {
     next(error)
   }
 }
-
 export const createGame = async (
   req: RequestWithUser,
   res: Response,
   next: NextFunction,
 ) => {
+  function getFullImageUrl(url: string) {
+    return `${process.env.SERVER_URL}/imgs/uploads/games/${url}`
+  }
   try {
     const { name, description } = req.body
     const game = await Game.create({
       name,
       description,
-      images: [req.file.filename],
+      images: [getFullImageUrl(req.file.filename)],
       createdBy: req.user._id,
     })
 

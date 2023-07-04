@@ -4,11 +4,10 @@ import {
   Container,
   Stack,
   TextField,
-  Typography,
   Button,
   Alert,
   AlertTitle,
-  Paper,
+  Typography,
 } from "@mui/material"
 import {
   Form,
@@ -25,22 +24,16 @@ import { GameDeleteDialog } from "../components/Game/GameDeleteDialog"
 const sxStyles = {
   bannerWrapper: {
     bgcolor: "background.paper",
+    p: 5,
   },
   banner: {
-    p: 20,
+    p: 15,
     pl: 5,
     pr: 5,
   },
   content: {
+    p: 5,
     pt: 10,
-  },
-  fieldName: {
-    width: 100,
-    fontSize: { xs: 16, md: 18 },
-  },
-  fieldInput: {
-    flex: 1,
-    maxWidth: 700,
   },
 }
 
@@ -52,96 +45,102 @@ export function EditGame() {
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
   const fetcher = useFetcher()
   return (
-    <Box sx={sxStyles.content}>
-      <Container>
-        <Form method="post">
-          <Stack gap={5}>
-            <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
-              <Typography sx={sxStyles.fieldName}>Name</Typography>
-              <Paper elevation={1} sx={sxStyles.fieldInput}>
-                <TextField
-                  fullWidth
-                  name="name"
-                  required
-                  defaultValue={game.name}
-                  autoFocus
-                  disabled={!game.active}
-                />
-              </Paper>
-            </Stack>
-            <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
-              <Typography sx={sxStyles.fieldName}>Description</Typography>
-              <Paper elevation={1} sx={sxStyles.fieldInput}>
-                <TextField
-                  fullWidth
-                  name="description"
-                  required
-                  multiline
-                  minRows={3}
-                  maxRows={5}
-                  defaultValue={game.description}
-                  disabled={!game.active}
-                />
-              </Paper>
-            </Stack>
-            <Stack direction={{ xs: "column", sm: "row" }} gap={5}>
-              <Typography sx={sxStyles.fieldName}>Image</Typography>
-              <Paper elevation={1} sx={sxStyles.fieldInput}>
-                <TextField
-                  fullWidth
-                  name="image"
-                  defaultValue={game.images[0]}
-                  disabled={!game.active}
-                />
-              </Paper>
-            </Stack>
-            {actionData?.data?.message && (
-              <Alert severity="error">
-                <AlertTitle>Error</AlertTitle>
-                {actionData.data.message}
-              </Alert>
-            )}
-            <Box sx={{ mt: 5, ml: { sm: "120px", display: "flex", gap: 10 } }}>
-              {game.active && (
-                <>
-                  <Button
-                    onClick={() => {
-                      navigate(-1)
-                    }}
-                    color="secondary"
-                  >
-                    Cancel
-                  </Button>
-                  <Button
-                    type="submit"
-                    disabled={navigation.state === "submitting"}
-                  >
-                    Save and Continue
-                  </Button>
-                </>
+    <Box>
+      <Box sx={sxStyles.bannerWrapper}>
+        <Container sx={sxStyles.banner}>
+          <Typography variant="h3" component="h1">
+            Edit Game
+          </Typography>
+        </Container>
+      </Box>
+      <Box sx={sxStyles.content}>
+        <Container
+        // sx={(theme) => ({
+        //   p: 10,
+        //   [theme.breakpoints.up("sm")]: {
+        //     px: 10,
+        //   },
+        // })}
+        >
+          <Form method="post">
+            <Stack gap={5}>
+              <TextField
+                label="Name"
+                fullWidth
+                name="name"
+                required
+                defaultValue={game.name}
+                autoFocus
+                disabled={!game.active}
+              />
+
+              <TextField
+                label="Description"
+                fullWidth
+                name="description"
+                required
+                multiline
+                minRows={3}
+                maxRows={5}
+                defaultValue={game.description}
+                disabled={!game.active}
+              />
+
+              <TextField
+                fullWidth
+                name="image"
+                defaultValue={game.images[0]}
+                disabled={!game.active}
+              />
+
+              {actionData?.data?.message && (
+                <Alert severity="error">
+                  <AlertTitle>Error</AlertTitle>
+                  {actionData.data.message}
+                </Alert>
               )}
-            </Box>
-          </Stack>
-        </Form>
-        {!game.active && (
-          <Box sx={{ ml: { sm: "120px", display: "flex", gap: 10 } }}>
-            <fetcher.Form method="post">
-              <Button
-                name="intent"
-                value="restore_game"
-                color="secondary"
-                type="submit"
-                disabled={fetcher.state === "submitting"}
-              >
-                Restore
+              <Box sx={{ display: "flex", gap: 2 }}>
+                {game.active && (
+                  <>
+                    <Button
+                      onClick={() => {
+                        navigate(-1)
+                      }}
+                      color="secondary"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={navigation.state === "submitting"}
+                    >
+                      Save and Continue
+                    </Button>
+                  </>
+                )}
+              </Box>
+            </Stack>
+          </Form>
+          {!game.active && (
+            <Box sx={{ display: "flex", gap: 2 }}>
+              <fetcher.Form method="post">
+                <Button
+                  name="intent"
+                  value="restore_game"
+                  color="secondary"
+                  type="submit"
+                  disabled={fetcher.state === "submitting"}
+                >
+                  Restore
+                </Button>
+              </fetcher.Form>
+              <Button onClick={() => setDeleteDialogOpen(true)}>
+                Delete Completely
               </Button>
-            </fetcher.Form>
-            <Button onClick={() => setDeleteDialogOpen(true)}>
-              Delete Completely
-            </Button>
-          </Box>
-        )}
-      </Container>
+            </Box>
+          )}
+        </Container>
+      </Box>
       <GameDeleteDialog
         gameId={game._id}
         isOpen={deleteDialogOpen}
@@ -175,7 +174,7 @@ export async function action({ request, params }) {
 
   const gameId = params.id
   try {
-    await updateGame(gameId, { gameId, name, description, images: [image] })
+    await updateGame(gameId, { name, description, images: [image] })
     return redirect("/dashboard/game")
   } catch (error) {
     // if validation error

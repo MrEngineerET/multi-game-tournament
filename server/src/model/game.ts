@@ -23,19 +23,4 @@ const gameSchema = new Schema<IGame>(
   { timestamps: true },
 )
 
-gameSchema.post("findOne", function (doc, next) {
-  doc.images = doc.images?.map((img) => getFullImageUrl(img))
-  next()
-})
-gameSchema.post("find", function (docs, next) {
-  docs.forEach((doc) => {
-    doc.images = doc.images?.map((img) => getFullImageUrl(img))
-  })
-  next()
-})
-
-function getFullImageUrl(url: string) {
-  return `${process.env.SERVER_URL}/imgs/uploads/games/${url}`
-}
-
 export const Game = model<IGame>("Game", gameSchema)
