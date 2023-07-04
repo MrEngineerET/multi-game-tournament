@@ -1,21 +1,24 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Box } from "@mui/system"
+import { Typography } from "@mui/material"
 
-export function EllipsisText({ text }) {
+export function EllipsisText({ children, sx, ...rest }) {
   return (
-    <Box
+    <Typography
       sx={{
         overflow: "hidden",
         textOverflow: "ellipsis",
         whiteSpace: "nowrap",
+        ...sx,
       }}
+      {...rest}
     >
-      {text}
-    </Box>
+      {children}
+    </Typography>
   )
 }
 
 EllipsisText.propTypes = {
-  text: PropTypes.string.isRequired,
+  children: PropTypes.string.isRequired,
+  sx: PropTypes.object,
 }
