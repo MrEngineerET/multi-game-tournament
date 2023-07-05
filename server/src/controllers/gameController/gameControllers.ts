@@ -4,6 +4,8 @@ import { RequestWithUser } from "../userController/authController"
 import multer from "multer"
 import { AppError } from "../../utils/AppError"
 import sharp from "sharp"
+import fs from "fs/promises"
+import path from "path"
 
 const multerFilter = (req, file, cb) => {
   if (file.mimetype.startsWith("image")) {
@@ -75,9 +77,6 @@ export const createGame = async (
   res: Response,
   next: NextFunction,
 ) => {
-  function getFullImageUrl(url: string) {
-    return `${process.env.SERVER_URL}/imgs/uploads/games/${url}`
-  }
   try {
     const { name, description } = req.body
     const game = await Game.create({
@@ -117,8 +116,14 @@ export const deleteGame = async (
 ) => {
   try {
     const force = req.query.force === "true"
-    if (force) await Game.findByIdAndDelete(req.params.id)
-    else
+    if (force) {
+      const game = await Game.findById(req.params.id)
+      // delete the game image
+      Promise.all(
+        game.images.map((image) => fs.unlink(getImageAbsoluteLocation(image))),
+      )
+      await Game.findByIdAndDelete(req.params.id)
+    } else
       await Game.findByIdAndUpdate(req.params.id, {
         active: false,
       })
@@ -126,6 +131,18 @@ export const deleteGame = async (
   } catch (error) {
     next(error)
   }
+}
+
+function getFullImageUrl(url: string) {
+  return `${process.env.SERVER_URL}/imgs/uploads/games/${url}`
+}
+
+function getImageAbsoluteLocation(fullImageUrl: string) {
+  const imgLocationInPublic = fullImageUrl.replace(
+    `${process.env.SERVER_URL}`,
+    "public/",
+  )
+  return path.resolve(imgLocationInPublic)
 }
 
 export default {
