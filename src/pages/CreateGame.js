@@ -1,4 +1,4 @@
-import React, { useEffect } from "react"
+import React, { useEffect, useState } from "react"
 import {
   Box,
   Container,
@@ -6,6 +6,8 @@ import {
   TextField,
   Typography,
   Button,
+  InputLabel,
+  Input,
 } from "@mui/material"
 import {
   Form,
@@ -38,6 +40,7 @@ export function CreateGame() {
   const navigation = useNavigation()
   const navigate = useNavigate()
   const actionData = useActionData()
+  const [gameImage, setGameImage] = useState("/images/image-loading-error.jpg")
 
   useEffect(() => {
     if (actionData?.data?.message) {
@@ -59,47 +62,87 @@ export function CreateGame() {
           <Form method="post" encType="multipart/form-data">
             <Box>
               <Stack gap={5}>
-                <TextField
-                  label="Name"
-                  sx={sxStyles.fieldInput}
-                  name="name"
-                  required
-                  autoFocus
-                />
-                <TextField
-                  label="Description"
-                  sx={sxStyles.fieldInput}
-                  name="description"
-                  required
-                  multiline
-                  minRows={4}
-                  maxRows={6}
-                />
-                <Box sx={{ flex: 1 }}>
-                  <Typography
-                    color="text.secondary"
-                    sx={{ mb: "2px", ml: 1, fontSize: 13 }}
-                  >
-                    Image
-                  </Typography>
-                  <Box sx={{ display: "flex", gap: 4 }}>
+                <Box
+                  sx={{
+                    display: "flex",
+                    gap: 5,
+                    flexDirection: {
+                      xs: "column",
+                      md: "row",
+                    },
+                  }}
+                >
+                  <Stack sx={{ flex: 1, gap: 5 }}>
                     <TextField
-                      type="file"
-                      inputProps={{
-                        accept: "image/*",
-                      }}
-                      sx={{ width: 1 }}
-                      name="image"
+                      label="Name"
+                      sx={sxStyles.fieldInput}
+                      name="name"
                       required
-                      component="span"
+                      autoFocus
+                      fullWidth
                     />
-                    {/* <Box
+                    <TextField
+                      label="Description"
+                      sx={sxStyles.fieldInput}
+                      name="description"
+                      required
+                      multiline
+                      minRows={4}
+                      maxRows={6}
+                      fullWidth
+                    />
+                  </Stack>
+                  <Box
+                    sx={{
+                      flex: 1,
+                      display: "flex",
+                      gap: 5,
+                      flexDirection: { md: "column" },
+                      alignItems: { xs: "flex-end", md: "stretch" },
+                    }}
+                  >
+                    <Box
                       component={"img"}
-                      src="the new image url"
-                      sx={{ flex: 1 }}
-                    /> */}
+                      src={gameImage}
+                      sx={{
+                        height: 250,
+                        objectFit: "contain",
+                        bgcolor: "background.lightest",
+                      }}
+                    />
+
+                    <Box sx={{ display: "flex", gap: 2 }}>
+                      <Box>
+                        <Input
+                          required
+                          type="file"
+                          name="image"
+                          id="image-change"
+                          sx={{ display: "none" }}
+                          inputProps={{ accept: "image/*" }}
+                          onChange={(event) => {
+                            const reader = new FileReader()
+                            reader.onload = (ev) => {
+                              setGameImage(ev.target.result)
+                            }
+                            reader.readAsDataURL(event.target.files[0])
+                          }}
+                        />
+                        <InputLabel htmlFor="image-change">
+                          <Button
+                            component="span"
+                            color="secondary"
+                            variant="outlined"
+                            size="small"
+                          >
+                            Select Image <sup>&nbsp;*</sup>
+                          </Button>
+                        </InputLabel>
+                      </Box>
+                    </Box>
                   </Box>
                 </Box>
+
                 <Box sx={{ mt: 2, display: "flex", gap: 2 }}>
                   <Button
                     onClick={() => {
