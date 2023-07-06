@@ -58,7 +58,19 @@ export const updateGame = async (
   next: NextFunction,
 ) => {
   try {
-    const game = await Game.findByIdAndUpdate(req.params.id, req.body, {
+    const gameId = req.params.id
+    if (req.file) {
+      const game = await Game.findById(gameId)
+      const gameImages = game?.images
+      if (gameImages)
+        Promise.all(
+          gameImages.map((image) => fs.unlink(getImageAbsoluteLocation(image))),
+        ).catch((error) => {
+          next(error)
+        })
+      req.body.images = [getFullImageUrl(req.file.filename)]
+    }
+    const game = await Game.findByIdAndUpdate(gameId, req.body, {
       new: true,
       runValidators: true,
     })
@@ -119,9 +131,11 @@ export const deleteGame = async (
     if (force) {
       const game = await Game.findById(req.params.id)
       // delete the game image
-      Promise.all(
-        game.images.map((image) => fs.unlink(getImageAbsoluteLocation(image))),
-      )
+      const gameImages = game?.images
+      if (gameImages)
+        Promise.all(
+          gameImages.map((image) => fs.unlink(getImageAbsoluteLocation(image))),
+        )
       await Game.findByIdAndDelete(req.params.id)
     } else
       await Game.findByIdAndUpdate(req.params.id, {
