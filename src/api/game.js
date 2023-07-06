@@ -31,6 +31,12 @@ export async function getGame(gameId) {
 }
 
 export async function updateGame(gameId, update) {
-  const { data: game } = (await axios.patch(`/game/${gameId}`, update)).data
+  const { data: game } = (
+    await axios.patch(`/game/${gameId}`, update, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    })
+  ).data
   return game
 }

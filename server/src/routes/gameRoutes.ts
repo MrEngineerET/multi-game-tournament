@@ -16,7 +16,13 @@ gameRouter.post(
   validator.createGame,
   gameController.createGame,
 )
-gameRouter.patch("/:id", validator.updateGame, gameController.updateGame)
+gameRouter.patch(
+  "/:id",
+  gameController.uploadPhoto,
+  gameController.resizePhoto,
+  validator.updateGame,
+  gameController.updateGame,
+)
 gameRouter.delete("/:id", validator.deleteGame, gameController.deleteGame)
 
 export default gameRouter
