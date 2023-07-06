@@ -1,5 +1,4 @@
 import React from "react"
-// import PropTypes from "prop-types"
 import {
   Box,
   Container,
@@ -16,7 +15,9 @@ import {
   useActionData,
   useLoaderData,
   useNavigate,
-  useFetcher,
+  useNavigation,
+  Form,
+  redirect,
 } from "react-router-dom"
 import { getGame, updateGame } from "../api/game"
 import { GameDeleteDialog } from "../components/Game/GameDeleteDialog"
@@ -42,17 +43,15 @@ const sxStyles = {
 export function EditGame() {
   const actionData = useActionData()
   const game = useLoaderData()
+  const navigation = useNavigation()
   const navigate = useNavigate()
   const [deleteDialogOpen, setDeleteDialogOpen] = React.useState(false)
-  const imageFetcher = useFetcher()
-  const gameFetcher = useFetcher()
-  const restoreFetcher = useFetcher()
+
   const [imageUrl, setImageUrl] = React.useState(game.images[0])
 
-  const saving =
-    imageFetcher.state === "submitting" ||
-    gameFetcher.state === "submitting" ||
-    restoreFetcher.state === "submitting"
+  const submitting =
+    navigation.state === "submitting" || navigation.state === "submitting"
+
   return (
     <Box>
       <Box sx={sxStyles.bannerWrapper}>
@@ -76,25 +75,35 @@ export function EditGame() {
               >
                 <ArrowBackIcon /> Back
               </Button>
-              {saving && (
+              {submitting && (
                 <Box sx={{ display: "flex", alignItems: "center" }}>
                   <RotatingGear />
                   <Typography variant="body2">Saving ...</Typography>
                 </Box>
               )}
             </Box>
-            <Box
-              sx={{
-                display: "flex",
-                flexDirection: {
-                  xs: "column",
-                  md: "row",
-                },
-                gap: 5,
-              }}
+            <Form
+              method="post"
+              encType="multipart/form-data"
+              style={submitting ? { pointerEvents: "none", opacity: 0.5 } : {}}
             >
-              <Box sx={{ flex: 1 }}>
-                <gameFetcher.Form method="post">
+              <Box
+                sx={{
+                  p: 5,
+                  boxShadow: "0px 0px 1px 0px rgba(0,0,0,0.1)",
+                  borderRadius: 1,
+                  display: "flex",
+                  flexDirection: {
+                    xs: "column",
+                    md: "row",
+                  },
+                  gap: {
+                    xs: 10,
+                    md: 5,
+                  },
+                }}
+              >
+                <Box sx={{ flex: 1 }}>
                   <Stack gap={5}>
                     <TextField
                       label="Name"
@@ -123,37 +132,30 @@ export function EditGame() {
                         {actionData.data.message}
                       </Alert>
                     )}
-                    <Box sx={{ display: "flex", gap: 2 }}>
-                      {game.active && (
-                        <Button
-                          type="submit"
-                          disabled={gameFetcher.state === "submitting"}
-                          name="intent"
-                          value="update_game"
-                        >
-                          Save
-                        </Button>
-                      )}
-                    </Box>
                   </Stack>
-                </gameFetcher.Form>
-              </Box>
-              <Box sx={{ flex: 1 }}>
-                <Stack gap={5}>
+                </Box>
+                <Box sx={{ flex: 1 }}>
                   <Box
-                    component={"img"}
-                    src={imageUrl}
+                    gap={5}
                     sx={{
-                      height: 250,
-                      objectFit: "contain",
-                      bgcolor: "background.lightest",
+                      display: "flex",
+                      flexDirection: {
+                        xs: "row",
+                        md: "column",
+                      },
+                      alignItems: { xs: "flex-end", md: "stretch" },
                     }}
-                  />
-                  {game.active && (
-                    <imageFetcher.Form
-                      method="post"
-                      encType="multipart/form-data"
-                    >
+                  >
+                    <Box
+                      component={"img"}
+                      src={imageUrl}
+                      sx={{
+                        height: 250,
+                        objectFit: "contain",
+                        bgcolor: "background.lightest",
+                      }}
+                    />
+                    {game.active && (
                       <Box sx={{ display: "flex", gap: 2 }}>
                         <Box>
                           <Input
@@ -171,47 +173,60 @@ export function EditGame() {
                             }}
                           />
                           <InputLabel htmlFor="image-change">
-                            <Button component="span" color="secondary">
+                            <Button
+                              component="span"
+                              color="secondary"
+                              variant="text"
+                              size="small"
+                            >
                               Change Image
                             </Button>
                           </InputLabel>
                         </Box>
-                        <Button
-                          type="submit"
-                          name="intent"
-                          value="change-image"
-                          disabled={imageFetcher.state === "submitting"}
-                        >
-                          Save
-                        </Button>
                       </Box>
-                    </imageFetcher.Form>
-                  )}
+                    )}
 
-                  {actionData?.data?.message && (
-                    <Alert severity="error">
-                      <AlertTitle>Error</AlertTitle>
-                      {actionData.data.message}
-                    </Alert>
-                  )}
-                </Stack>
+                    {actionData?.data?.message && (
+                      <Alert severity="error">
+                        <AlertTitle>Error</AlertTitle>
+                        {actionData.data.message}
+                      </Alert>
+                    )}
+                  </Box>
+                </Box>
               </Box>
-            </Box>
+              {game.active && (
+                <Box sx={{ display: "flex", gap: 2, p: 5 }}>
+                  <Button
+                    onClick={() => {
+                      navigate(-1)
+                    }}
+                    color="secondary"
+                    variant="outlined"
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" name="intent" value="update_game">
+                    Save
+                  </Button>
+                </Box>
+              )}
+            </Form>
           </Box>
 
           {!game.active && (
-            <Box sx={{ display: "flex", gap: 2 }}>
-              <restoreFetcher.Form method="post">
+            <Box sx={{ display: "flex", gap: 2, mt: 5 }}>
+              <Form method="post">
                 <Button
                   name="intent"
                   value="restore_game"
                   color="secondary"
                   type="submit"
-                  disabled={restoreFetcher.state === "submitting"}
+                  disabled={submitting}
                 >
                   Restore
                 </Button>
-              </restoreFetcher.Form>
+              </Form>
               <Button onClick={() => setDeleteDialogOpen(true)}>
                 Delete Completely
               </Button>
@@ -236,11 +251,14 @@ export async function action({ request, params }) {
   const intent = formData.get("intent")
   const gameId = params.id
   if (intent === "update_game") {
-    const name = formData.get("name")
-    const description = formData.get("description")
+    const payload = {}
+    payload.name = formData.get("name")
+    payload.description = formData.get("description")
+    const image = formData.get("image")
+    if (image) payload.image = image
     try {
-      await updateGame(gameId, { name, description })
-      return null
+      await updateGame(gameId, payload)
+      return redirect("/dashboard/game")
     } catch (error) {
       // if validation error
       if (error.response?.status === 422) return error.response.data
@@ -250,21 +268,7 @@ export async function action({ request, params }) {
   if (intent === "restore_game") {
     try {
       await updateGame(gameId, { active: true })
-      return null
-    } catch (error) {
-      // if validation error
-      if (error.response?.status === 422) return error.response.data
-      else throw error
-    }
-  }
-
-  if (intent === "change-image") {
-    const image = formData.get("image")
-    // console.log("idid", "---->", image)
-    // return null
-    try {
-      await updateGame(gameId, { image })
-      return null
+      return redirect("/dashboard/game")
     } catch (error) {
       // if validation error
       if (error.response?.status === 422) return error.response.data
