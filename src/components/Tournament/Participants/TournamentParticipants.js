@@ -9,6 +9,8 @@ import {
   DialogContent,
   DialogActions,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from "@mui/material"
 import { CircularProgress } from "@mui/material"
 import { useTournamentContext } from "../../../context/TournamentContext"
@@ -30,6 +32,8 @@ export function TournamentParticipants() {
     participantId: null,
   })
   const alert = useAlert()
+  const theme = useTheme()
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
   useEffect(() => {
     if (fetcher.data?.error) {
@@ -110,30 +114,36 @@ export function TournamentParticipants() {
         </fetcher.Form>
       )}
       <Dialog open={openDeleteDialog.status} onClose={handleCloseDialog}>
-        <DialogTitle>
-          Are you sure you want to remove the participant?
-        </DialogTitle>
-        <DialogContent sx={{ pb: 10 }}>
-          <Typography>
-            This action will remove the participant from the tournament
-          </Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button color="secondary" onClick={handleCloseDialog} sx={{ mr: 3 }}>
-            Cancel
-          </Button>
-          <fetcher.Form method="post">
-            <input
-              readOnly
-              name="participant_id"
-              value={openDeleteDialog.participantId}
-              hidden
-            />
-            <Button type="submit" name="intent" value="delete">
-              Remove Participant
+        <Box sx={{ p: { xs: 1, sm: 5 } }}>
+          <DialogTitle>
+            Are you sure you want to remove the participant?
+          </DialogTitle>
+          <DialogContent sx={{ pb: 10 }}>
+            <Typography>
+              This action will remove the participant from the tournament
+            </Typography>
+          </DialogContent>
+          <DialogActions sx={{ mr: 3 }}>
+            <Button
+              color="secondary"
+              onClick={handleCloseDialog}
+              sx={{ mr: 3 }}
+            >
+              Cancel
             </Button>
-          </fetcher.Form>
-        </DialogActions>
+            <fetcher.Form method="post">
+              <input
+                readOnly
+                name="participant_id"
+                value={openDeleteDialog.participantId}
+                hidden
+              />
+              <Button type="submit" name="intent" value="delete">
+                {isSmallScreen ? "Remove" : "Remove Participant"}
+              </Button>
+            </fetcher.Form>
+          </DialogActions>
+        </Box>
       </Dialog>
     </Box>
   )
