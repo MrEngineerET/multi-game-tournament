@@ -5,6 +5,7 @@ import multer from "multer"
 import { AppError } from "../../utils/AppError"
 import sharp from "sharp"
 import fs from "fs/promises"
+import * as fsNonProm from "fs"
 import path from "path"
 
 const multerFilter = (req, file, cb) => {
@@ -64,7 +65,11 @@ export const updateGame = async (
       const gameImages = game?.images
       if (gameImages)
         Promise.all(
-          gameImages.map((image) => fs.unlink(getImageAbsoluteLocation(image))),
+          gameImages.map((image) => {
+            const absolutImageLocation = getImageAbsoluteLocation(image)
+            if (fsNonProm.existsSync(absolutImageLocation))
+              return fs.unlink(absolutImageLocation)
+          }),
         ).catch((error) => {
           next(error)
         })
@@ -134,7 +139,11 @@ export const deleteGame = async (
       const gameImages = game?.images
       if (gameImages)
         Promise.all(
-          gameImages.map((image) => fs.unlink(getImageAbsoluteLocation(image))),
+          gameImages.map((image) => {
+            const absolutImageLocation = getImageAbsoluteLocation(image)
+            if (fsNonProm.existsSync(absolutImageLocation))
+              return fs.unlink(absolutImageLocation)
+          }),
         )
       await Game.findByIdAndDelete(req.params.id)
     } else
