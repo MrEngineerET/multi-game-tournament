@@ -12,6 +12,7 @@ import { GameInfo } from "../components/Tournament/CreateTournament/GameInfo"
 import { createTournament } from "../api/tournament"
 import { getAllGames } from "../api/game"
 import { useAlert } from "../context/AlertContext"
+import { AddParticipant } from "../components/Tournament/CreateTournament/AddParticipants"
 
 const styles = {
   bannerWrapper: {
@@ -56,6 +57,7 @@ export function CreateTournament() {
           <Form method="post">
             <Stack gap={10} sx={{ width: { xs: "100%", md: "80%" } }}>
               <BasicInfo />
+              <AddParticipant />
               <GameInfo />
               <Box align="right">
                 <Button

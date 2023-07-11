@@ -55,17 +55,6 @@ export function BasicInfo() {
               Double Elimination
             </MenuItem>
           </TextField>
-
-          <TextField
-            label="Participants"
-            name="participants"
-            fullWidth
-            size={isSmallScreen ? "small" : "normal"}
-            multiline
-            minRows={3}
-            maxRows={5}
-            required
-          />
         </Stack>
       </CardContent>
     </Card>

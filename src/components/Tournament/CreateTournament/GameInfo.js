@@ -157,6 +157,7 @@ function GameInfoContent({
                     disabled={disableForm}
                     key={value._id}
                     label={value.name}
+                    sx={{ px: 1 }}
                   />
                 ))}
               </Box>
