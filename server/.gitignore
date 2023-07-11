@@ -4,4 +4,6 @@
 todo.ts
 email.html
 .env
-/public/imgs/uploads
+/public/imgs/uploads/games/*.jpeg
+/public/imgs/uploads/games/*.png
+/public/imgs/uploads/games/*.jpg
