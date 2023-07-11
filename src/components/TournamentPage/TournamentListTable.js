@@ -18,6 +18,7 @@ import { TableToolBar } from "./TableToolBar"
 
 export function TournamentListTable({ tournaments, filter }) {
   const [selected, setSelected] = React.useState([])
+  const [isAllSelected, setIsAllSelected] = React.useState(false)
 
   const filteredTournaments = tournaments.filter((tournament) => {
     if (filter == "all" || filter === null || filter.trim() === "") return true
@@ -74,7 +75,17 @@ export function TournamentListTable({ tournaments, filter }) {
           <TableHead>
             <TableRow>
               <TableCell padding="checkbox">
-                <Checkbox />
+                <Checkbox
+                  color="secondary"
+                  checked={isAllSelected}
+                  onClick={() => {
+                    setIsAllSelected((prev) => {
+                      if (prev) setSelected([])
+                      else setSelected(tournaments.map((t) => t._id))
+                      return !prev
+                    })
+                  }}
+                />
               </TableCell>
               <TableCell sx={{ fontSize: "1rem" }}>Name</TableCell>
               <TableCell sx={{ fontSize: "1rem" }} align="right">

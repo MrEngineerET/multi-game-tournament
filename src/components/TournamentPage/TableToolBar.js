@@ -1,9 +1,9 @@
-/* eslint-disable no-unused-vars */
 import React from "react"
 import PropTypes from "prop-types"
 import { Form, redirect, useNavigation } from "react-router-dom"
 import { Box, Typography, Button } from "@mui/material"
 import DeleteIcon from "@mui/icons-material/Delete"
+// eslint-disable-next-line no-unused-vars
 import ArchiveIcon from "@mui/icons-material/Archive"
 import { deleteTournament, updateTournament } from "../../api/tournament"
 
