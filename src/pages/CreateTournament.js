@@ -87,6 +87,8 @@ export async function action({ request }) {
   participants = participants.filter((p) => p)
   let selectedGames = JSON.parse(formData.get("selected_games"))
 
+  if (participants.length < 2)
+    return { error: "Number of participants must be greater than 2" }
   try {
     const tournament = await createTournament({
       name,
