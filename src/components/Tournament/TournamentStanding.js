@@ -1,28 +1,28 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { useLoaderData } from "react-router-dom"
+import { useLoaderData, defer, Await } from "react-router-dom"
 import { getTournamentStanding } from "../../api/tournament"
 import {
-  Typography,
   Table,
   TableBody,
   TableCell,
   TableContainer,
   TableHead,
   TableRow,
-  Paper,
-  Box,
 } from "@mui/material"
+import { Paper, Box, Skeleton } from "@mui/material"
 import { useTournamentContext } from "../../context/TournamentContext"
 
 export function TournamentStanding() {
   const { tournamentData } = useTournamentContext()
-  const finalStanding = useLoaderData()
+  const { finalStanding } = useLoaderData()
   let standing
   if (finalStanding.length > 0) standing = finalStanding
   else {
     const participantsLength = tournamentData.participants.length
-    const temp = Array(participantsLength).fill({ name: "-", rank: "-" })
+    const temp = Array(participantsLength)
+      .fill()
+      .map((_, index) => ({ name: "-", rank: index + 1 }))
     temp.forEach((participant, index) => {
       participant.rank = index + 1
     })
@@ -30,10 +30,7 @@ export function TournamentStanding() {
   }
 
   return (
-    <div>
-      <Typography variant="h5" sx={{ mb: 2 }}>
-        Standings
-      </Typography>
+    <Box>
       <TableContainer
         component={Paper}
         sx={{ backgroundColor: "#f8f8f8", borderRadius: 2 }}
@@ -73,26 +70,58 @@ export function TournamentStanding() {
                       <StandingIcon src={"/icons/medal_three.png"} />
                     </Box>
                   ) : (
-                    <Box sx={{ ml: 3 }}>{participant.rank}</Box>
+                    <Box sx={{ ml: 3 }}>
+                      <React.Suspense fallback={<div>{participant.rank}</div>}>
+                        <Await
+                          resolve={finalStanding}
+                          errorElement={<div>Error Happened</div>}
+                        >
+                          {(finalStanding) => (
+                            <div>
+                              {finalStanding.length !== 0
+                                ? finalStanding[index].rank
+                                : participant.rank}
+                            </div>
+                          )}
+                        </Await>
+                      </React.Suspense>
+                    </Box>
                   )}
                 </TableCell>
                 <TableCell
                   sx={{ fontSize: 14 + (array.length - 1 - index) * 1 }}
                 >
-                  {participant.name}
+                  <React.Suspense
+                    fallback={
+                      <Skeleton variant="rounded" width={100} height={20} />
+                    }
+                  >
+                    <Await
+                      resolve={finalStanding}
+                      errorElement={<div>Error Happened</div>}
+                    >
+                      {(finalStanding) => (
+                        <div>
+                          {finalStanding.length !== 0
+                            ? finalStanding[index].name
+                            : "-"}
+                        </div>
+                      )}
+                    </Await>
+                  </React.Suspense>
                 </TableCell>
               </TableRow>
             ))}
           </TableBody>
         </Table>
       </TableContainer>
-    </div>
+    </Box>
   )
 }
 
 export function loader({ params }) {
   const tournamentId = params.id
-  return getTournamentStanding(tournamentId)
+  return defer({ finalStanding: getTournamentStanding(tournamentId) })
 }
 
 function StandingIcon({ src }) {
