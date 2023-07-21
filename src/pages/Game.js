@@ -88,6 +88,7 @@ export function Game() {
             gap: 5,
             flexWrap: "wrap",
             justifyContent: "center",
+            mb: 10,
           }}
         >
           <React.Suspense

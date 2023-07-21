@@ -9,7 +9,7 @@ const styleConstants = {
 const styles = {
   root: {
     minWidth: "100%",
-    overflow: "scroll",
+    overflow: "auto",
   },
   group: {
     display: "flex",

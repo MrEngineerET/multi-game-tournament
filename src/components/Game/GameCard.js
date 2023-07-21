@@ -48,7 +48,7 @@ export function GameCard({ game, openDeleteDialog }) {
             <Typography
               variant="body2"
               color="text.secondary"
-              sx={{ height: 100, overflow: "scroll" }}
+              sx={{ height: 100, overflow: "auto" }}
             >
               {game.description}
             </Typography>
