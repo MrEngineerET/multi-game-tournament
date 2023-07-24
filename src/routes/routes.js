@@ -1,7 +1,7 @@
 import React from "react"
 import { Navigate, Outlet, Route } from "react-router-dom"
 import { LandingPage } from "../pages/LandingPage"
-import { ProtectedRoute, RestrictedRoute } from "./util"
+import { ProtectedRoute, RestrictedRoute, OnlyLoggedOutRoutes } from "./util"
 import { AlertProvider } from "../context/AlertContext"
 import { AuthProvider } from "../context/AuthContext"
 import { LogIn, action as loginAction } from "../pages/LogIn"
@@ -186,12 +186,20 @@ export const routes = (
       </Route>
 
       {/* loggedout routes */}
-      <Route path="/login" element={<LogIn />} action={loginAction} />
-      <Route path="/signup" element={<SignUp />} action={signupAction} />
       <Route
-        path="/forgot-password"
-        element={<div>This is the forgot password page</div>}
-      />
+        element={
+          <OnlyLoggedOutRoutes>
+            <Outlet />
+          </OnlyLoggedOutRoutes>
+        }
+      >
+        <Route path="/login" element={<LogIn />} action={loginAction} />
+        <Route path="/signup" element={<SignUp />} action={signupAction} />
+        <Route
+          path="/forgot-password"
+          element={<div>This is the forgot password page</div>}
+        />
+      </Route>
     </Route>
     {/* common routes */}
     <Route path="/testing" element={<TestingComponent />} />

@@ -22,3 +22,12 @@ RestrictedRoute.propTypes = {
   children: PropTypes.node.isRequired,
   role: PropTypes.string.isRequired,
 }
+
+export const OnlyLoggedOutRoutes = ({ children }) => {
+  const { user } = useAuth()
+  if (user) return <Navigate to="/" replace={true} />
+  return <>{children}</>
+}
+OnlyLoggedOutRoutes.propTypes = {
+  children: PropTypes.node.isRequired,
+}
