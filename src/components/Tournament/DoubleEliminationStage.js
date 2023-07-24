@@ -16,7 +16,7 @@ export function DoubleEliminationStage({ stage }) {
           gap: 20,
           mb: 10,
           minWidth: "100%",
-          overflow: "scroll",
+          overflow: "auto",
         }}
       >
         <DoubleEliminationGroup group={winnerGroup} />

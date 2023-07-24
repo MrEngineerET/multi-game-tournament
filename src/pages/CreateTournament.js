@@ -9,7 +9,7 @@ import {
 import { Box, Container, Stack, Typography, Button } from "@mui/material"
 import { BasicInfo } from "../components/Tournament/CreateTournament/BasicInfo"
 import { GameInfo } from "../components/Tournament/CreateTournament/GameInfo"
-import { createTournament } from "../api/tournament"
+import { createTournament, stageType } from "../api/tournament"
 import { getAllGames } from "../api/game"
 import { useAlert } from "../context/AlertContext"
 import { AddParticipant } from "../components/Tournament/CreateTournament/AddParticipants"
@@ -78,27 +78,31 @@ export function CreateTournament() {
 
 export async function action({ request }) {
   const formData = await request.formData()
-  const name = formData.get("tournament_name")
-  const description = formData.get("tournament_desc")
-  const stageType = formData.get("stage_type")
+  const data = {}
+
   let participants = formData.get("participants").split(",")
   participants = participants.map((p) => {
     if (p) return p.trim()
     return null
   })
   participants = participants.filter((p) => p)
-  let selectedGames = JSON.parse(formData.get("selected_games"))
 
-  if (participants.length < 2)
-    return { error: "Number of participants must be greater than 2" }
+  // if (participants.length < 2)
+  //   return { error: "Number of participants must be greater than 2" }
+  data.participants = participants
+  const selectedGames = JSON.parse(formData.get("selected_games"))
+  data.games = selectedGames.map((g) => ({ gameId: g._id, count: g.count }))
+  data.name = formData.get("tournament_name")
+  data.description = formData.get("tournament_desc")
+  data.stageType = formData.get("stage_type")
+  if (data.stageType === stageType.singleElimination)
+    data.consolationFinal = formData.get("consolation_final") === "true"
+  else if (data.stageType === stageType.doubleElimination) {
+    //do something
+  }
+
   try {
-    const tournament = await createTournament({
-      name,
-      description,
-      participants,
-      stageType,
-      games: selectedGames.map((g) => ({ gameId: g._id, count: g.count })),
-    })
+    const tournament = await createTournament(data)
     return { redirectURL: `/tournament/${tournament._id}` }
   } catch (error) {
     if (error.response?.data?.message)

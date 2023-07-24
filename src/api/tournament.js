@@ -7,13 +7,17 @@ export const stageType = {
   round_robin: "round_robin",
 }
 
-export async function createTournament({
-  name,
-  description,
-  participants,
-  stageType,
-  games,
-}) {
+export async function createTournament(data) {
+  const {
+    name,
+    description,
+    participants,
+    stageType,
+    games,
+    consolationFinal,
+    grandFinal,
+  } = data
+
   const { data: tournament } = (
     await axios.post("/tournament", {
       name,
@@ -21,6 +25,8 @@ export async function createTournament({
       participants,
       stageType,
       games,
+      consolationFinal,
+      grandFinal,
     })
   ).data
   return tournament
