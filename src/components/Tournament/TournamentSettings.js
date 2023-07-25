@@ -1,6 +1,5 @@
 import React from "react"
 import {
-  Box,
   Card,
   CardContent,
   CardHeader,
@@ -9,6 +8,7 @@ import {
   MenuItem,
   Button,
 } from "@mui/material"
+import { Box, Checkbox, FormControlLabel, Typography } from "@mui/material"
 import { useMediaQuery, useTheme } from "@mui/material"
 import {
   stageType,
@@ -27,8 +27,14 @@ export function TournamentSettings() {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const { tournamentData } = useTournamentContext()
-  const selectedStageType = tournamentData.stages[0].type
   const isPending = tournamentData.status === "pending"
+  const stage = tournamentData.stages[0]
+  const [selectedStageType, setSelectedStageType] = React.useState(
+    () => stage.type,
+  )
+  const [consolationFinal, setConsolationFinal] = React.useState(
+    stage.settings.consolationFinal,
+  )
 
   return (
     <Box
@@ -69,23 +75,47 @@ export function TournamentSettings() {
                 defaultValue={tournamentData.description}
                 disabled={fetcherBasic.state === "submitting"}
               />
-
-              <TextField
-                label="Type"
-                name="stage_type"
-                fullWidth
-                select
-                defaultValue={selectedStageType}
-                size={isSmallScreen ? "small" : "normal"}
-                disabled={fetcherBasic.state === "submitting" || !isPending}
-              >
-                <MenuItem value={stageType.singleElimination}>
-                  Single Elimination
-                </MenuItem>
-                <MenuItem value={stageType.doubleElimination}>
-                  Double Elimination
-                </MenuItem>
-              </TextField>
+              <Box>
+                <TextField
+                  label="Type"
+                  name="stage_type"
+                  fullWidth
+                  select
+                  value={selectedStageType}
+                  onChange={(e) => {
+                    setSelectedStageType(e.target.value)
+                  }}
+                  size={isSmallScreen ? "small" : "normal"}
+                  disabled={fetcherBasic.state === "submitting" || !isPending}
+                >
+                  <MenuItem value={stageType.singleElimination}>
+                    Single Elimination
+                  </MenuItem>
+                  <MenuItem value={stageType.doubleElimination}>
+                    Double Elimination
+                  </MenuItem>
+                </TextField>
+                {selectedStageType === stageType.singleElimination && (
+                  <FormControlLabel
+                    label={
+                      <Typography sx={{ ml: 5, fontSize: 14 }}>
+                        Third Place Match
+                      </Typography>
+                    }
+                    labelPlacement="start"
+                    name="consolation_final"
+                    value={consolationFinal}
+                    checked={consolationFinal}
+                    onChange={(e) => {
+                      setConsolationFinal(e.target.checked)
+                    }}
+                    control={<Checkbox size="small" />}
+                  />
+                )}
+                {selectedStageType === stageType.doubleElimination && (
+                  <Box> Double Elimination</Box>
+                )}
+              </Box>
             </Stack>
             <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 5 }}>
               <Button
@@ -136,10 +166,13 @@ export async function action({ request, params }) {
     }
     if (formData.stage_type) {
       updates.stageType = formData.stage_type
+      updates.consolationFinal = formData.consolation_final === "true"
     }
     await updateTournament(tournamentId, updates)
     return { status: "success", intent: "edit_basic" }
-  } else if (formData.intent === "edit_game") {
+  }
+
+  if (formData.intent === "edit_game") {
     const initialSelectedValues = JSON.parse(formData.initial_values)
     const updatedGames = JSON.parse(formData.selected_games).map((g) => ({
       gameId: g._id,

@@ -6,9 +6,8 @@ import {
   TextField,
   MenuItem,
   CardHeader,
-  Typography,
 } from "@mui/material"
-import { Box, Checkbox, FormControlLabel } from "@mui/material"
+import { Box, Checkbox, FormControlLabel, Typography } from "@mui/material"
 import { useMediaQuery, useTheme } from "@mui/material"
 import { stageType } from "../../../api/tournament"
 

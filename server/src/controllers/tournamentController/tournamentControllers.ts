@@ -1,5 +1,11 @@
 import { BracketsManager, helpers } from "brackets-manager"
-import { InputStage, Seeding, Status } from "brackets-model"
+import {
+  InputStage,
+  Seeding,
+  StageType,
+  Status,
+  GrandFinalType,
+} from "brackets-model"
 import { Request, Response, NextFunction } from "express"
 import { RequestWithUser } from "../userController/authController"
 import {
@@ -57,6 +63,8 @@ const updateTournament = async (
       updatedTournament = await updateTournamentStageType(
         tournamentId,
         stageType,
+        req.body.consolationFinal,
+        req.body.grandFinal,
       )
     }
     if (name || description || status) {
@@ -101,13 +109,17 @@ async function updateTournamentMatch(
 
 async function updateTournamentStageType(
   tournamentId,
-  stageType,
+  stageType: StageType,
+  consolationFinal: boolean,
+  grandFinal: GrandFinalType,
 ): Promise<TournamentType> {
   // get the tournamnent and check if the new StageType is different from the current one
   const tournament = await Tournament.findById(tournamentId)
   if (!tournament) throw new Error("Invalid tournament id")
 
-  if (tournament.stage[0].type === stageType) return tournament
+  const stage = tournament.stage[0]
+  if (stage.type === stageType && consolationFinal === undefined && !grandFinal)
+    return tournament
   // get all the participant
   const participants = tournament.participant.map((p) => p.name)
   // get the current stage Setting and update the stage type with the new one
@@ -118,6 +130,9 @@ async function updateTournamentStageType(
     settings: tournament.stage[0].settings,
     seeding: participants,
   }
+  if (consolationFinal !== undefined)
+    inputStage.settings.consolationFinal = consolationFinal
+  if (grandFinal) inputStage.settings.grandFinal = grandFinal
   // delete match, stage, round, ground, match-game, participantGameMatrix,
   await Tournament.updateOne(
     { _id: tournamentId },
