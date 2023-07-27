@@ -205,7 +205,7 @@ function GameInfoContent({
             value="edit_game"
             disabled={disableForm}
           >
-            {disableForm ? "Saving..." : "Save"}
+            Save
           </Button>
         </Box>
       )}

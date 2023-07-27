@@ -111,10 +111,11 @@ export function TournamentSettings() {
                       setConsolationFinal(e.target.checked)
                     }}
                     control={<Checkbox size="small" />}
+                    disabled={!isPending}
                   />
                 )}
                 {selectedStageType === stageType.doubleElimination && (
-                  <FormControl sx={{ ml: 10, mt: 1 }}>
+                  <FormControl sx={{ ml: 10, mt: 1 }} disabled={!isPending}>
                     <FormLabel
                       id="demo-radio-buttons-group-label"
                       sx={{ fontSize: 14 }}
@@ -182,7 +183,6 @@ export function TournamentSettings() {
             ...g.gameId,
             count: g.count,
           }))}
-          submitDisabled={fetcherGame.state === "submitting"}
           disableForm={fetcherGame.state === "submitting" || !isPending}
         />
       </fetcherGame.Form>
