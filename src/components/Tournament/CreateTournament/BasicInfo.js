@@ -104,7 +104,6 @@ export function BasicInfo() {
                       <Radio
                         sx={{
                           py: 1.5,
-                          // ml: 2,
                           "& .MuiSvgIcon-root": {
                             fontSize: 16,
                           },
@@ -121,7 +120,6 @@ export function BasicInfo() {
                       <Radio
                         sx={{
                           py: 1.5,
-                          // ml: 2,
                           "& .MuiSvgIcon-root": {
                             fontSize: 16,
                           },

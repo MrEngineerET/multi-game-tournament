@@ -9,6 +9,7 @@ import {
   Button,
 } from "@mui/material"
 import { Box, Checkbox, FormControlLabel, Typography } from "@mui/material"
+import { FormLabel, RadioGroup, Radio, FormControl } from "@mui/material"
 import { useMediaQuery, useTheme } from "@mui/material"
 import {
   stageType,
@@ -113,7 +114,51 @@ export function TournamentSettings() {
                   />
                 )}
                 {selectedStageType === stageType.doubleElimination && (
-                  <Box> Double Elimination</Box>
+                  <FormControl sx={{ ml: 10, mt: 1 }}>
+                    <FormLabel
+                      id="demo-radio-buttons-group-label"
+                      sx={{ fontSize: 14 }}
+                    >
+                      Grand Final
+                    </FormLabel>
+                    <RadioGroup
+                      defaultValue={stage.settings.grandFinal}
+                      name="grand_final"
+                    >
+                      <FormControlLabel
+                        value="single"
+                        control={
+                          <Radio
+                            sx={{
+                              py: 1.5,
+                              "& .MuiSvgIcon-root": {
+                                fontSize: 16,
+                              },
+                            }}
+                          />
+                        }
+                        label={
+                          <Typography sx={{ fontSize: 14 }}>Single</Typography>
+                        }
+                      />
+                      <FormControlLabel
+                        value="double"
+                        control={
+                          <Radio
+                            sx={{
+                              py: 1.5,
+                              "& .MuiSvgIcon-root": {
+                                fontSize: 16,
+                              },
+                            }}
+                          />
+                        }
+                        label={
+                          <Typography sx={{ fontSize: 14 }}>Double</Typography>
+                        }
+                      />
+                    </RadioGroup>
+                  </FormControl>
                 )}
               </Box>
             </Stack>
@@ -166,7 +211,10 @@ export async function action({ request, params }) {
     }
     if (formData.stage_type) {
       updates.stageType = formData.stage_type
-      updates.consolationFinal = formData.consolation_final === "true"
+      if (formData.stage_type === stageType.singleElimination)
+        updates.consolationFinal = formData.consolation_final === "true"
+      if (formData.stage_type === stageType.doubleElimination)
+        updates.grandFinal = formData.grand_final
     }
     await updateTournament(tournamentId, updates)
     return { status: "success", intent: "edit_basic" }
