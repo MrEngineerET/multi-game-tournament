@@ -72,7 +72,7 @@ export function Round({
     return `LB Round ${roundIndex + 1}`
   }
   function getGrandFinalRoundName(isLastRound) {
-    if (isLastRound) return "GF Round 2"
+    if (isLastRound || roundLength === 1) return "Grand Final"
     return `GF Round 1`
   }
 

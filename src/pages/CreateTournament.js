@@ -1,3 +1,4 @@
+/*eslint-disable no-unused-vars*/
 import React from "react"
 import {
   Form,
@@ -87,8 +88,8 @@ export async function action({ request }) {
   })
   participants = participants.filter((p) => p)
 
-  // if (participants.length < 2)
-  //   return { error: "Number of participants must be greater than 2" }
+  if (participants.length < 2)
+    return { error: "Number of participants must be greater than 2" }
   data.participants = participants
   const selectedGames = JSON.parse(formData.get("selected_games"))
   data.games = selectedGames.map((g) => ({ gameId: g._id, count: g.count }))
@@ -98,9 +99,8 @@ export async function action({ request }) {
   if (data.stageType === stageType.singleElimination)
     data.consolationFinal = formData.get("consolation_final") === "true"
   else if (data.stageType === stageType.doubleElimination) {
-    //do something
+    data.grandFinal = formData.get("grand_final")
   }
-
   try {
     const tournament = await createTournament(data)
     return { redirectURL: `/tournament/${tournament._id}` }

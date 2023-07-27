@@ -7,7 +7,16 @@ import {
   MenuItem,
   CardHeader,
 } from "@mui/material"
-import { Box, Checkbox, FormControlLabel, Typography } from "@mui/material"
+import {
+  Box,
+  Checkbox,
+  FormControlLabel,
+  Typography,
+  FormLabel,
+  RadioGroup,
+  Radio,
+  FormControl,
+} from "@mui/material"
 import { useMediaQuery, useTheme } from "@mui/material"
 import { stageType } from "../../../api/tournament"
 
@@ -67,7 +76,7 @@ export function BasicInfo() {
             {selectedStageType === stageType.singleElimination && (
               <FormControlLabel
                 label={
-                  <Typography sx={{ ml: 5, fontSize: 14 }}>
+                  <Typography sx={{ ml: 5, fontSize: 14, opacity: 0.9 }}>
                     Third Place Match
                   </Typography>
                 }
@@ -81,7 +90,50 @@ export function BasicInfo() {
               />
             )}
             {selectedStageType === stageType.doubleElimination && (
-              <Box> Double Elimination</Box>
+              <FormControl sx={{ ml: 10, mt: 1 }}>
+                <FormLabel
+                  id="demo-radio-buttons-group-label"
+                  sx={{ fontSize: 14 }}
+                >
+                  Grand Final
+                </FormLabel>
+                <RadioGroup defaultValue="double" name="grand_final">
+                  <FormControlLabel
+                    value="single"
+                    control={
+                      <Radio
+                        sx={{
+                          py: 1.5,
+                          // ml: 2,
+                          "& .MuiSvgIcon-root": {
+                            fontSize: 16,
+                          },
+                        }}
+                      />
+                    }
+                    label={
+                      <Typography sx={{ fontSize: 14 }}>Single</Typography>
+                    }
+                  />
+                  <FormControlLabel
+                    value="double"
+                    control={
+                      <Radio
+                        sx={{
+                          py: 1.5,
+                          // ml: 2,
+                          "& .MuiSvgIcon-root": {
+                            fontSize: 16,
+                          },
+                        }}
+                      />
+                    }
+                    label={
+                      <Typography sx={{ fontSize: 14 }}>Double</Typography>
+                    }
+                  />
+                </RadioGroup>
+              </FormControl>
             )}
           </Box>
         </Stack>
