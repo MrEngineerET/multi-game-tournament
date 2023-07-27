@@ -97,12 +97,14 @@ async function updateTournamentMatch(
   // manage game assignment
   const gameManagement = new GameManagement(updatedTournament)
   await gameManagement.addGameToMatches()
-  // check if the tournament is finished
-  const { match: matches } = await manager.export()
-  const isCompleted = matches.every((m) => m.status === Status.Archived)
-  if (isCompleted) {
-    updatedTournament.status = TournamentStatus.completed
+
+  try {
+    // check if the tournament is finished
+    const standing = await manager.get.finalStandings(0)
+    if (standing) updatedTournament.status = TournamentStatus.completed
     await updatedTournament.save()
+  } catch (e) {
+    /* eslint no-empty: ["error", { "allowEmptyCatch": true }] */
   }
   return updatedTournament
 }
@@ -488,13 +490,12 @@ async function getTournamentStanding(
     const tournament = await Tournament.findById(tournamentId)
     const storage = new MyDB(tournament)
     const manager = new BracketsManager(storage)
-    const { match: matches } = await manager.export()
-    const isCompleted = matches.every((m) => m.status === Status.Archived)
-    if (isCompleted) {
+    try {
       const standing = await manager.get.finalStandings(0)
       return res.send(standing)
+    } catch (e) {
+      res.send([])
     }
-    res.send([])
   } catch (error) {
     next(error)
   }

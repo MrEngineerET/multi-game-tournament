@@ -6,6 +6,7 @@ import {
   MatchGame,
   Stage,
   Participant,
+  Status,
 } from "brackets-model"
 import { Game } from "./game"
 
@@ -59,6 +60,7 @@ export interface ITournament {
   participantGameMatrix: { participantId: number; games: Game[] }[]
   status: TournamentStatus
   createdBy: Types.ObjectId
+  progress: number
 }
 
 type TournamentDocumentOverrides = {
@@ -204,8 +206,22 @@ const TournamentSchema = new Schema<ITournament, TournamentModelType>(
       ref: "User",
     },
   },
-  { timestamps: true },
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  },
 )
+
+TournamentSchema.virtual("progress").get(function () {
+  if (this.status === TournamentStatus.completed) return 100
+  const matches = this.match
+  const completedMatchLength = matches.filter(
+    (match) =>
+      match.status === Status.Completed || match.status === Status.Archived,
+  ).length
+  return (completedMatchLength / matches.length) * 100
+})
 
 export const Tournament = model<ITournament, TournamentModelType>(
   "tournament",

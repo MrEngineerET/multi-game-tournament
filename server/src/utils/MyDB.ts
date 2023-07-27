@@ -204,7 +204,7 @@ export class MyDB implements CrudInterface {
     arg: number | Partial<DataTypes[T]>,
     value: DataTypes[T] | Partial<DataTypes[T]>,
   ): Promise<boolean> {
-    console.log("running UPDATE ====>")
+    // console.log("running UPDATE ====>")
     // console.log(table, arg, value)
     if (typeof arg === "number") {
       try {
