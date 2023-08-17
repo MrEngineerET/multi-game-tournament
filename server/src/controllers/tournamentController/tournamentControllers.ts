@@ -406,9 +406,13 @@ async function joinTournament(req: Request, res: Response, next: NextFunction) {
       }
     }
     // issue a jwt token called tournament_token and send it the user
-    const tournamentToken = jwt.sign({ tournamentId }, process.env.JWT_SECRET, {
-      expiresIn: "30d",
-    })
+    const tournamentToken = jwt.sign(
+      { tournamentId, firstName },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "30d",
+      },
+    )
 
     const previousTokens = req.cookies.tournament_tokens || {}
     const tournament_tokens = {
@@ -432,49 +436,65 @@ async function joinTournament(req: Request, res: Response, next: NextFunction) {
   }
 }
 
+interface RequestWithPlayer extends Request {
+  player: {
+    tournamentOwner: boolean
+    firstName?: string
+  }
+}
+
 async function protectTournament(
-  req: Request,
+  req: RequestWithPlayer,
   res: Response,
   next: NextFunction,
 ) {
   try {
     const { id: tournamentIdParam } = req.params
-    let tokens = null
     if (
       req.headers.authorization &&
       req.headers.authorization.startsWith("Bearer")
     ) {
-      tokens = req.headers.authorization.split(" ")[1]
-    } else if (req.cookies?.tournament_tokens) {
-      tokens = req.cookies.tournament_tokens
-    }
-    if (!tokens) {
-      throw { statusCode: 401, message: "Please join the tournament first" }
-    }
-
-    if (tokens[tournamentIdParam]) {
-      const { tournamentId } = jwt.verify(
-        tokens[tournamentIdParam],
-        process.env.JWT_SECRET,
-      ) as {
-        tournamentId: string
-      }
-      if (tournamentId && tournamentId === tournamentIdParam) return next()
-    }
-
-    if (typeof tokens === "string") {
-      const { id } = jwt.verify(tokens, process.env.JWT_SECRET) as {
-        id: string
-      }
-      if (id) {
-        const tournament = await Tournament.findById(tournamentIdParam)
-        if (!tournament)
-          throw { statusCode: 404, message: "Tournament not found" }
-        if (id && id === tournament.createdBy.toString()) return next()
+      const token = req.headers.authorization.split(" ")[1]
+      if (token) {
+        const { id } = jwt.verify(token, process.env.JWT_SECRET) as {
+          id: string
+        }
+        if (id) {
+          const tournament = await Tournament.findById(tournamentIdParam)
+          if (!tournament)
+            throw { statusCode: 404, message: "Tournament not found" }
+          if (id === tournament.createdBy.toString()) {
+            req.player = {
+              tournamentOwner: true,
+            }
+            return next()
+          }
+        }
       }
     }
-
-    throw { statusCode: 401, message: "Invalid tournament token" }
+    if (req.cookies?.tournament_tokens) {
+      const tokens = req.cookies.tournament_tokens
+      if (!tokens) {
+        throw { statusCode: 401, message: "Please join the tournament first" }
+      }
+      if (tokens[tournamentIdParam]) {
+        const { tournamentId, firstName } = jwt.verify(
+          tokens[tournamentIdParam],
+          process.env.JWT_SECRET,
+        ) as {
+          tournamentId: string
+          firstName: string
+        }
+        if (tournamentId && tournamentId === tournamentIdParam) {
+          req.player = {
+            tournamentOwner: false,
+            firstName,
+          }
+          return next()
+        }
+      }
+      throw { statusCode: 401, message: "Invalid tournament token" }
+    }
   } catch (error) {
     next(error)
   }
