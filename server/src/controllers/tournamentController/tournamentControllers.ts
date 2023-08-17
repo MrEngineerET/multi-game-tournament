@@ -5,6 +5,7 @@ import {
   StageType,
   Status,
   GrandFinalType,
+  Match,
 } from "brackets-model"
 import { Request, Response, NextFunction } from "express"
 import { RequestWithUser } from "../userController/authController"
@@ -45,7 +46,7 @@ const getAllTournaments = async (
   }
 }
 const updateTournament = async (
-  req: Request,
+  req: RequestWithPlayer,
   res: Response,
   next: NextFunction,
 ) => {
@@ -56,7 +57,12 @@ const updateTournament = async (
     let updatedTournament
     const { match } = req.body
     if (req.body.match) {
-      updatedTournament = await updateTournamentMatch(tournamentId, match)
+      const player = req.player
+      updatedTournament = await updateTournamentMatch(
+        tournamentId,
+        match,
+        player,
+      )
     }
     const { stageType } = req.body
     if (req.body.stageType) {
@@ -88,9 +94,27 @@ const updateTournament = async (
 }
 async function updateTournamentMatch(
   tournamentId,
-  match,
+  match: Match,
+  player: { tournamentOwner: boolean; firstName?: string },
 ): Promise<TournamentType> {
-  const myDB = await MyDB.build(tournamentId)
+  const tournament = await Tournament.findById(tournamentId)
+  if (!tournament) throw new Error("Invalid tournament id")
+  const matchDetail = tournament.match.find((m) => m.id === match.id)
+  const opponent1Name = tournament.participant.find(
+    (p) => p.id === matchDetail.opponent1.id,
+  ).name
+  const opponent2Name = tournament.participant.find(
+    (p) => p.id === matchDetail.opponent2.id,
+  ).name
+
+  if (
+    !player.tournamentOwner &&
+    !opponent1Name.includes(player.firstName) &&
+    !opponent2Name.includes(player.firstName)
+  ) {
+    throw new Error("You are not allowed to update this match")
+  }
+  const myDB = new MyDB(tournament)
   const manager = new BracketsManager(myDB)
   await manager.update.match(match)
   const updatedTournament = await Tournament.findById(tournamentId)

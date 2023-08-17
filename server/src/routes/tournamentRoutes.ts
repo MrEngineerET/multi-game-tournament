@@ -17,6 +17,7 @@ tournamentRouter.get(
 tournamentRouter.patch(
   "/:id",
   validator.updateTournament,
+  tournamentController.protectTournament,
   tournamentController.updateTournament,
 )
 
