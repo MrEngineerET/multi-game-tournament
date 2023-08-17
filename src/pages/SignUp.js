@@ -20,6 +20,7 @@ import { LoadingButton } from "../components/Common/LoadingButton"
 export function SignUp() {
   const showShowCasing = false
   const navigation = useNavigation()
+  const submitting = navigation.state === "submitting"
   const actionData = useActionData()
   const navigate = useNavigate()
   const { getIdentity } = useAuth()
@@ -95,6 +96,7 @@ export function SignUp() {
               type="text"
               fullWidth
               required
+              disabled={submitting}
             />
             <TextField
               variant="outlined"
@@ -104,6 +106,7 @@ export function SignUp() {
               type="text"
               fullWidth
               required
+              disabled={submitting}
             />
 
             <TextField
@@ -120,6 +123,7 @@ export function SignUp() {
                   </InputAdornment>
                 ),
               }}
+              disabled={submitting}
             />
             <TextField
               variant="outlined"
@@ -135,9 +139,10 @@ export function SignUp() {
                   </InputAdornment>
                 ),
               }}
+              disabled={submitting}
             />
             <LoadingButton
-              loading={navigation.state === "submitting"}
+              loading={submitting}
               sx={{
                 maxWidth: 200,
                 mt: 3,

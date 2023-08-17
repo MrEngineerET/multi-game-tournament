@@ -106,6 +106,7 @@ export function CreateGame() {
                       src={gameImage}
                       sx={{
                         height: 250,
+                        width: "100%",
                         objectFit: "contain",
                         bgcolor: "background.lightest",
                       }}

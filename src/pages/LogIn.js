@@ -20,6 +20,7 @@ import { Copyright } from "../components/CopyRight"
 export function LogIn() {
   const showShowCasing = false
   const navigation = useNavigation()
+  const submitting = navigation.state === "submitting"
   const actionData = useActionData()
   const auth = useAuth()
   const navigate = useNavigate()
@@ -100,6 +101,7 @@ export function LogIn() {
                   </InputAdornment>
                 ),
               }}
+              disabled={submitting}
             />
             <TextField
               variant="outlined"
@@ -114,9 +116,10 @@ export function LogIn() {
                   </InputAdornment>
                 ),
               }}
+              disabled={submitting}
             />
             <LoadingButton
-              loading={navigation.state === "submitting"}
+              loading={submitting}
               sx={{
                 maxWidth: 200,
                 mt: 3,
