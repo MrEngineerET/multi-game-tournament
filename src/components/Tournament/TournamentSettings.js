@@ -52,6 +52,11 @@ export function TournamentSettings() {
         <CardContent>
           <fetcherBasic.Form method="post">
             <Stack gap={5}>
+              <input
+                type="hidden"
+                name="context"
+                value={JSON.stringify(tournamentData.stages[0])}
+              />
               <TextField
                 label="Tournament name"
                 required
@@ -209,7 +214,13 @@ export async function action({ request, params }) {
     if (formData.tournament_description) {
       updates.description = formData.tournament_description
     }
-    if (formData.stage_type) {
+    const previousTournamentSettings = JSON.parse(formData.context)
+    if (
+      formData.stage_type !== previousTournamentSettings.type ||
+      formData.consolation_final !==
+        previousTournamentSettings.settings.consolationFinal ||
+      formData.grand_final !== previousTournamentSettings.settings.grandFinal
+    ) {
       updates.stageType = formData.stage_type
       if (formData.stage_type === stageType.singleElimination)
         updates.consolationFinal = formData.consolation_final === "true"
