@@ -45,7 +45,7 @@ export function TournamentStanding() {
           <TableBody>
             {standing.map((participant, index, array) => (
               <TableRow
-                key={participant.id}
+                key={participant.id || index}
                 sx={{
                   "&:nth-of-type(even)": { backgroundColor: "#f1f1f1" },
                   height: 50 + (array.length - 1 - index) * 3,

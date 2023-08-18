@@ -300,7 +300,8 @@ export function TournamentDetail() {
 
 function ShareTournamentDialog({ isOpen = false, onClose }) {
   const alert = useAlert()
-  const joinURL = `${window.location.href}/join`
+  const tournamentURL = window.location.href.match(/^.*tournament\/\d*/)[0]
+  const joinURL = `${tournamentURL}/join`
 
   const handleCopy = () => {
     navigator.clipboard.writeText(joinURL)

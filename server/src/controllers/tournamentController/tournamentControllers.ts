@@ -66,6 +66,8 @@ const updateTournament = async (
     }
     const { stageType } = req.body
     if (req.body.stageType) {
+      if (!req.player.tournamentOwner)
+        throw new Error("You are not allowed to update this tournament")
       updatedTournament = await updateTournamentStageType(
         tournamentId,
         stageType,
@@ -74,6 +76,8 @@ const updateTournament = async (
       )
     }
     if (name || description || status) {
+      if (!req.player.tournamentOwner)
+        throw new Error("You are not allowed to update this tournament")
       const updateData = { name, description, status }
       updatedTournament = await Tournament.findByIdAndUpdate(
         tournamentId,
@@ -507,9 +511,6 @@ async function protectTournament(
     }
     if (req.cookies?.tournament_tokens) {
       const tokens = req.cookies.tournament_tokens
-      if (!tokens) {
-        throw { statusCode: 401, message: "Please join the tournament first" }
-      }
       if (tokens[tournamentIdParam]) {
         const { tournamentId, firstName } = jwt.verify(
           tokens[tournamentIdParam],
@@ -526,8 +527,8 @@ async function protectTournament(
           return next()
         }
       }
-      throw { statusCode: 401, message: "Invalid tournament token" }
     }
+    throw { statusCode: 401, message: "Please join the tournament first" }
   } catch (error) {
     next(error)
   }
