@@ -1,8 +1,9 @@
 import React from "react"
+import PropTypes from "prop-types"
 import { Card, CardHeader, CardContent, Button } from "@mui/material"
 import { Box, TextField, Chip } from "@mui/material"
 
-export function AddParticipant() {
+export function AddParticipant({ disableInputs }) {
   const [name, setName] = React.useState("")
   const [participants, setParticipants] = React.useState([])
 
@@ -31,6 +32,7 @@ export function AddParticipant() {
               }
             }}
             sx={{ minWidth: { xs: 200, sm: 250 } }}
+            disabled={disableInputs}
           />
           <input hidden readOnly value={participants} name="participants" />
           <Button
@@ -64,4 +66,8 @@ export function AddParticipant() {
       </CardContent>
     </Card>
   )
+}
+
+AddParticipant.propTypes = {
+  disableInputs: PropTypes.bool,
 }

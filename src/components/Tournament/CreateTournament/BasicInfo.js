@@ -1,4 +1,5 @@
 import React from "react"
+import PropTypes from "prop-types"
 import {
   Card,
   CardContent,
@@ -20,7 +21,7 @@ import {
 import { useMediaQuery, useTheme } from "@mui/material"
 import { stageType } from "../../../api/tournament"
 
-export function BasicInfo() {
+export function BasicInfo({ disableInputs }) {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const [selectedStageType, setSelectedStageType] = React.useState(
@@ -41,6 +42,7 @@ export function BasicInfo() {
             variant="outlined"
             size={isSmallScreen ? "small" : "normal"}
             autoFocus
+            disabled={disableInputs}
           />
 
           <TextField
@@ -53,6 +55,7 @@ export function BasicInfo() {
             maxRows={5}
             size={isSmallScreen ? "small" : "normal"}
             required
+            disabled={disableInputs}
           />
           <Box>
             <TextField
@@ -65,6 +68,7 @@ export function BasicInfo() {
                 setSelectedStageType(e.target.value)
               }}
               size={isSmallScreen ? "small" : "normal"}
+              disabled={disableInputs}
             >
               <MenuItem value={stageType.singleElimination}>
                 Single Elimination
@@ -83,6 +87,7 @@ export function BasicInfo() {
                 labelPlacement="start"
                 name="consolation_final"
                 value={consolationFinal}
+                disabled={disableInputs}
                 onChange={(e) => {
                   setConsolationFinal(e.target.checked)
                 }}
@@ -90,7 +95,7 @@ export function BasicInfo() {
               />
             )}
             {selectedStageType === stageType.doubleElimination && (
-              <FormControl sx={{ ml: 10, mt: 1 }}>
+              <FormControl sx={{ ml: 10, mt: 1 }} disabled={disableInputs}>
                 <FormLabel
                   id="demo-radio-buttons-group-label"
                   sx={{ fontSize: 14 }}
@@ -138,4 +143,8 @@ export function BasicInfo() {
       </CardContent>
     </Card>
   )
+}
+
+BasicInfo.propTypes = {
+  disableInputs: PropTypes.bool,
 }

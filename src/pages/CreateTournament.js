@@ -1,4 +1,3 @@
-/*eslint-disable no-unused-vars*/
 import React from "react"
 import {
   Form,
@@ -7,13 +6,14 @@ import {
   useNavigate,
   useNavigation,
 } from "react-router-dom"
-import { Box, Container, Stack, Typography, Button } from "@mui/material"
+import { Box, Container, Stack, Typography } from "@mui/material"
 import { BasicInfo } from "../components/Tournament/CreateTournament/BasicInfo"
 import { GameInfo } from "../components/Tournament/CreateTournament/GameInfo"
 import { createTournament, stageType } from "../api/tournament"
 import { getAllGames } from "../api/game"
 import { useAlert } from "../context/AlertContext"
 import { AddParticipant } from "../components/Tournament/CreateTournament/AddParticipants"
+import { LoadingButton } from "../components/Common/LoadingButton"
 
 const styles = {
   bannerWrapper: {
@@ -32,6 +32,7 @@ const styles = {
 export function CreateTournament() {
   const navigate = useNavigate()
   const navigation = useNavigation()
+  const submitting = navigation.state === "submitting"
   const actionData = useActionData()
   const alert = useAlert()
 
@@ -57,16 +58,13 @@ export function CreateTournament() {
         <Container sx={styles.content}>
           <Form method="post">
             <Stack gap={10} sx={{ width: { xs: "100%", md: "80%" } }}>
-              <BasicInfo />
-              <AddParticipant />
+              <BasicInfo disableInputs={submitting} />
+              <AddParticipant disableInputs={submitting} />
               <GameInfo />
               <Box align="right">
-                <Button
-                  type="submit"
-                  disabled={navigation.state === "submitting"}
-                >
+                <LoadingButton type="submit" loading={submitting}>
                   Save and continue
-                </Button>
+                </LoadingButton>
               </Box>
             </Stack>
           </Form>
