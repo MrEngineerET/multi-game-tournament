@@ -147,7 +147,16 @@ async function updateTournamentStageType(
   if (stage.type === stageType && consolationFinal === undefined && !grandFinal)
     return tournament
   // get all the participant
-  const participants = tournament.participant.map((p) => p.name)
+
+  let participants = await prepareParticipants(
+    tournament.participant.map((p) => {
+      if (p.userId) return p.userId.toString()
+      return p.name
+    }),
+    tournament._id,
+  )
+  participants = helpers.balanceByes(participants)
+
   // get the current stage Setting and update the stage type with the new one
   const inputStage: InputStage = {
     tournamentId: Number(tournamentId),
@@ -156,9 +165,9 @@ async function updateTournamentStageType(
     settings: tournament.stage[0].settings,
     seeding: participants,
   }
-  if (consolationFinal !== undefined)
-    inputStage.settings.consolationFinal = consolationFinal
-  if (grandFinal) inputStage.settings.grandFinal = grandFinal
+  if (stageType === "single_elimination")
+    inputStage.settings.consolationFinal = !!consolationFinal
+  else inputStage.settings.grandFinal = grandFinal
   // delete match, stage, round, ground, match-game, participantGameMatrix,
   await Tournament.updateOne(
     { _id: tournamentId },
