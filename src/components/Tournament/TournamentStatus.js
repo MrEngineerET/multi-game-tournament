@@ -5,6 +5,7 @@ import { useFetcher, useLocation } from "react-router-dom"
 
 export function TournamentStatus() {
   const { tournamentData } = useTournamentContext()
+  const isTournamentOwner = tournamentData.player.tournamentOwner
   const stage = tournamentData.stages[0]
   const location = useLocation()
   const fetcher = useFetcher()
@@ -17,10 +18,10 @@ export function TournamentStatus() {
   const isBracketPage = location.pathname.trim().match(/tournament\/\d+$/)
 
   if (!isBracketPage) return ""
-  return (
-    <Box>
-      {isReadyToStart && (
-        <>
+  if (isReadyToStart && isTournamentOwner)
+    return (
+      <Box>
+        <Box>
           <Alert severity="info" sx={{ mb: 5 }}>
             <AlertTitle>Info</AlertTitle>
             <Typography sx={{ mb: 3 }}>
@@ -41,25 +42,27 @@ export function TournamentStatus() {
               </Button>
             </fetcher.Form>
           </Alert>
-        </>
-      )}
-      {isPending && tournamentData.games.length === 0 && (
-        <Box sx={{ mb: 5 }}>
-          <Alert severity="info">
-            <Typography sx={{ mb: 3 }}>
-              If you want to add games to your tournament
-            </Typography>
-            <Button href="settings">Add Game</Button>
-          </Alert>
+          {tournamentData.games.length === 0 && (
+            <Box sx={{ mb: 5 }}>
+              <Alert severity="info">
+                <Typography sx={{ mb: 3 }}>
+                  If you want to add games to your tournament
+                </Typography>
+                <Button href="settings">Add Game</Button>
+              </Alert>
+            </Box>
+          )}
         </Box>
-      )}
-
-      {isReadyToStart && (
         <Alert severity="info" sx={{ mb: 5 }}>
           This bracket is a preview and subject to change until the tournament
           is started.
         </Alert>
-      )}
-    </Box>
-  )
+      </Box>
+    )
+  else if (isReadyToStart && !isTournamentOwner)
+    return (
+      <Alert severity="info" sx={{ mb: 5 }}>
+        Hang tight for the Tournament Creator to kick off the tournament! 😊
+      </Alert>
+    )
 }
