@@ -270,7 +270,7 @@ const createTournament = async (
 }
 
 const getTournament = async (
-  req: Request,
+  req: RequestWithPlayer,
   res: Response,
   next: NextFunction,
 ) => {
@@ -281,7 +281,10 @@ const getTournament = async (
     })
     if (!tournament) throw { statusCode: 404, message: "Invalid tournament id" }
 
-    res.status(200).send({ status: "success", data: tournament })
+    res.status(200).send({
+      status: "success",
+      data: { ...tournament.toObject(), player: req.player },
+    })
   } catch (error) {
     next(error)
   }
