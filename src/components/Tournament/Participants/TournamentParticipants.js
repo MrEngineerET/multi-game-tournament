@@ -25,7 +25,9 @@ import { useAlert } from "../../../context/AlertContext"
 
 export function TournamentParticipants() {
   const fetcher = useFetcher()
+  const isSubmitting = fetcher.state === "submitting"
   const { tournamentData } = useTournamentContext()
+  const isTournamentOwner = tournamentData.player.tournamentOwner
   const isPending = tournamentData.status === "pending"
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     status: false,
@@ -72,6 +74,7 @@ export function TournamentParticipants() {
             index={index}
             isPending={isPending}
             openDeleteDialog={openDialog}
+            disableActions={!isTournamentOwner}
           />
         ))}
       </Box>
@@ -84,8 +87,7 @@ export function TournamentParticipants() {
                 justifyContent: "flex-end",
                 mb: 2,
                 pr: 8,
-                visibility:
-                  fetcher.state === "submitting" ? "visible" : "hidden",
+                visibility: isSubmitting ? "visible" : "hidden",
               }}
             >
               <CircularProgress color="secondary" size={25} />
@@ -98,12 +100,12 @@ export function TournamentParticipants() {
                 fullWidth
                 name="name"
                 label="Name"
-                disabled={fetcher.state === "submitting"}
+                disabled={isSubmitting || !isTournamentOwner}
               />
               <Button
                 sx={{ width: 100 }}
                 type="submit"
-                disabled={fetcher.state === "submitting"}
+                disabled={isSubmitting || !isTournamentOwner}
                 name="intent"
                 value="add"
               >

@@ -24,12 +24,14 @@ import { useFetcher } from "react-router-dom"
 
 export function TournamentSettings() {
   const fetcherBasic = useFetcher()
+  const submittingBasicInfo = fetcherBasic.state === "submitting"
   const fetcherGame = useFetcher()
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
   const { tournamentData } = useTournamentContext()
-  const isPending = tournamentData.status === "pending"
+  const isTournamentPending = tournamentData.status === "pending"
   const stage = tournamentData.stages[0]
+  const isTournamentOwner = tournamentData.player.tournamentOwner
   const [selectedStageType, setSelectedStageType] = React.useState(
     () => stage.type,
   )
@@ -65,7 +67,7 @@ export function TournamentSettings() {
                 variant="outlined"
                 size={isSmallScreen ? "small" : "normal"}
                 defaultValue={tournamentData.name}
-                disabled={fetcherBasic.state === "submitting"}
+                disabled={submittingBasicInfo || !isTournamentOwner}
               />
 
               <TextField
@@ -79,7 +81,7 @@ export function TournamentSettings() {
                 size={isSmallScreen ? "small" : "normal"}
                 required
                 defaultValue={tournamentData.description}
-                disabled={fetcherBasic.state === "submitting"}
+                disabled={submittingBasicInfo || !isTournamentOwner}
               />
               <Box>
                 <TextField
@@ -92,7 +94,11 @@ export function TournamentSettings() {
                     setSelectedStageType(e.target.value)
                   }}
                   size={isSmallScreen ? "small" : "normal"}
-                  disabled={fetcherBasic.state === "submitting" || !isPending}
+                  disabled={
+                    submittingBasicInfo ||
+                    !isTournamentPending ||
+                    !isTournamentOwner
+                  }
                 >
                   <MenuItem value={stageType.singleElimination}>
                     Single Elimination
@@ -104,7 +110,12 @@ export function TournamentSettings() {
                 {selectedStageType === stageType.singleElimination && (
                   <FormControlLabel
                     label={
-                      <Typography sx={{ ml: 5, fontSize: 14 }}>
+                      <Typography
+                        sx={[
+                          { ml: 5, fontSize: 14 },
+                          !isTournamentPending && { opacity: 0.5 },
+                        ]}
+                      >
                         Third Place Match
                       </Typography>
                     }
@@ -116,11 +127,14 @@ export function TournamentSettings() {
                       setConsolationFinal(e.target.checked)
                     }}
                     control={<Checkbox size="small" />}
-                    disabled={!isPending}
+                    disabled={!isTournamentPending || !isTournamentOwner}
                   />
                 )}
                 {selectedStageType === stageType.doubleElimination && (
-                  <FormControl sx={{ ml: 10, mt: 1 }} disabled={!isPending}>
+                  <FormControl
+                    sx={{ ml: 10, mt: 1 }}
+                    disabled={!isTournamentPending || !isTournamentOwner}
+                  >
                     <FormLabel
                       id="demo-radio-buttons-group-label"
                       sx={{ fontSize: 14 }}
@@ -173,9 +187,9 @@ export function TournamentSettings() {
                 type="submit"
                 name="intent"
                 value="edit_basic"
-                disabled={fetcherBasic.state === "submitting"}
+                disabled={submittingBasicInfo || !isTournamentOwner}
               >
-                {fetcherBasic.state === "submitting" ? "Saving..." : "Save"}
+                {submittingBasicInfo ? "Saving..." : "Save"}
               </Button>
             </Box>
           </fetcherBasic.Form>
@@ -188,7 +202,11 @@ export function TournamentSettings() {
             ...g.gameId,
             count: g.count,
           }))}
-          disableForm={fetcherGame.state === "submitting" || !isPending}
+          disableForm={
+            fetcherGame.state === "submitting" ||
+            !isTournamentPending ||
+            !isTournamentOwner
+          }
         />
       </fetcherGame.Form>
       {/* invisible layout Element */}

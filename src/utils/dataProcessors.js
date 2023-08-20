@@ -11,6 +11,7 @@ export function catagorizeData(tournamentData) {
     match_games: tournamentData.match_game,
     games: tournamentData.game,
     status: tournamentData.status,
+    player: tournamentData.player,
   }
 
   // create participants property in matches and add 'opponent1' and 'opponent2'

@@ -18,6 +18,7 @@ export function ParticipantListItem({
   index,
   isPending,
   openDeleteDialog,
+  disableActions = false,
 }) {
   const fetcher = useFetcher()
   const [openNameEditor, setOpenNameEditor] = useState(false)
@@ -62,14 +63,14 @@ export function ParticipantListItem({
           <IconButton
             size="small"
             onClick={() => setOpenNameEditor((prev) => !prev)}
-            disabled={!isPending}
+            disabled={!isPending || disableActions}
           >
             <EditIcon fontSize="inherit" />
           </IconButton>
 
           <IconButton
             size="small"
-            disabled={!isPending}
+            disabled={!isPending || disableActions}
             type="submit"
             name="intent"
             value="delete"
@@ -142,4 +143,5 @@ ParticipantListItem.propTypes = {
   index: PropTypes.number.isRequired,
   isPending: PropTypes.bool.isRequired,
   openDeleteDialog: PropTypes.func.isRequired,
+  disableActions: PropTypes.bool,
 }

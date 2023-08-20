@@ -21,6 +21,7 @@ import { Tabs, Tab } from "@mui/material"
 import { TournamentStatus } from "./TournamentStatus"
 import ShareIcon from "@mui/icons-material/Share"
 import { useAlert } from "../../context/AlertContext"
+import LockIcon from "@mui/icons-material/Lock"
 
 const sxStyles = {
   gameImageList: {
@@ -66,6 +67,7 @@ export function TournamentDetail() {
   const location = useLocation()
   const [openShareDialog, setOpenShareDialog] = useState(false)
   const { tournamentData } = useTournamentContext()
+  const isTournamentOwner = tournamentData.player.tournamentOwner
   const [tabValue, setTabValue] = useState(() => {
     if (location.pathname.includes("participants")) return tabs.participants
     else if (location.pathname.includes("settings")) return tabs.settings
@@ -249,7 +251,14 @@ export function TournamentDetail() {
                     value={tabs.bracket}
                   />
                   <Tab
-                    label="Participants"
+                    label={
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                      >
+                        <span>Participant</span>{" "}
+                        {!isTournamentOwner && <LockIcon fontSize="16px" />}
+                      </Box>
+                    }
                     LinkComponent={Link}
                     to="participants"
                     replace
@@ -263,7 +272,14 @@ export function TournamentDetail() {
                     value={tabs.standing}
                   />
                   <Tab
-                    label="Settings"
+                    label={
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 0.5 }}
+                      >
+                        <span>Settings</span>{" "}
+                        {!isTournamentOwner && <LockIcon fontSize="16px" />}
+                      </Box>
+                    }
                     LinkComponent={Link}
                     to="settings"
                     replace
