@@ -58,10 +58,17 @@ tournamentRouter.post(
   validator.addParticipant,
   tournamentController.addParticipant,
 )
+
+tournamentRouter.patch(
+  "/:tournamentId/participant/shuffle",
+  tournamentController.shuffleParticipant,
+)
+
 tournamentRouter.patch(
   "/:tournamentId/participant/:participantId",
   tournamentController.updateParticipant,
 )
+
 tournamentRouter.delete(
   "/:tournamentId/participant/:participantId",
   tournamentController.deleteParticipant,

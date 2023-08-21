@@ -107,6 +107,35 @@ async function updateParticipant(
   }
 }
 
+async function shuffleParticipant(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+) {
+  try {
+    const shuffledParticipants = req.body.shuffledParticipants
+    const { tournamentId } = req.params
+    const tournament = await Tournament.findById(tournamentId)
+    const currentParticipants = tournament.participant
+    if (currentParticipants.length !== shuffledParticipants.length) {
+      throw {
+        statusCode: 400,
+        message: "Participant list is not the same",
+      }
+    }
+
+    for (let i = 0; i < currentParticipants.length; i++) {
+      currentParticipants.length
+      currentParticipants[i].name = shuffledParticipants[i]
+    }
+    await tournament.save()
+    res
+      .status(200)
+      .send({ status: "success", message: "Participants shuffled" })
+  } catch (error) {
+    next(error)
+  }
+}
 async function deleteParticipant(
   req: Request,
   res: Response,
@@ -179,4 +208,5 @@ export default {
   addParticipant,
   updateParticipant,
   deleteParticipant,
+  shuffleParticipant,
 }
