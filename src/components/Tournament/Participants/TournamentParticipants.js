@@ -12,6 +12,7 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material"
+import ShuffleIcon from "@mui/icons-material/Shuffle"
 import { CircularProgress } from "@mui/material"
 import { useTournamentContext } from "../../../context/TournamentContext"
 // import DragIndicatorIcon from "@mui/icons-material/DragIndicator"
@@ -20,14 +21,15 @@ import {
   addParticipant,
   updateParticipant,
   removeParticipant,
+  shuffleParticipants,
 } from "../../../api/tournament"
 import { useAlert } from "../../../context/AlertContext"
+import { shuffle } from "../../../utils"
 
 export function TournamentParticipants() {
   const fetcher = useFetcher()
-  const isSubmitting = fetcher.state === "submitting"
+  const shuffleFetcher = useFetcher()
   const { tournamentData } = useTournamentContext()
-  const isTournamentOwner = tournamentData.player.tournamentOwner
   const isPending = tournamentData.status === "pending"
   const [openDeleteDialog, setOpenDeleteDialog] = useState({
     status: false,
@@ -37,9 +39,14 @@ export function TournamentParticipants() {
   const theme = useTheme()
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
+  const isSubmitting =
+    fetcher.state === "submitting" || shuffleFetcher.state === "submitting"
+  const isTournamentOwner = tournamentData.player.tournamentOwner
+  const disableForms = isSubmitting || !isTournamentOwner
+
   useEffect(() => {
     if (fetcher.data?.error) {
-      alert.showError(fetcher.data.error, "error", {
+      alert.showError(fetcher.data.error, {
         vertical: "bottom",
         horizontal: "left",
       })
@@ -66,6 +73,49 @@ export function TournamentParticipants() {
         maxWidth: "600px",
       }}
     >
+      <Box
+        sx={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "space-between",
+        }}
+      >
+        {tournamentData.participants.length > 1 && (
+          <shuffleFetcher.Form method="patch">
+            <input
+              readOnly
+              name="shuffled_participants"
+              value={JSON.stringify(
+                shuffle(tournamentData.participants.map((p) => p.name)),
+              )}
+              hidden
+            />
+            <Button
+              variant="text"
+              endIcon={<ShuffleIcon />}
+              color="secondary"
+              sx={{ mb: 2 }}
+              type="submit"
+              name="intent"
+              value="shuffle"
+              disabled={disableForms}
+            >
+              Shuffle
+            </Button>
+          </shuffleFetcher.Form>
+        )}
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            mb: 2,
+            pr: 8,
+            visibility: isSubmitting ? "visible" : "hidden",
+          }}
+        >
+          <CircularProgress color="secondary" size={25} />
+        </Box>
+      </Box>
       <Box>
         {tournamentData.participants.map((participant, index) => (
           <ParticipantListItem
@@ -74,25 +124,13 @@ export function TournamentParticipants() {
             index={index}
             isPending={isPending}
             openDeleteDialog={openDialog}
-            disableActions={!isTournamentOwner}
+            disableActions={disableForms}
           />
         ))}
       </Box>
       {isPending && (
         <fetcher.Form method="post">
           <Box sx={{ mt: 10, mb: 20 }}>
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "flex-end",
-                mb: 2,
-                pr: 8,
-                visibility: isSubmitting ? "visible" : "hidden",
-              }}
-            >
-              <CircularProgress color="secondary" size={25} />
-            </Box>
-
             <Box sx={{ display: "flex", gap: 5 }}>
               <TextField
                 placeholder="Name"
@@ -100,12 +138,12 @@ export function TournamentParticipants() {
                 fullWidth
                 name="name"
                 label="Name"
-                disabled={isSubmitting || !isTournamentOwner}
+                disabled={disableForms}
               />
               <Button
                 sx={{ width: 100 }}
                 type="submit"
-                disabled={isSubmitting || !isTournamentOwner}
+                disabled={disableForms}
                 name="intent"
                 value="add"
               >
@@ -161,7 +199,6 @@ export async function action({ request, params }) {
       await addParticipant(tournamentId, [name])
       return null
     } catch (error) {
-      console.log("idid", "error", error)
       if (error.response?.data?.message)
         return { error: error.response.data.message }
       else throw error
@@ -176,14 +213,23 @@ export async function action({ request, params }) {
       if (error.response?.data?.message)
         return { error: error.response.data.message }
       else throw error
-      // if (error.response?.data?.message) {
-      //   console.log("idid", "error", error, error.response?.data?.message)
-      //   return { error: error.response.data.message }
-      // } else throw error
     }
   } else if (intent === "delete") {
     const participantId = formData.get("participant_id")
     await removeParticipant(tournamentId, participantId)
     return null
+  } else if (intent === "shuffle") {
+    try {
+      let shuffledParticipants = formData.get("shuffled_participants")
+      if (shuffleParticipants)
+        shuffledParticipants = JSON.parse(shuffledParticipants)
+      else return { error: "Participant required" }
+      await shuffleParticipants(tournamentId, shuffledParticipants)
+      return null
+    } catch (error) {
+      if (error.response?.data?.message)
+        return { error: error.response.data.message }
+      else throw error
+    }
   }
 }

@@ -67,6 +67,7 @@ export const routes = (
         <Outlet />
       </AlertProvider>
     }
+    errorElement={<ErrorPage />}
   >
     <Route
       path="/"

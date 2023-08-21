@@ -91,6 +91,16 @@ export async function updateParticipant(tournamentId, participantId, newName) {
     name: newName,
   })
 }
+/**
+ *
+ * @param {string} tournamentId
+ * @param {string} shuffledParticipants
+ */
+export async function shuffleParticipants(tournamentId, shuffledParticipants) {
+  await axios.patch(`tournament/${tournamentId}/participant/shuffle`, {
+    shuffledParticipants,
+  })
+}
 
 /**
  *

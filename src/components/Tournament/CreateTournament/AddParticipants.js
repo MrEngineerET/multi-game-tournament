@@ -2,6 +2,8 @@ import React from "react"
 import PropTypes from "prop-types"
 import { Card, CardHeader, CardContent, Button } from "@mui/material"
 import { Box, TextField, Chip } from "@mui/material"
+import ShuffleIcon from "@mui/icons-material/Shuffle"
+import { shuffle } from "../../../utils"
 
 export function AddParticipant({ disableInputs }) {
   const [name, setName] = React.useState("")
@@ -10,7 +12,6 @@ export function AddParticipant({ disableInputs }) {
   const handleParticipantDelete = (participant) => {
     setParticipants(participants.filter((p) => p !== participant))
   }
-
   return (
     <Card elevation={3}>
       <CardHeader title="Participant" sx={{ bgcolor: "background.default" }} />
@@ -47,7 +48,21 @@ export function AddParticipant({ disableInputs }) {
             Add
           </Button>
         </Box>
-        <Box sx={{ mt: 5, display: "flex", flexWrap: "wrap", gap: 3 }}>
+        {participants.length > 1 && (
+          <Button
+            variant="text"
+            endIcon={<ShuffleIcon />}
+            color="secondary"
+            size="small"
+            sx={{ mt: 2 }}
+            onClick={() =>
+              setParticipants((participants) => shuffle(participants))
+            }
+          >
+            Shuffle
+          </Button>
+        )}
+        <Box sx={{ mt: 2, display: "flex", flexWrap: "wrap", gap: 3 }}>
           {participants.map((participant) => (
             <Chip
               onMouseDown={(event) => {

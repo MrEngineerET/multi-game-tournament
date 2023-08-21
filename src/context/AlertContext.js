@@ -15,9 +15,9 @@ export function AlertProvider({ children }) {
   })
 
   function openAlert(message, severityType, anchorOrigin) {
-    setMessage(message)
-    if (severityType) setSeverity(severityType)
     if (anchorOrigin) setAnchorOrigin(anchorOrigin)
+    if (severityType) setSeverity(severityType)
+    setMessage(message)
     setOpenSnackbar(true)
   }
   const values = {
