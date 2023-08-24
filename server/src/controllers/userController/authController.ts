@@ -304,7 +304,43 @@ const googleAuth = async (
   next: NextFunction,
 ) => {
   try {
-    res.send("success")
+    const credential = req.body.credential
+    const decodedData = jwt.decode(credential) as GoogleIdTokenPayload
+    if (!decodedData) return next(new AppError("Invalid Token", 404))
+    // verify the request is from google
+    if (decodedData.aud !== process.env.GOOGLE_CLIENT_ID)
+      return next(new AppError("Invalid Token", 404))
+    if (!decodedData.email_verified)
+      return next(new AppError("Your email is not verified", 404))
+
+    const user = await User.findOne({ email: decodedData.email })
+    let token
+    if (!user) {
+      const { email, email_verified, given_name, family_name, picture } =
+        decodedData
+      if (!email_verified)
+        return next(new AppError("Unverified email address", 404))
+      const newUser = new User({
+        firstName: given_name,
+        lastName: family_name,
+        email,
+        images: [picture],
+      })
+      await newUser.save()
+      token = signToken(newUser._id)
+    } else {
+      token = signToken(user._id)
+    }
+
+    res.cookie("jwt", token, {
+      expires: new Date(
+        Date.now() +
+          Number(process.env.JWT_COOKIE_EXPIRES_IN) * 24 * 60 * 60 * 1000,
+      ),
+      httpOnly: true,
+      secure: req.secure || req.headers["x-forwarded-proto"] === "https",
+    })
+    res.redirect(`${process.env.CLIENT_URL}/login?token=${token}`)
   } catch (error) {
     next(error)
   }
@@ -321,4 +357,22 @@ export default {
   restrictTo,
   updatePassword,
   googleAuth,
+}
+
+interface GoogleIdTokenPayload {
+  iss: string
+  azp: string
+  aud: string
+  sub: string
+  email: string
+  email_verified: boolean
+  at_hash?: string
+  name?: string
+  picture?: string
+  given_name?: string
+  family_name?: string
+  iat: number
+  exp: number
+  locale?: string
+  [key: string]: any
 }

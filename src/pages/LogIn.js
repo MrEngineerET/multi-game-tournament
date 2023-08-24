@@ -193,6 +193,14 @@ export function LogIn() {
   )
 }
 
+export async function loader() {
+  const location = window.location
+  const url = new URL(location.href)
+  const token = url.searchParams.get("token")
+  if (token) authModule.saveToken(token)
+  return { res: token }
+}
+
 export const action = async ({ request }) => {
   const formData = await request.formData()
   const email = formData.get("email")

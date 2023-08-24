@@ -17,7 +17,7 @@ export class MyAxios {
   }
 
   getAxios = () => {
-    const sleepTime = 500
+    const sleepTime = 2000
     if (process.env.NODE_ENV === "development") {
       return {
         ...this.axios,
@@ -56,6 +56,7 @@ export class MyAxios {
           Authorization: this.token ? `Bearer ${this.token}` : "",
         },
       },
+      withCredentials: true,
     })
   }
   clearToken = () => {

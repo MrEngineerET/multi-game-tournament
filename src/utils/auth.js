@@ -6,13 +6,7 @@ export const auth = {
   async logInWithEmailAndPassword(email, password) {
     auth.isAuthenticated = true
     const res = (await axios.post("/user/login", { email, password })).data
-    LocalStorage.setItem("token", res.token)
-    if (res.token) {
-      axios.defaults.headers.Authorization = res.token
-        ? `Bearer ${res.token}`
-        : ""
-      // setToken(res.token)
-    }
+    this.saveToken(res.token)
     return res.data.user
   },
   async signup(email, password, firstName, lastName) {
@@ -24,8 +18,7 @@ export const auth = {
         lastName,
       })
     ).data
-    LocalStorage.setItem("token", res.token)
-    setToken(res.token)
+    this.saveToken(res.token)
     return res
   },
   // remove local credentials and notify the auth server that the user logged out
@@ -46,5 +39,10 @@ export const auth = {
     const res = (await axios.get("/user/me")).data
     const user = res.data.data
     return user
+  },
+  saveToken(token) {
+    if (!token) return
+    setToken(token)
+    LocalStorage.setItem("token", token)
   },
 }

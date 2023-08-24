@@ -31,7 +31,6 @@ export const AuthProvider = ({ children }) => {
       setUser(null)
     }
   }
-
   const value = { user, login, logout, getIdentity }
 
   if (user === undefined)
