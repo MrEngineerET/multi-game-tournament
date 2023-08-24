@@ -298,6 +298,18 @@ const updatePassword = async (
   }
 }
 
+const googleAuth = async (
+  req: RequestWithUser,
+  res: Response,
+  next: NextFunction,
+) => {
+  try {
+    res.send("success")
+  } catch (error) {
+    next(error)
+  }
+}
+
 export default {
   signup,
   login,
@@ -308,4 +320,5 @@ export default {
   isLoggedIn,
   restrictTo,
   updatePassword,
+  googleAuth,
 }

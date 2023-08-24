@@ -16,6 +16,7 @@ import { auth as authModule } from "../utils/auth"
 import { useAuth } from "../context/AuthContext"
 import { useAlert } from "../context/AlertContext"
 import { Copyright } from "../components/CopyRight"
+import { GoogleLoginButton } from "../components/GoogleButtons/GoogleLoginButton"
 
 export function LogIn() {
   const showShowCasing = false
@@ -121,7 +122,7 @@ export function LogIn() {
             <LoadingButton
               loading={submitting}
               sx={{
-                maxWidth: 200,
+                maxWidth: 250,
                 mt: 3,
               }}
               variant="contained"
@@ -131,6 +132,39 @@ export function LogIn() {
             >
               Login
             </LoadingButton>
+
+            <Box
+              sx={{
+                display: "flex",
+                position: "relative",
+                justifyContent: "center",
+                width: 100,
+                mt: 3,
+              }}
+            >
+              <Typography
+                type="body2"
+                sx={{
+                  bgcolor: "#fff",
+                  zIndex: 2,
+                  px: 1,
+                  fontSize: 12,
+                  fontWeight: 500,
+                }}
+              >
+                OR
+              </Typography>
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "1px",
+                  bgcolor: "#e0e0e0",
+                  position: "absolute",
+                  top: "50%",
+                }}
+              />
+            </Box>
+            <GoogleLoginButton />
             <Grid container>
               <Grid item xs>
                 <Link href="#">

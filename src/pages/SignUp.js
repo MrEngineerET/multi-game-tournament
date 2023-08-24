@@ -16,6 +16,7 @@ import { useAuth } from "../context/AuthContext"
 import { Copyright } from "../components/CopyRight"
 import { useAlert } from "../context/AlertContext"
 import { LoadingButton } from "../components/Common/LoadingButton"
+import { GoogleSignUpButton } from "../components/GoogleButtons/GoogleSignUpButton"
 
 export function SignUp() {
   const showShowCasing = false
@@ -144,7 +145,7 @@ export function SignUp() {
             <LoadingButton
               loading={submitting}
               sx={{
-                maxWidth: 200,
+                maxWidth: 250,
                 mt: 3,
               }}
               variant="contained"
@@ -154,6 +155,38 @@ export function SignUp() {
             >
               Sign Up
             </LoadingButton>
+            <Box
+              sx={{
+                display: "flex",
+                position: "relative",
+                justifyContent: "center",
+                width: 200,
+                mt: 3,
+              }}
+            >
+              <Typography
+                type="body2"
+                sx={{
+                  bgcolor: "#fff",
+                  zIndex: 2,
+                  px: 1,
+                  fontSize: 12,
+                  fontWeight: 500,
+                }}
+              >
+                OR
+              </Typography>
+              <Box
+                sx={{
+                  width: "100%",
+                  height: "1px",
+                  bgcolor: "red",
+                  position: "absolute",
+                  top: "50%",
+                }}
+              />
+            </Box>
+            <GoogleSignUpButton />
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link to="/login">
