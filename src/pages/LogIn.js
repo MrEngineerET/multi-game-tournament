@@ -11,6 +11,7 @@ import {
   Link,
   useActionData,
   useNavigate,
+  useLoaderData,
 } from "react-router-dom"
 import { auth as authModule } from "../utils/auth"
 import { useAuth } from "../context/AuthContext"
@@ -23,20 +24,21 @@ export function LogIn() {
   const navigation = useNavigation()
   const submitting = navigation.state === "submitting"
   const actionData = useActionData()
+  const loaderData = useLoaderData()
   const auth = useAuth()
   const navigate = useNavigate()
   const alert = useAlert()
 
   useEffect(() => {
-    if (actionData?.error) {
-      alert.showError(actionData.error)
+    if (actionData?.error || loaderData?.error) {
+      alert.showError(actionData?.error || loaderData?.error)
     }
     if (actionData?.res) {
       auth.getIdentity().then(() => {
         navigate("/")
       })
     }
-  }, [actionData])
+  }, [actionData, loaderData])
   return (
     <Form method="post">
       <Box
@@ -197,8 +199,14 @@ export async function loader() {
   const location = window.location
   const url = new URL(location.href)
   const token = url.searchParams.get("token")
-  if (token) authModule.saveToken(token)
-  return { res: token }
+  const error = url.searchParams.get("error")
+  if (token) {
+    authModule.saveToken(token)
+    return { res: token }
+  } else if (error) {
+    return { error }
+  }
+  return null
 }
 
 export const action = async ({ request }) => {

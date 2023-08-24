@@ -306,20 +306,21 @@ const googleAuth = async (
   try {
     const credential = req.body.credential
     const decodedData = jwt.decode(credential) as GoogleIdTokenPayload
-    if (!decodedData) return next(new AppError("Invalid Token", 404))
+    if (!decodedData) throw new Error("Invalid Token")
     // verify the request is from google
     if (decodedData.aud !== process.env.GOOGLE_CLIENT_ID)
-      return next(new AppError("Invalid Token", 404))
+      throw new Error("Invalid token")
     if (!decodedData.email_verified)
-      return next(new AppError("Your email is not verified", 404))
+      throw new Error("Your email is not verified")
 
-    const user = await User.findOne({ email: decodedData.email })
+    const user = await User.findOne({ email: decodedData.email }).select(
+      "+password",
+    )
     let token
     if (!user) {
       const { email, email_verified, given_name, family_name, picture } =
         decodedData
-      if (!email_verified)
-        return next(new AppError("Unverified email address", 404))
+      if (!email_verified) throw new Error("Unverified email address")
       const newUser = new User({
         firstName: given_name,
         lastName: family_name,
@@ -329,9 +330,10 @@ const googleAuth = async (
       await newUser.save()
       token = signToken(newUser._id)
     } else {
-      token = signToken(user._id)
+      if (user.password)
+        throw new Error("Account is created using email and password")
     }
-
+    token = signToken(user._id)
     res.cookie("jwt", token, {
       expires: new Date(
         Date.now() +
@@ -342,7 +344,7 @@ const googleAuth = async (
     })
     res.redirect(`${process.env.CLIENT_URL}/login?token=${token}`)
   } catch (error) {
-    next(error)
+    res.redirect(`${process.env.CLIENT_URL}/login?error=${error.message}`)
   }
 }
 
