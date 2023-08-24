@@ -62,6 +62,7 @@ import {
   loader as joinTouramentLoader,
 } from "../components/Tournament/JoinTournament"
 import { DashBoardLayOut } from "../pages/Dashboard"
+import { TournamentListErrorComponent } from "../components/TournamentPage/TournamentList"
 
 export const routes = (
   <Route
@@ -103,7 +104,12 @@ export const routes = (
         >
           <Route index element={<LandingPage />} />
           <Route path="/tournament">
-            <Route index element={<Tournament />} loader={tournamentsLoader} />
+            <Route
+              index
+              element={<Tournament />}
+              loader={tournamentsLoader}
+              errorElement={<TournamentListErrorComponent />}
+            />
             <Route
               path="new"
               element={<CreateTournament />}

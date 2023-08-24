@@ -1,9 +1,11 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { Box, Typography, Card, Button } from "@mui/material"
-import { Await, useLoaderData } from "react-router-dom"
+import { Box, Typography, Card, Button, Paper } from "@mui/material"
+import { Await, useLoaderData, useFetcher } from "react-router-dom"
 import { TournamentListSkeleton } from "./TournamentListSkeleton"
 import { TournamentListTable } from "./TournamentListTable"
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline"
+import { LoadingButton } from "../Common/LoadingButton"
 
 export function TournamentList({ filter = "all" }) {
   const { tournaments } = useLoaderData()
@@ -36,19 +38,9 @@ export function TournamentList({ filter = "all" }) {
           <Await
             resolve={tournaments}
             errorElement={
-              <Box
-                sx={{
-                  my: 5,
-                  py: 10,
-                  bgcolor: "background.themostlight",
-                  borderRadius: 2,
-                  textAlign: "center",
-                }}
-              >
-                <Typography color="error" variant="h5">
-                  Error while loading the tournaments
-                </Typography>
-              </Box>
+              <TournamentListErrorComponent
+                onRetry={() => window.location.reload()}
+              />
             }
           >
             {(tournaments) => (
@@ -67,4 +59,54 @@ export function TournamentList({ filter = "all" }) {
 }
 TournamentList.propTypes = {
   filter: PropTypes.string,
+}
+
+export function TournamentListErrorComponent({ onRetry, disableButton }) {
+  const fetcher = useFetcher()
+  if (onRetry === undefined) onRetry = () => fetcher.load("/tournament/?index")
+  return (
+    <Paper
+      elevation={1}
+      sx={{
+        padding: "2rem",
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "1rem",
+        margin: "2rem auto",
+        my: 10,
+        mx: { xs: 0, sm: 10 },
+      }}
+    >
+      <ErrorOutlineIcon
+        color="error"
+        fontSize="large"
+        sx={{
+          fontSize: "4rem",
+        }}
+      />
+      <Typography variant="h5" color="textSecondary">
+        Oops! Something went wrong.
+      </Typography>
+      <Typography variant="body1" textAlign="center" color="textSecondary">
+        {
+          "We couldn't fetch the tournaments. Please check your internet connection and try again."
+        }
+      </Typography>
+      <LoadingButton
+        variant="outlined"
+        color="primary"
+        onClick={onRetry}
+        loading={disableButton || fetcher.state === "loading"}
+      >
+        Retry
+      </LoadingButton>
+    </Paper>
+  )
+}
+
+TournamentListErrorComponent.propTypes = {
+  onRetry: PropTypes.func,
+  disableButton: PropTypes.bool,
 }

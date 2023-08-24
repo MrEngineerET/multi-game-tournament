@@ -1,5 +1,4 @@
 import { axios } from "../utils/axios"
-// import LocalStorage from "../utils/localStorage"
 
 export const stageType = {
   singleElimination: "single_elimination",
