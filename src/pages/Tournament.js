@@ -4,10 +4,8 @@ import { Container } from "@mui/system"
 import { defer } from "react-router-dom"
 import { getTournaments } from "../api/tournament"
 
-import {
-  TournamentList,
-  TournamentFilter,
-} from "../components/TournamentPage/TournamentList"
+import { TournamentList } from "../components/TournamentPage/TournamentList"
+import { TournamentFilter } from "../components/TournamentPage/TournamentFilter"
 
 const styles = {
   bannerWrapper: {
