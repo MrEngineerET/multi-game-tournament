@@ -68,6 +68,10 @@ export async function loader({ params }) {
   try {
     const tournamentId = params.id
     const tournament = await getTournament(tournamentId)
+    if (!tournament)
+      throw new Error(
+        "Sorry, we can't find the tournament you are looking for.",
+      )
     return {
       data: formatToUIModel(tournament),
       rawData: tournament,
@@ -83,13 +87,21 @@ export async function action({ request, params }) {
   // update a tournament
   const url = new URL(request.url)
   const matchId = url.searchParams.get("match_id")
-  if (matchId) {
-    return updateMatchAction(request, params)
-  } else {
-    const formData = await request.formData()
-    const status = formData.get("status")
-    const { id } = params
-    await updateTournament(id, { status })
+  try {
+    if (matchId) {
+      await updateMatchAction(request, params)
+    } else {
+      const formData = await request.formData()
+      const status = formData.get("status")
+      if (status) {
+        const { id } = params
+        await updateTournament(id, { status })
+      }
+      return null
+    }
+  } catch (error) {
+    if (error?.response?.data?.message)
+      return { error: error.response.data.message }
     return null
   }
 }

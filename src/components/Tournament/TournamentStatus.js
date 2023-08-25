@@ -1,7 +1,8 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useTournamentContext } from "../../context/TournamentContext"
 import { Box, Alert, AlertTitle, Button, Typography } from "@mui/material"
 import { useFetcher, useLocation } from "react-router-dom"
+import { useAlert } from "../../context/AlertContext"
 
 export function TournamentStatus() {
   const { tournamentData } = useTournamentContext()
@@ -9,6 +10,11 @@ export function TournamentStatus() {
   const stage = tournamentData.stages[0]
   const location = useLocation()
   const fetcher = useFetcher()
+  const alert = useAlert()
+
+  useEffect(() => {
+    if (fetcher.data?.error) alert.showError(fetcher.data.error)
+  }, [fetcher.data])
 
   const isPending = tournamentData.status === "pending"
 
