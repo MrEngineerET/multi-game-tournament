@@ -1,32 +1,59 @@
 import React from "react"
+import PropTypes from "prop-types"
 import { useRouteError } from "react-router-dom"
-import { Box, Typography } from "@mui/material"
+import { Typography } from "@mui/material"
+import { Container, Button } from "@mui/material/"
+import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline"
 
-export function ErrorPage() {
+export function ErrorPage({ onRetry }) {
+  if (onRetry === undefined) onRetry = () => window.location.reload()
   const error = useRouteError()
-  let errorMessage = error?.response?.data.message
+  let errorMessage = error?.response?.data.message // error from axios
   console.log("error", error)
   if (error.statusText === "Not Found") errorMessage = "Page not found"
 
   return (
-    <Box
+    <Container
       sx={{
         display: "flex",
         flexDirection: "column",
-        alignItems: "center",
         justifyContent: "center",
-        height: "100vh",
+        alignItems: "center",
+        my: 20,
       }}
     >
-      <Typography variant="h4" gutterBottom>
-        Oops!
+      <ErrorOutlineIcon
+        sx={{
+          fontSize: 100,
+          color: "error.main",
+        }}
+      />
+      <Typography
+        variant="h4"
+        sx={{
+          marginTop: 2,
+          marginBottom: 1,
+          textAlign: "center",
+        }}
+      >
+        Oops! Something went wrong.
       </Typography>
-      <Typography variant="body1" gutterBottom>
-        Sorry, an unexpected error has occurred.
+      <Typography
+        variant="body1"
+        sx={{
+          marginBottom: 4,
+          textAlign: "center",
+        }}
+      >
+        {errorMessage || error?.message || "Something went wrong"}
       </Typography>
-      <Typography variant="body1" gutterBottom>
-        <i>{errorMessage || error?.message || "Something went wrong"}</i>
-      </Typography>
-    </Box>
+      <Button variant="contained" color="primary" onClick={onRetry}>
+        Try Again
+      </Button>
+    </Container>
   )
+}
+
+ErrorPage.propTypes = {
+  onRetry: PropTypes.func,
 }
