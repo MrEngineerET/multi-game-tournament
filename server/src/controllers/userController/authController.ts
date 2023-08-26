@@ -332,8 +332,8 @@ const googleAuth = async (
     } else {
       if (user.password)
         throw new Error("Account is created using email and password")
+      token = signToken(user._id)
     }
-    token = signToken(user._id)
     res.cookie("jwt", token, {
       expires: new Date(
         Date.now() +
