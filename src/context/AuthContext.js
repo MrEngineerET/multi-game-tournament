@@ -29,6 +29,7 @@ export const AuthProvider = ({ children }) => {
       setUser(user)
     } catch (error) {
       setUser(null)
+      await auth.logout()
     }
   }
   const value = { user, login, logout, getIdentity }

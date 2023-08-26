@@ -18,6 +18,7 @@ import { useAuth } from "../context/AuthContext"
 import { useAlert } from "../context/AlertContext"
 import { Copyright } from "../components/CopyRight"
 import { GoogleLoginButton } from "../components/GoogleButtons/GoogleLoginButton"
+import LocalStorage from "../utils/localStorage"
 
 export function LogIn() {
   const showShowCasing = false
@@ -202,6 +203,12 @@ export async function loader() {
   const error = url.searchParams.get("error")
   if (token) {
     authModule.saveToken(token)
+    console.log("idid", "token", token)
+    console.log(
+      "idid",
+      "token from the localStorage",
+      LocalStorage.getItem("token"),
+    )
     return { res: token }
   } else if (error) {
     return { error }

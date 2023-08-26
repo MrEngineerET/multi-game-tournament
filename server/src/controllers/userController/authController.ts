@@ -326,6 +326,7 @@ const googleAuth = async (
         lastName: family_name,
         email,
         images: [picture],
+        accountStatus: "active",
       })
       await newUser.save()
       token = signToken(newUser._id)
