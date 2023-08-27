@@ -46,29 +46,14 @@ export class MyAxios {
       return this.axios
     }
   }
+
   setToken = (token) => {
     if (!token) throw new Error("no token")
-    this.token = token
-    this.axios = pureAxios.create({
-      baseURL: process.env.REACT_APP_API_URL,
-      headers: {
-        common: {
-          Authorization: this.token ? `Bearer ${this.token}` : "",
-        },
-      },
-      withCredentials: true,
-    })
+    this.axios.defaults.headers.common.Authorization = `Bearer ${token}`
   }
   clearToken = () => {
     this.token = null
-    this.axios = pureAxios.create({
-      baseURL: process.env.REACT_APP_API_URL,
-      headers: {
-        common: {
-          Authorization: this.token ? `Bearer ${this.token}` : "",
-        },
-      },
-    })
+    this.axios.defaults.headers.common.Authorization = ""
   }
 }
 
