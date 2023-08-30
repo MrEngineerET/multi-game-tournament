@@ -343,9 +343,10 @@ const googleAuth = async (
       httpOnly: true,
       secure: req.secure || req.headers["x-forwarded-proto"] === "https",
     })
-    res.redirect(`${process.env.CLIENT_URL}/login?token=${token}`)
+
+    res.status(200).send({ status: "success", token })
   } catch (error) {
-    res.redirect(`${process.env.CLIENT_URL}/login?error=${error.message}`)
+    next(error)
   }
 }
 

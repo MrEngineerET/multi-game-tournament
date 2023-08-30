@@ -11,35 +11,46 @@ import {
   Link,
   useActionData,
   useNavigate,
-  useLoaderData,
 } from "react-router-dom"
 import { auth as authModule } from "../utils/auth"
 import { useAuth } from "../context/AuthContext"
 import { useAlert } from "../context/AlertContext"
 import { Copyright } from "../components/CopyRight"
 import { GoogleLoginButton } from "../components/GoogleButtons/GoogleLoginButton"
-import LocalStorage from "../utils/localStorage"
 
 export function LogIn() {
   const showShowCasing = false
   const navigation = useNavigation()
-  const submitting = navigation.state === "submitting"
+  const [submitting, setSubmitting] = React.useState(
+    navigation.state === "submitting",
+  )
   const actionData = useActionData()
-  const loaderData = useLoaderData()
   const auth = useAuth()
   const navigate = useNavigate()
   const alert = useAlert()
 
   useEffect(() => {
-    if (actionData?.error || loaderData?.error) {
-      alert.showError(actionData?.error || loaderData?.error)
+    if (actionData?.error) {
+      handleLoginFail(actionData.error)
     }
-    if (actionData?.res) {
-      auth.getIdentity().then(() => {
-        navigate("/")
-      })
+    if (actionData?.token) {
+      handleLoginSuccess()
     }
-  }, [actionData, loaderData])
+  }, [actionData])
+
+  useEffect(() => {
+    if (navigation.state === "submitting") setSubmitting(true)
+  }, [navigation.state])
+
+  function handleLoginSuccess() {
+    auth.getIdentity().then(() => {
+      navigate("/")
+    })
+  }
+  function handleLoginFail(errorMessage) {
+    alert.showError(errorMessage)
+  }
+
   return (
     <Form method="post">
       <Box
@@ -106,6 +117,7 @@ export function LogIn() {
                 ),
               }}
               disabled={submitting}
+              required
             />
             <TextField
               variant="outlined"
@@ -121,6 +133,7 @@ export function LogIn() {
                 ),
               }}
               disabled={submitting}
+              required
             />
             <LoadingButton
               loading={submitting}
@@ -167,7 +180,11 @@ export function LogIn() {
                 }}
               />
             </Box>
-            <GoogleLoginButton />
+            <GoogleLoginButton
+              onSuccess={handleLoginSuccess}
+              onFail={handleLoginFail}
+              setSubmitting={(val) => setSubmitting(val)}
+            />
             <Grid container>
               <Grid item xs>
                 <Link href="#">
@@ -196,35 +213,29 @@ export function LogIn() {
   )
 }
 
-export async function loader() {
-  const location = window.location
-  const url = new URL(location.href)
-  const token = url.searchParams.get("token")
-  const error = url.searchParams.get("error")
-  if (token) {
-    authModule.saveToken(token)
-    console.log("idid", "token", token)
-    console.log(
-      "idid",
-      "token from the localStorage",
-      LocalStorage.getItem("token"),
-    )
-    return { res: token }
-  } else if (error) {
-    return { error }
-  }
-  return null
-}
-
 export const action = async ({ request }) => {
   const formData = await request.formData()
+  const intent = formData.get("intent")
+
+  if (intent === "googleSignIn") {
+    const credential = formData.get("credential")
+    try {
+      const res = await authModule.logInWithGoogle(credential)
+      return { token: res.token }
+    } catch (error) {
+      if (error.response?.data?.message) {
+        return { error: error.response.data.message }
+      }
+      throw error
+    }
+  }
+
   const email = formData.get("email")
   const password = formData.get("password")
   try {
     const res = await authModule.logInWithEmailAndPassword(email, password)
-    return { res }
+    return { token: res.token }
   } catch (error) {
-    console.log("idid", "error", error)
     if (error.response?.data?.message) {
       return { error: error.response.data.message }
     }

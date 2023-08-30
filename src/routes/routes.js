@@ -4,11 +4,7 @@ import { LandingPage } from "../pages/LandingPage"
 import { ProtectedRoute, RestrictedRoute, OnlyLoggedOutRoutes } from "./util"
 import { AlertProvider } from "../context/AlertContext"
 import { AuthProvider } from "../context/AuthContext"
-import {
-  LogIn,
-  action as loginAction,
-  loader as loginLoader,
-} from "../pages/LogIn"
+import { LogIn, action as loginAction } from "../pages/LogIn"
 import { SignUp, action as signupAction } from "../pages/SignUp"
 import TestingComponent from "../components/TestingComponent"
 import { PageNotFound } from "../pages/PageNotFound"
@@ -204,12 +200,7 @@ export const routes = (
           </OnlyLoggedOutRoutes>
         }
       >
-        <Route
-          path="/login"
-          element={<LogIn />}
-          action={loginAction}
-          loader={loginLoader}
-        />
+        <Route path="/login" element={<LogIn />} action={loginAction} />
         <Route path="/signup" element={<SignUp />} action={signupAction} />
         <Route
           path="/forgot-password"

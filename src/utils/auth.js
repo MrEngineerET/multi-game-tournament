@@ -21,6 +21,17 @@ export const auth = {
     this.saveToken(res.token)
     return res
   },
+  async logInWithGoogle(credential) {
+    auth.isAuthenticated = true
+    const res = (
+      await axios.post("/user/google", {
+        credential,
+      })
+    ).data
+    this.saveToken(res.token)
+    return res
+  },
+
   // remove local credentials and notify the auth server that the user logged out
   async logout() {
     auth.isAuthenticated = false
