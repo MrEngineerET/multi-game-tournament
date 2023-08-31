@@ -21,22 +21,38 @@ import { GoogleSignUpButton } from "../components/GoogleButtons/GoogleSignUpButt
 export function SignUp() {
   const showShowCasing = false
   const navigation = useNavigation()
-  const submitting = navigation.state === "submitting"
+  const [submitting, setSubmitting] = React.useState(
+    navigation.state === "submitting",
+  )
   const actionData = useActionData()
   const navigate = useNavigate()
-  const { getIdentity } = useAuth()
+  const auth = useAuth()
   const alert = useAlert()
 
   useEffect(() => {
     if (actionData?.error) {
       alert.showError(actionData.error)
     }
-    if (actionData?.res) {
-      getIdentity().then(() => {
+    if (actionData?.token) {
+      auth.getIdentity().then(() => {
         navigate("/")
       })
     }
   }, [actionData])
+
+  useEffect(() => {
+    if (navigation.state === "submitting") setSubmitting(true)
+  }, [navigation.state])
+
+  function handleLoginSuccess() {
+    auth.getIdentity().then(() => {
+      navigate("/")
+    })
+  }
+  function handleLoginFail(errorMessage) {
+    alert.showError(errorMessage)
+  }
+
   return (
     <Form method="post">
       <Box
@@ -186,7 +202,11 @@ export function SignUp() {
                 }}
               />
             </Box>
-            <GoogleSignUpButton />
+            <GoogleSignUpButton
+              onSuccess={handleLoginSuccess}
+              onFail={handleLoginFail}
+              setSubmitting={(val) => setSubmitting(val)}
+            />
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link to="/login">
@@ -206,13 +226,28 @@ export function SignUp() {
 
 export const action = async ({ request }) => {
   const formData = await request.formData()
+  const intent = formData.get("intent")
+
+  if (intent === "googleSignUp") {
+    const credential = formData.get("credential")
+    try {
+      const res = await authModule.logInWithGoogle(credential)
+      return { token: res.token }
+    } catch (error) {
+      if (error.response?.data?.message) {
+        return { error: error.response.data.message }
+      }
+      throw error
+    }
+  }
+
   const firstName = formData.get("firstName")
   const lastName = formData.get("lastName")
   const email = formData.get("email")
   const password = formData.get("password")
   try {
     const res = await authModule.signup(email, password, firstName, lastName)
-    return { res }
+    return { token: res.token }
   } catch (error) {
     if (error.response?.data?.message) {
       return { error: error.response.data.message }
