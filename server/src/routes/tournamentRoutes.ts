@@ -20,6 +20,11 @@ tournamentRouter.patch(
   tournamentController.protectTournament,
   tournamentController.updateTournament,
 )
+tournamentRouter.get(
+  "/:id/standing",
+  tournamentController.protectTournament,
+  tournamentController.getTournamentStanding,
+)
 
 tournamentRouter.use(authController.protect)
 
@@ -74,8 +79,4 @@ tournamentRouter.delete(
   tournamentController.deleteParticipant,
 )
 
-tournamentRouter.get(
-  "/:tournamentId/standing",
-  tournamentController.getTournamentStanding,
-)
 export default tournamentRouter
