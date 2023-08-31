@@ -20,15 +20,12 @@ import { createGame } from "../api/game"
 import { useAlert } from "../context/AlertContext"
 
 const sxStyles = {
-  bannerWrapper: {
-    bgcolor: "background.paper",
-    p: 5,
-  },
-  banner: {
-    p: 15,
-    pl: 5,
-    pr: 5,
-  },
+  bannerWrapper: (theme) => ({
+    background: theme.palette.background.cucumberWater,
+    px: { xs: 5, sm: 10, md: 20 },
+    py: { xs: 10, sm: 25, md: 30 },
+  }),
+
   content: {
     p: 5,
     pt: 10,
@@ -51,7 +48,7 @@ export function CreateGame() {
   return (
     <Box>
       <Box sx={sxStyles.bannerWrapper}>
-        <Container sx={sxStyles.banner}>
+        <Container>
           <Typography variant="h3" component="h1">
             New Game
           </Typography>

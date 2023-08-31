@@ -8,17 +8,12 @@ import { getAllGames } from "../api/game"
 import { GameDeleteDialog } from "../components/Game/GameDeleteDialog"
 
 const styles = {
-  root: {
-    display: "flex",
-    flexDirection: "column",
-    gap: 5,
-  },
-  bannerWrapper: {
-    bgcolor: "background.paper",
-    p: { xs: 10, sm: 20 },
-    pl: 5,
-    pr: 5,
-  },
+  bannerWrapper: (theme) => ({
+    background: theme.palette.background.cucumberWater,
+    px: { xs: 5, sm: 10, md: 20 },
+    py: { xs: 10, sm: 25, md: 30 },
+    mb: 10,
+  }),
   banner: (theme) => ({
     display: "flex",
     flexDirection: { xs: "column", sm: "row" },
@@ -59,7 +54,7 @@ export function Game() {
     setTabValue(newValue)
   }
   return (
-    <Box sx={styles.root}>
+    <Box>
       <Box sx={styles.bannerWrapper}>
         <Container>
           <Box sx={styles.banner}>

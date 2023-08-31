@@ -35,6 +35,7 @@ const lightModeTheme = {
       lightest: "#EAEEF0",
       themostlight: "#F6F6F6",
       darkBanner: "#282a33",
+      cucumberWater: "linear-gradient(90deg, #e3ffe7 0%, #d9e7ff 100%)",
     },
     primary: {
       main: "#FF466E",

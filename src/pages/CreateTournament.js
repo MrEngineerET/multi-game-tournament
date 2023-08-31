@@ -16,13 +16,12 @@ import { AddParticipant } from "../components/Tournament/CreateTournament/AddPar
 import { LoadingButton } from "../components/Common/LoadingButton"
 
 const styles = {
-  bannerWrapper: {
-    bgcolor: "background.paper",
-  },
+  bannerWrapper: (theme) => ({
+    background: theme.palette.background.cucumberWater,
+  }),
   banner: {
-    p: 20,
-    pl: 5,
-    pr: 5,
+    px: { xs: 5, sm: 10, md: 20 },
+    py: { xs: 10, sm: 25, md: 30 },
   },
   content: {
     pt: 10,

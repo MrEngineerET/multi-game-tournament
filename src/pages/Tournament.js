@@ -8,16 +8,15 @@ import { TournamentList } from "../components/TournamentPage/TournamentList"
 import { TournamentFilter } from "../components/TournamentPage/TournamentFilter"
 
 const styles = {
-  bannerWrapper: {
-    bgcolor: "background.paper",
-    p: { xs: 10, sm: 20 },
-    pl: 5,
-    pr: 5,
-  },
+  bannerWrapper: (theme) => ({
+    px: { xs: 5, sm: 10, md: 20 },
+    py: { xs: 10, sm: 25, md: 30 },
+    background: theme.palette.background.cucumberWater,
+  }),
   banner: {
     display: "flex",
     flexDirection: { xs: "column", sm: "row" },
-    gap: 10,
+    gap: 5,
     justifyContent: "space-between",
     alignItems: "center",
   },
