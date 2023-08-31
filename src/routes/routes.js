@@ -18,8 +18,8 @@ import {
 
 import {
   TournamentProvider,
-  loader as tournamentDetailLoader,
   action as tournamentAction,
+  loader as tournamentDataLoader,
 } from "../context/TournamentContext"
 import { ErrorPage } from "../pages/ErrorPage"
 import {
@@ -59,6 +59,7 @@ import {
 } from "../components/Tournament/JoinTournament"
 import { DashBoardLayOut } from "../pages/Dashboard"
 import { TournamentListErrorComponent } from "../components/TournamentPage/TournamentList"
+import { TournamentDetail } from "../components/Tournament/TournamentDetail"
 
 export const routes = (
   <Route
@@ -123,8 +124,12 @@ export const routes = (
 
         <Route
           path="/tournament/:id"
-          element={<TournamentProvider />}
-          loader={tournamentDetailLoader}
+          element={
+            <TournamentProvider>
+              <TournamentDetail />
+            </TournamentProvider>
+          }
+          loader={tournamentDataLoader}
           errorElement={<ErrorPage />}
           action={tournamentAction}
         >

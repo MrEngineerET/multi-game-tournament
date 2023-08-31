@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState } from "react"
 import PropTypes from "prop-types"
-import { redirect, useLoaderData } from "react-router-dom"
+import { useLoaderData, redirect } from "react-router-dom"
 import { getTournament } from "../api/tournament"
 import {
   catagorizeData,
@@ -10,7 +10,6 @@ import {
   MatchScoreAndDetailDialog,
   tabs as matchEditDialogTabs,
 } from "../components/Tournament/Match/MatchScoreAndDetailDialog"
-import { TournamentDetail } from "../components/Tournament/TournamentDetail"
 import { updateMatchAction } from "../components/Tournament/Match/ReportScore"
 import { updateTournament } from "../api/tournament"
 
@@ -18,7 +17,7 @@ const tournamentContext = createContext(null)
 
 export const useTournamentContext = () => useContext(tournamentContext)
 
-export const TournamentProvider = () => {
+export const TournamentProvider = ({ children }) => {
   const { data, rawData } = useLoaderData()
   const [openMatchDialog, setOpenMatchDialog] = useState({
     status: false,
@@ -44,7 +43,7 @@ export const TournamentProvider = () => {
   }
   return (
     <tournamentContext.Provider value={value}>
-      <TournamentDetail />
+      {children}
       <MatchScoreAndDetailDialog
         open={openMatchDialog.status}
         onClose={() =>
@@ -83,6 +82,10 @@ export async function loader({ params }) {
   }
 }
 
+function formatToUIModel(data) {
+  return catagorizeData(addParticipantNameInMatch(data))
+}
+
 export async function action({ request, params }) {
   // update a tournament
   const url = new URL(request.url)
@@ -104,8 +107,4 @@ export async function action({ request, params }) {
       return { error: error.response.data.message }
     return null
   }
-}
-
-function formatToUIModel(data) {
-  return catagorizeData(addParticipantNameInMatch(data))
 }
