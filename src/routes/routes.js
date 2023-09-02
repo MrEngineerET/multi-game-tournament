@@ -60,6 +60,10 @@ import {
 import { DashBoardLayOut } from "../pages/Dashboard"
 import { TournamentListErrorComponent } from "../components/TournamentPage/TournamentList"
 import { TournamentDetail } from "../components/Tournament/TournamentDetail"
+import {
+  ForgotPassword,
+  action as forgotPasswordAction,
+} from "../pages/ForgotPassword"
 
 export const routes = (
   <Route
@@ -209,7 +213,8 @@ export const routes = (
         <Route path="/signup" element={<SignUp />} action={signupAction} />
         <Route
           path="/forgot-password"
-          element={<div>This is the forgot password page</div>}
+          element={<ForgotPassword />}
+          action={forgotPasswordAction}
         />
       </Route>
     </Route>

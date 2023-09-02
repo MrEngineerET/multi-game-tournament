@@ -51,6 +51,11 @@ export const auth = {
     const user = res.data.data
     return user
   },
+
+  async resetPassword(email) {
+    return axios.post("/user/forgot-password", { email })
+  },
+
   saveToken(token) {
     if (!token) return
     setToken(token)

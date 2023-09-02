@@ -188,7 +188,7 @@ export function LogIn() {
             />
             <Grid container>
               <Grid item xs>
-                <Link href="#">
+                <Link to="/forgot-password">
                   <Typography
                     variant="body2"
                     color="primary"
