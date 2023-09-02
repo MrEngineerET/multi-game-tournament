@@ -1,16 +1,18 @@
 import React from "react"
 import PropTypes from "prop-types"
-import { useRouteError } from "react-router-dom"
+import { useRouteError, useAsyncError } from "react-router-dom"
 import { Typography } from "@mui/material"
 import { Container, Button } from "@mui/material/"
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline"
 
 export function ErrorPage({ onRetry }) {
   if (onRetry === undefined) onRetry = () => window.location.reload()
-  const error = useRouteError()
+  let error = useRouteError()
+  const asyncError = useAsyncError()
+  if (!error) error = asyncError
   let errorMessage = error?.response?.data.message // error from axios
   console.log("error", error)
-  if (error.statusText === "Not Found") errorMessage = "Page not found"
+  if (error?.statusText === "Not Found") errorMessage = "Page not found"
 
   return (
     <Container
@@ -45,7 +47,7 @@ export function ErrorPage({ onRetry }) {
           textAlign: "center",
         }}
       >
-        {errorMessage || error?.message || "Something went wrong"}
+        {errorMessage || "Something went wrong"}
       </Typography>
       <Button variant="contained" color="primary" onClick={onRetry}>
         Try Again

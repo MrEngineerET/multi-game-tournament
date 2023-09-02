@@ -1,6 +1,7 @@
+/*eslint-disable */
 import React, { createContext, useContext, useState } from "react"
 import PropTypes from "prop-types"
-import { useLoaderData, redirect } from "react-router-dom"
+import { useLoaderData, redirect, defer, Await } from "react-router-dom"
 import { getTournament } from "../api/tournament"
 import {
   catagorizeData,
@@ -12,13 +13,15 @@ import {
 } from "../components/Tournament/Match/MatchScoreAndDetailDialog"
 import { updateMatchAction } from "../components/Tournament/Match/ReportScore"
 import { updateTournament } from "../api/tournament"
+import { ErrorPage } from "../pages/ErrorPage"
+import { TournamentDetailSkeleton } from "../components/Tournament/TournamentDetailSkeleton"
 
 const tournamentContext = createContext(null)
 
 export const useTournamentContext = () => useContext(tournamentContext)
 
 export const TournamentProvider = ({ children }) => {
-  const { data, rawData } = useLoaderData()
+  const { data } = useLoaderData()
   const [openMatchDialog, setOpenMatchDialog] = useState({
     status: false,
     tab: matchEditDialogTabs.reportScore,
@@ -34,47 +37,51 @@ export const TournamentProvider = ({ children }) => {
   }
 
   const getMatch = (matchId) => {
-    return rawData.match.find((m) => m.id == matchId)
+    return data.match.find((m) => m.id == matchId)
   }
   const value = {
     getMatch,
-    tournamentData: data,
     openMatchScoreEditDialog,
   }
-  return (
-    <tournamentContext.Provider value={value}>
-      {children}
-      <MatchScoreAndDetailDialog
-        open={openMatchDialog.status}
-        onClose={() =>
-          setOpenMatchDialog((prev) => ({
-            ...prev,
-            status: false,
-          }))
-        }
-        match={openMatchDialog.match}
-        tab={openMatchDialog.tab}
-      />
-    </tournamentContext.Provider>
-  )
+  if (value)
+    return (
+      <React.Suspense fallback={<TournamentDetailSkeleton />}>
+        <Await resolve={data} errorElement={<ErrorPage />}>
+          {(data) => {
+            value.tournamentData = formatToUIModel(data)
+            return (
+              <tournamentContext.Provider value={value}>
+                {children}
+                <MatchScoreAndDetailDialog
+                  open={openMatchDialog.status}
+                  onClose={() =>
+                    setOpenMatchDialog((prev) => ({
+                      ...prev,
+                      status: false,
+                    }))
+                  }
+                  match={openMatchDialog.match}
+                  tab={openMatchDialog.tab}
+                />
+              </tournamentContext.Provider>
+            )
+          }}
+        </Await>
+      </React.Suspense>
+    )
 }
 
 TournamentProvider.propTypes = {
   children: PropTypes.node,
 }
 
-export async function loader({ params }) {
+export function loader({ params }) {
   try {
     const tournamentId = params.id
-    const tournament = await getTournament(tournamentId)
-    if (!tournament)
-      throw new Error(
-        "Sorry, we can't find the tournament you are looking for.",
-      )
-    return {
-      data: formatToUIModel(tournament),
-      rawData: tournament,
-    }
+    const tournamentPromise = getTournament(tournamentId)
+    return defer({
+      data: tournamentPromise,
+    })
   } catch (error) {
     if (error?.response?.status === 401) {
       return redirect(`/tournament/${params.id}/join`)
