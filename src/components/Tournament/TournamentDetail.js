@@ -207,6 +207,7 @@ export function TournamentDetail() {
                   </Typography>
                   <ButtonBase
                     onClick={() => setOpenShareDialog(true)}
+                    disabled={!isTournamentOwner}
                     sx={{
                       bgcolor: "#334",
                       padding: 2,
