@@ -7,7 +7,7 @@ export const auth = {
     auth.isAuthenticated = true
     const res = (await axios.post("/user/login", { email, password })).data
     this.saveToken(res.token)
-    return res.data.user
+    return res
   },
   async signup(email, password, firstName, lastName) {
     const res = (
@@ -53,7 +53,7 @@ export const auth = {
   },
 
   async resetPassword(email) {
-    return axios.post("/user/forgot-password", { email })
+    return axios.post("/user/forgotpassword", { email })
   },
 
   saveToken(token) {

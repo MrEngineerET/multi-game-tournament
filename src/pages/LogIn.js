@@ -235,6 +235,7 @@ export const action = async ({ request }) => {
   const password = formData.get("password")
   try {
     const res = await authModule.logInWithEmailAndPassword(email, password)
+    console
     return { token: res.token }
   } catch (error) {
     if (error.response?.data?.message) {
