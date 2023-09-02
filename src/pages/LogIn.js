@@ -32,6 +32,7 @@ export function LogIn() {
   useEffect(() => {
     if (actionData?.error) {
       handleLoginFail(actionData.error)
+      setSubmitting(false)
     }
     if (actionData?.token) {
       handleLoginSuccess()

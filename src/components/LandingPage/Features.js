@@ -69,6 +69,9 @@ export function Features() {
                       borderRadius: "50%",
                       p: 2,
                       mt: 2,
+                      display: "flex",
+                      justifyContent: "center",
+                      alignItems: "center",
                     }}
                   >
                     <ElectricBoltTwoToneIcon
