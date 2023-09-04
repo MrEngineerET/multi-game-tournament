@@ -199,6 +199,9 @@ const forgotPassword = async (
     if (!user) {
       return next(new AppError("There is no user with email address.", 404))
     }
+    if (!user.password) {
+      return next(new AppError("Account is created using google", 404))
+    }
 
     // 2) Generate the random reset token
     const resetToken = user.createPasswordResetToken()
@@ -209,7 +212,7 @@ const forgotPassword = async (
       const resetURL = `${req.protocol}://${req.get(
         "host",
       )}/api/v1/users/resetPassword/${resetToken}`
-      await new Email(user, resetURL).sendPasswordReset()
+      await new Email(user.email).sendResetPassword(resetURL)
 
       res.status(200).json({
         status: "success",

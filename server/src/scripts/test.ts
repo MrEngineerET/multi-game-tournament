@@ -1,21 +1,12 @@
-import { openMongooseConnection, closeMongooseConnection } from "../db"
-import { MyDB } from "../utils/MyDB"
-import { Tournament } from "../model/tournament"
-import { BracketsManager, helpers } from "brackets-manager"
-import { Status } from "brackets-model"
+import { Email } from "../utils/email"
+import { config } from "dotenv"
+config({ path: "../../.env" })
 ;(async () => {
   try {
-    const DB_URI = "mongodb://127.0.0.1:27017/multi_game_tournament"
-    await openMongooseConnection(DB_URI)
-    // add your code here
-    const tournament = await Tournament.find({})
-    console.log(
-      "tournament",
-      tournament.map((t) => t?.progress),
-    )
+    const email = new Email("meetbirukberhanu@gmail.com")
+    await email.test()
+    console.log("I guess the email is sent successfully")
   } catch (error) {
-    console.log("ERROR happen in script ", error)
-  } finally {
-    await closeMongooseConnection()
+    console.log("error", error)
   }
 })()
