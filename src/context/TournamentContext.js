@@ -92,7 +92,8 @@ export async function action({ request, params }) {
   const matchId = url.searchParams.get("match_id")
   try {
     if (matchId) {
-      await updateMatchAction(request, params)
+      const res = await updateMatchAction(request, params)
+      return res
     } else {
       const formData = await request.formData()
       const status = formData.get("status")

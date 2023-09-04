@@ -29,8 +29,13 @@ export const MatchScoreAndDetailDialog = ({
     else setTabValue(tab)
   }, [tab, hideScoreEdit])
 
+  const handleClose = (e, reason) => {
+    if (reason === "escapeKeyDown" || reason === "backdropClick") return
+    onClose()
+  }
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <Box sx={{ boxShadow: 3 }}>
         <Tabs
           value={tabValue}
