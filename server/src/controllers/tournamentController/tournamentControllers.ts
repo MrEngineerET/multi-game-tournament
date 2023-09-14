@@ -19,7 +19,6 @@ import { MyDB } from "../../utils/MyDB"
 import { GameManagement } from "../../utils/GameManagement"
 import tournamentParticipantController from "./tournamentParticipantController"
 import validator from "validator"
-import { Types } from "mongoose"
 import { User } from "../../model/User"
 import jwt from "jsonwebtoken"
 

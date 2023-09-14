@@ -25,15 +25,12 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack"
 import SettingsIcon from "@mui/icons-material/Settings"
 
 const sxStyles = {
-  bannerWrapper: {
-    bgcolor: "background.paper",
-    p: 5,
-  },
-  banner: {
-    p: 15,
-    pl: 5,
-    pr: 5,
-  },
+  bannerWrapper: (theme) => ({
+    background: theme.palette.background.cucumberWater,
+    px: { xs: 5, sm: 10, md: 20 },
+    py: { xs: 10, sm: 25, md: 30 },
+  }),
+
   content: {
     p: 5,
     pt: 2,
@@ -55,7 +52,7 @@ export function EditGame() {
   return (
     <Box>
       <Box sx={sxStyles.bannerWrapper}>
-        <Container sx={sxStyles.banner}>
+        <Container>
           <Typography variant="h3" component="h1">
             Edit Game
           </Typography>
