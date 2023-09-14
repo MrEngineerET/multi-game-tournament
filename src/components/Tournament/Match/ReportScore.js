@@ -79,9 +79,9 @@ export function ReportScore({ match, onClose }) {
                     name="participant_one_score"
                     type="number"
                     sx={styles.scoreInputField}
-                    required
                     autoFocus
                     disabled={isSubmitting}
+                    defaultValue={match.opponent1?.score}
                   />
                 </TableCell>
               </TableRow>
@@ -92,8 +92,8 @@ export function ReportScore({ match, onClose }) {
                     name="participant_two_score"
                     type="number"
                     sx={styles.scoreInputField}
-                    required
                     disabled={isSubmitting}
+                    defaultValue={match.opponent2?.score}
                   />
                 </TableCell>
               </TableRow>
@@ -135,13 +135,26 @@ export async function updateMatchAction(request, params) {
   const { id } = params
   const formData = await request.formData()
 
-  const participantOneScore = Number(formData.get("participant_one_score"))
-  const participantTwoScore = Number(formData.get("participant_two_score"))
+  let participantOneScore = formData.get("participant_one_score")
+  let participantTwoScore = formData.get("participant_two_score")
+  console.log("scores", participantOneScore, participantTwoScore)
+
+  if (!participantOneScore && !participantTwoScore)
+    return { error: "Please enter score." }
+
+  const isNotCompleted = !participantOneScore || !participantTwoScore
+
+  participantOneScore = Number(participantOneScore)
+  if (isNotCompleted && participantOneScore === 0)
+    participantOneScore = undefined
+  participantTwoScore = Number(participantTwoScore)
+  if (isNotCompleted && participantTwoScore === 0)
+    participantTwoScore = undefined
 
   if (participantOneScore === participantTwoScore)
-    return { error: "Scores cannot be equal" }
+    return { error: "Scores cannot be equal." }
   if (participantOneScore < 0 || participantTwoScore < 0)
-    return { error: "Scores cannot be negative" }
+    return { error: "Scores cannot be negative." }
 
   const playerOneResult =
     participantOneScore > participantTwoScore ? "win" : "loss"
@@ -151,7 +164,7 @@ export async function updateMatchAction(request, params) {
       id: Number(matchId),
       opponent1: {
         score: participantOneScore,
-        result: playerOneResult,
+        result: isNotCompleted ? undefined : playerOneResult,
       },
       opponent2: {
         score: participantTwoScore,

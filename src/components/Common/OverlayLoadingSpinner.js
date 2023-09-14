@@ -10,10 +10,11 @@ export const OverlayLoadingSpinner = () => {
         position: "fixed",
         top: 0,
         left: 0,
-        backgroundColor: "rgba(0, 0, 0, 0.4)", // Dark overlay color with 20% opacity
+        backgroundColor: "rgba(0, 0, 0, 0.4)", // Dark overlay color
         display: "flex",
         justifyContent: "center",
         alignItems: "center",
+        zIndex: 20000, // Make sure the overlay is on top of everything else on the page
       }}
     >
       <CircularProgress />

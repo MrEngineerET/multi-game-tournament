@@ -136,7 +136,6 @@ const styles = {
 }
 
 export function Match({ match }) {
-  const matchCompleted = match.status === 4 || match.status === 5
   const matchReady = match.status === 2
 
   const { openMatchScoreEditDialog, tournamentData } = useTournamentContext()
@@ -145,67 +144,24 @@ export function Match({ match }) {
   return (
     <Box sx={styles.root}>
       <Box sx={styles.match}>
-        <Box sx={[styles.opponent, styles.opponentTop]}>
-          <Typography component="span" sx={styles.name}>
-            {match.participants[0]?.name}
-          </Typography>
-          <Typography
-            sx={[
-              styles.score,
-              !matchCompleted && styles.invisible,
-              match.participants[0]?.result === "win" && styles.winner,
-            ]}
-            component="span"
-          >
-            {match.participants[0]?.score === 0
-              ? 0
-              : match.participants[0]?.score || "-"}
-          </Typography>
-        </Box>
+        <Participant
+          match={match}
+          disableAction={tournamentStatus !== "progress"}
+        />
         <Divider key="divider" sx={styles.divider} />
-        <Box sx={[styles.opponent, styles.opponentBottom]}>
-          <Typography component="span" sx={styles.name}>
-            {match.participants[1]?.name}
-          </Typography>
-          <Typography
-            sx={[
-              styles.score,
-              !matchCompleted && styles.invisible,
-              match.participants[1]?.result === "win" && styles.winner,
-            ]}
-            component="span"
-          >
-            {match.participants[1]?.score === 0
-              ? 0
-              : match.participants[1]?.score || "-"}
-          </Typography>
-        </Box>
+        <Participant
+          match={match}
+          position="bottom"
+          disableAction={tournamentStatus !== "progress"}
+        />
         {matchReady && (
-          <Box sx={styles.editScore}>
-            <ClickToolTip
-              title={
-                tournamentStatus !== "progress"
-                  ? "Please first start the Tournament"
-                  : ""
-              }
-            >
-              <span>
-                <IconButton
-                  onClick={() =>
-                    openMatchScoreEditDialog(
-                      match,
-                      matchEditDialogTabs.reportScore,
-                    )
-                  }
-                  disabled={tournamentStatus !== "progress"}
-                >
-                  <SportsScoreIcon sx={styles.editIcon} />
-                </IconButton>
-              </span>
-            </ClickToolTip>
-          </Box>
+          <EditScoreButton
+            match={match}
+            disableButton={tournamentStatus !== "progress"}
+          />
         )}
       </Box>
+      {/* show match info button which open match and score edit dialog */}
       <Box id="match_tool_tip" sx={styles.matchToolTipWrapper}>
         <Box sx={styles.matchToolTip}>
           <IconButton
@@ -229,4 +185,73 @@ export function Match({ match }) {
 
 Match.propTypes = {
   match: PropTypes.object,
+}
+
+function Participant({ match, position = "top", disableAction }) {
+  const matchCompleted = match.status === 4 || match.status === 5
+  const matchRunning = match.status === 3
+  const participant = match.participants[position === "top" ? 0 : 1]
+  return (
+    <Box
+      sx={[
+        styles.opponent,
+        position === "top" ? styles.opponentTop : styles.opponentBottom,
+      ]}
+    >
+      <Typography component="span" sx={styles.name}>
+        {participant?.name}
+      </Typography>
+      <Typography
+        sx={[
+          styles.score,
+          !(matchCompleted || matchRunning) && styles.invisible,
+          participant?.result === "win" && styles.winner,
+          { position: "relative" },
+        ]}
+        component="span"
+      >
+        {matchRunning && !participant?.score ? (
+          <EditScoreButton match={match} disableButton={disableAction} />
+        ) : participant?.score === 0 ? (
+          0
+        ) : (
+          participant?.score || "-"
+        )}
+      </Typography>
+    </Box>
+  )
+}
+
+Participant.propTypes = {
+  match: PropTypes.object.isRequired,
+  position: PropTypes.string,
+  disableAction: PropTypes.bool.isRequired,
+}
+
+function EditScoreButton({ match, disableButton }) {
+  const { openMatchScoreEditDialog } = useTournamentContext()
+  return (
+    <Box sx={styles.editScore}>
+      <ClickToolTip
+        title={disableButton ? "Please first start the Tournament" : ""}
+      >
+        {/* edit score button button */}
+        <Box component={"span"}>
+          <IconButton
+            onClick={() =>
+              openMatchScoreEditDialog(match, matchEditDialogTabs.reportScore)
+            }
+            disabled={disableButton}
+          >
+            <SportsScoreIcon sx={styles.editIcon} />
+          </IconButton>
+        </Box>
+      </ClickToolTip>
+    </Box>
+  )
+}
+
+EditScoreButton.propTypes = {
+  match: PropTypes.object.isRequired,
+  disableButton: PropTypes.bool.isRequired,
 }
