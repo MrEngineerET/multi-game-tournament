@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect } from "react"
 import { Outlet, Link, useLocation } from "react-router-dom"
 
 import { Typography, Box, Stack, ButtonBase } from "@mui/material"
+import { useMediaQuery, useTheme } from "@mui/material"
 import { ShareTournamentDialog } from "./ShareTournamentDialog"
 import { useTournamentContext } from "../../context/TournamentContext"
 import { Container } from "@mui/system"
@@ -56,6 +57,11 @@ const sxStyles = {
 const tabs = { bracket: 0, participants: 1, standing: 2, settings: 3 }
 
 export function TournamentDetail() {
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const isMediumScreen = useMediaQuery(theme.breakpoints.down("md"))
+  const isLargeScreen = useMediaQuery(theme.breakpoints.down("xl"))
+
   const location = useLocation()
   const [openShareDialog, setOpenShareDialog] = useState(false)
   const { tournamentData } = useTournamentContext()
@@ -95,12 +101,14 @@ export function TournamentDetail() {
     setTabValue(newTabValue)
   }
 
+  const maxImageList = isMobile ? 2 : isMediumScreen ? 3 : isLargeScreen ? 4 : 5
+
   return (
     <Box>
       <Box sx={{ position: "relative" }}>
         <Stack direction="row" sx={sxStyles.gameImageList} gap={1}>
           {gameList.length !== 0
-            ? gameList.map(({ image }) => (
+            ? gameList.slice(0, maxImageList).map(({ image }) => (
                 <Box key={image} flex={1}>
                   <Box
                     component={"img"}
@@ -112,7 +120,7 @@ export function TournamentDetail() {
                   />
                 </Box>
               ))
-            : ifNoGameimages.map((image) => {
+            : ifNoGameimages.slice(0, maxImageList).map((image) => {
                 return (
                   <Box flex={1} key={image}>
                     <Box
@@ -168,12 +176,13 @@ export function TournamentDetail() {
                       {gameList.length === 0 ? (
                         <Typography sx={sxStyles.text}>TBD </Typography>
                       ) : (
-                        gameList.map((game) => (
+                        gameList.slice(0, maxImageList).map((game) => (
                           <Typography key={game.name} sx={sxStyles.text}>
                             {game.name} ({game.count})
                           </Typography>
                         ))
                       )}
+                      {gameList.length > maxImageList && <span>...</span>}
                     </Stack>
                   </Stack>
                 </Stack>

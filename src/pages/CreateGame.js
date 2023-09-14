@@ -147,6 +147,7 @@ export function CreateGame() {
                       navigate(-1)
                     }}
                     color="secondary"
+                    disabled={navigation.state === "submitting"}
                   >
                     Cancel
                   </Button>
