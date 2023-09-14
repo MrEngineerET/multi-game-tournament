@@ -405,7 +405,7 @@ export async function prepareParticipants(
   tournamentId: number,
 ): Promise<Seeding> {
   const participantPromise = participants.map((p) => {
-    if (Types.ObjectId.isValid(p)) {
+    if (isValidObjectId(p)) {
       return User.findById(p, { firstName: 1, lastName: 1 })
     }
     if (p && validator.isEmail(p)) {
@@ -543,7 +543,7 @@ async function getTournamentStanding(
   next: NextFunction,
 ) {
   try {
-    const tournamentId = req.params.tournamentId
+    const tournamentId = req.params.id
     const tournament = await Tournament.findById(tournamentId)
     const storage = new MyDB(tournament)
     const manager = new BracketsManager(storage)
@@ -556,6 +556,10 @@ async function getTournamentStanding(
   } catch (error) {
     next(error)
   }
+}
+
+function isValidObjectId(id) {
+  return /^[a-f\d]{24}$/i.test(id)
 }
 
 export default {

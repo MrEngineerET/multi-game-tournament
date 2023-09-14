@@ -8,7 +8,7 @@ import { prepareParticipants } from "./tournamentControllers"
 
 async function addParticipant(req: Request, res: Response, next: NextFunction) {
   try {
-    //TODO: add a validator to this controller(participant should be array, no duplication of participants)
+    //TODO: add a validator to this controller(participant should be array, no duplication of participants, tournament status should be pending)
     const { participants: newParticipants } = req.body
     const { tournamentId } = req.params
 

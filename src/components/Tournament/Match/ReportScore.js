@@ -13,6 +13,7 @@ import { TextField, Button, Box, Alert } from "@mui/material"
 import PropTypes from "prop-types"
 import { useFetcher } from "react-router-dom"
 import { updateTournament } from "../../../api/tournament"
+import { OverlayLoadingSpinner } from "../../Common/OverlayLoadingSpinner"
 
 const styles = {
   scoreInputField: {
@@ -43,6 +44,8 @@ const styles = {
 export function ReportScore({ match, onClose }) {
   const theme = useTheme()
   const fetcher = useFetcher()
+  const isSubmitting =
+    fetcher.state === "submitting" || fetcher.state === "loading"
 
   React.useEffect(() => {
     if (fetcher.data?.closeDialog && fetcher.state === "idle") onClose()
@@ -51,68 +54,73 @@ export function ReportScore({ match, onClose }) {
   const isSmallScreen = useMediaQuery(theme.breakpoints.down("sm"))
 
   return (
-    <fetcher.Form method="post" action={`?match_id=${match.id}`}>
-      <Alert
-        severity="error"
-        sx={[styles.alert, fetcher.data?.error && styles.alertShow]}
-      >
-        {fetcher.data?.error}
-      </Alert>
-
-      <TableContainer>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Participant</TableCell>
-              <TableCell>Score</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            <TableRow>
-              <TableCell>{match.participants[0]?.name}</TableCell>
-              <TableCell>
-                <TextField
-                  name="participant_one_score"
-                  type="number"
-                  sx={styles.scoreInputField}
-                  required
-                  autoFocus
-                />
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell>{match.participants[1]?.name}</TableCell>
-              <TableCell>
-                <TextField
-                  name="participant_two_score"
-                  type="number"
-                  sx={styles.scoreInputField}
-                  required
-                />
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-
-      <Box sx={styles.dialogAction}>
-        <Button
-          variant="outlined"
-          color="secondary"
-          onClick={onClose}
-          size={isSmallScreen ? "small" : "medium"}
+    <>
+      {isSubmitting && <OverlayLoadingSpinner />}
+      <fetcher.Form method="post" action={`?match_id=${match.id}`}>
+        <Alert
+          severity="error"
+          sx={[styles.alert, fetcher.data?.error && styles.alertShow]}
         >
-          cancel
-        </Button>
-        <Button
-          type="submit"
-          size={isSmallScreen ? "small" : "medium"}
-          disabled={fetcher.state === "submitting"}
-        >
-          Save
-        </Button>
-      </Box>
-    </fetcher.Form>
+          {fetcher.data?.error}
+        </Alert>
+        <TableContainer sx={{ opacity: 0.7 }}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Participant</TableCell>
+                <TableCell>Score</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              <TableRow>
+                <TableCell>{match.participants[0]?.name}</TableCell>
+                <TableCell>
+                  <TextField
+                    name="participant_one_score"
+                    type="number"
+                    sx={styles.scoreInputField}
+                    autoFocus
+                    disabled={isSubmitting}
+                    defaultValue={match.opponent1?.score}
+                  />
+                </TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>{match.participants[1]?.name}</TableCell>
+                <TableCell>
+                  <TextField
+                    name="participant_two_score"
+                    type="number"
+                    sx={styles.scoreInputField}
+                    disabled={isSubmitting}
+                    defaultValue={match.opponent2?.score}
+                  />
+                </TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        <Box sx={styles.dialogAction}>
+          <Button
+            variant="outlined"
+            color="secondary"
+            onClick={onClose}
+            disabled={isSubmitting}
+            size={isSmallScreen ? "small" : "medium"}
+          >
+            cancel
+          </Button>
+          <Button
+            type="submit"
+            size={isSmallScreen ? "small" : "medium"}
+            disabled={isSubmitting}
+          >
+            Save
+          </Button>
+        </Box>
+      </fetcher.Form>
+    </>
   )
 }
 
@@ -127,13 +135,26 @@ export async function updateMatchAction(request, params) {
   const { id } = params
   const formData = await request.formData()
 
-  const participantOneScore = Number(formData.get("participant_one_score"))
-  const participantTwoScore = Number(formData.get("participant_two_score"))
+  let participantOneScore = formData.get("participant_one_score")
+  let participantTwoScore = formData.get("participant_two_score")
+  console.log("scores", participantOneScore, participantTwoScore)
+
+  if (!participantOneScore && !participantTwoScore)
+    return { error: "Please enter score." }
+
+  const isNotCompleted = !participantOneScore || !participantTwoScore
+
+  participantOneScore = Number(participantOneScore)
+  if (isNotCompleted && participantOneScore === 0)
+    participantOneScore = undefined
+  participantTwoScore = Number(participantTwoScore)
+  if (isNotCompleted && participantTwoScore === 0)
+    participantTwoScore = undefined
 
   if (participantOneScore === participantTwoScore)
-    return { error: "Scores cannot be equal" }
+    return { error: "Scores cannot be equal." }
   if (participantOneScore < 0 || participantTwoScore < 0)
-    return { error: "Scores cannot be negative" }
+    return { error: "Scores cannot be negative." }
 
   const playerOneResult =
     participantOneScore > participantTwoScore ? "win" : "loss"
@@ -143,7 +164,7 @@ export async function updateMatchAction(request, params) {
       id: Number(matchId),
       opponent1: {
         score: participantOneScore,
-        result: playerOneResult,
+        result: isNotCompleted ? undefined : playerOneResult,
       },
       opponent2: {
         score: participantTwoScore,

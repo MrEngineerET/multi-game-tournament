@@ -21,16 +21,22 @@ export const MatchScoreAndDetailDialog = ({
 }) => {
   const [tabValue, setTabValue] = useState(tab)
   const { tournamentData } = useTournamentContext()
-  const hideScoreEdit = // if match is not ready and tounament in not in progress
-    match?.status !== 2 || tournamentData.status !== "progress"
+  const hideScoreEdit = // if match is not (ready and running) and tounament in not in progress
+    (match?.status !== 2 && match?.status !== 3) ||
+    tournamentData.status !== "progress"
 
   useEffect(() => {
     if (hideScoreEdit) setTabValue(0)
     else setTabValue(tab)
   }, [tab, hideScoreEdit])
 
+  const handleClose = (e, reason) => {
+    if (reason === "escapeKeyDown" || reason === "backdropClick") return
+    onClose()
+  }
+
   return (
-    <Dialog open={open} onClose={onClose} maxWidth="sm" fullWidth>
+    <Dialog open={open} onClose={handleClose} maxWidth="sm" fullWidth>
       <Box sx={{ boxShadow: 3 }}>
         <Tabs
           value={tabValue}

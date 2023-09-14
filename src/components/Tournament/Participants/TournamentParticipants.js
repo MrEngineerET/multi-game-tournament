@@ -98,7 +98,7 @@ export function TournamentParticipants() {
               type="submit"
               name="intent"
               value="shuffle"
-              disabled={disableForms}
+              disabled={disableForms || !isPending}
             >
               Shuffle
             </Button>
